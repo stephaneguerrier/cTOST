@@ -1,0 +1,32 @@
+template:
+  params:
+    bootswatch: flatly
+
+reference:
+  - title: TOST functions
+    contents:
+    - tost
+    - dtost
+    - atost
+  - title: Data
+    contents:
+    - skin
+  - title: Print and comparison
+    contents:
+    - compare_to_tost
+    - print.tost
+
+
+navbar:
+  left:
+  - icon: fa-home
+    href: index.html
+  - text: Get started
+    href: articles/get_started.html
+  - text: Reproducibility
+    href: articles/reproducibility.html
+  - text: Reference
+    href: reference/index.html
+  right:
+  - icon: fa-github
+    href: https://github.com/yboulag/cTOST

@@ -2,12 +2,12 @@
 % Please edit documentation in R/equiv.R
 \name{print.tost}
 \alias{print.tost}
-\title{Print Results of (Bio)Equivalence Assessment}
+\title{Print Results of (Bio)Equivalence Assessment in Univariate Settings}
 \usage{
 \method{print}{tost}(x, ticks = 30, rn = 5, ...)
 }
 \arguments{
-\item{x}{A \code{tost} object, which is the output of one of the following functions `tost`, `atost` or `dtost`.}
+\item{x}{A \code{tost} object, which is the output of one of the following functions `tost` or `ctost`.}
 
 \item{ticks}{Number of ticks to print the confidence interval in the console.}
 
@@ -19,5 +19,5 @@
 Prints object.
 }
 \description{
-Print Results of (Bio)Equivalence Assessment
+Print Results of (Bio)Equivalence Assessment in Univariate Settings
 }

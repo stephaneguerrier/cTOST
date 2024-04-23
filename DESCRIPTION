@@ -10,7 +10,7 @@ Authors@R: c(
     person("Stéphane", "Laurent", role = "cph")
     )
 Maintainer: Stéphane Guerrier <stef.guerrier@gmail.com>
-Description:  A system containing easy-to-use tools to compute the bioequivalence assessment in the univariate framework using the methods proposed in Boulaguiem et al. (2023) <doi:10.1101/2023.03.11.532179>.
+Description: A system containing easy-to-use tools to compute the bioequivalence assessment in the univariate framework using the methods proposed in Boulaguiem et al. (2024) <https://doi.org/10.1002/sim.9993>.
 Depends:
     PowerTOST,
     cli,

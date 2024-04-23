@@ -43,8 +43,8 @@ res_atost = atost(theta = theta_hat, sigma = sig_hat, nu = nu,
               alpha = 0.05, delta = log(1.25))
 res_atost
 compare_to_tost(res_atost)
-
 }
 \author{
 Younes Boulaguiem, Stéphane Guerrier, Dominique-Laurent Couturier
 }
+\keyword{internal}

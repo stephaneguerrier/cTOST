@@ -44,6 +44,7 @@ This repository holds the `cTOST` R package. This package contains the function 
 The `cTOST` package is available on GitHub at the moment. It is subject to ongoing updates that may lead to stability issues.  
 
 In order to install the package, it is required to pre-install the `devtools` dependency. Run the following command if you do not have it already installed:
+
 ```{r, eval=FALSE}
 install.packages("devtools")
 ```
@@ -51,7 +52,7 @@ install.packages("devtools")
 The package is then installed with the following command:
 
 ```{r, eval=FALSE}
-devtools::install_github("yboulag/cTOST")
+devtools::install_github("stephaneguerrier/cTOST")
 ```
 
 Note that Windows users are assumed that have Rtools installed (if this is not the case, please visit this [link](https://cran.r-project.org/bin/windows/Rtools/).
@@ -59,10 +60,10 @@ Note that Windows users are assumed that have Rtools installed (if this is not t
 ## How to cite
 
 ```{}
-@Manual{boulaguiem2023ctost,
+@Manual{boulaguiem2024ctost,
   title = {cTOST: Finite Sample Correction of The TOST in The Univariate Framework},
   author = {Younes Boulaguiem and Stéphane Guerrier and Dominique-Laurent Couturier},
-  year = {2023},
+  year = {2024},
   note = {R package version 1.0.0},
   url = {https://github.com/yboulag/cTOST},
 }

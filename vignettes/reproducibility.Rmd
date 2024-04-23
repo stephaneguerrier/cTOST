@@ -88,6 +88,7 @@ res_tost
 ### $\delta$-TOST
 
 Using the $\delta$-TOST, we still cannot accept bioequivalence, even though the corrected region is larger:
+
 ```{r, eval = F}
 res_dtost = dtost(theta = theta_hat, sigma = sig_hat, nu = nu, alpha = 0.05, delta = log(1.25))
 res_dtost

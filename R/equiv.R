@@ -1,3 +1,120 @@
+#' @title Finite Sample Adjusted (Bio)Equivalence Testing
+#'
+#' @description This function is used to compute finite sample corrected version of the standard (univariate or multivariate) TOST.
+#'
+#' @param theta                 A \code{numeric} value corresponding to the difference of means.
+#' @param sigma                 A \code{numeric} value corresponding to the standard error.
+#' @param nu                    A \code{numeric} value corresponding to the number of degrees of freedom.
+#' @param delta                 A \code{numeric} value corresponding to (bio)equivalence limit. We assume symmetry, i.e, the (bio)equivalence interval corresponds to (-delta,delta)
+#' @param method                A \code{character} value corresponding to the considered finite sample adjustment method, see Details below for more information.
+#' @param alpha                 A \code{numeric} value specifying the significance level (default: alpha = 0.05).
+#' @param ...                   Additional parameters.
+#'
+#'
+#' @details
+#' In univariate settings, two methods are available: alpha-TOST (using method = 'alpha') and delta-TOST (using method = 'delta').
+#' The alpha-TOST and delta-TOST are introduced in Boulaguiem et al. (2024, <https://doi.org/10.1002/sim.9993>). The former is a corrective procedure of the significance level applied to the TOST while the latter
+#' adjusts the equivalence limits. In general, the alpha-TOST appears to outperform the delta-TOST.
+#'
+#' In multivariate setting, the only available method is the (multivariate) alpha-TOST (using method = 'alpha') introduced in Boulaguiem et al. (2024, bioarxiv).
+#'
+#' @author Younes Boulaguiem, Stéphane Guerrier, Dominique-Laurent Couturier, Luca Insolia
+#'
+#' @return A \code{tost} object with the structure:
+#' \itemize{
+#'  \item decision:    A boolean variable indicating whether (bio)equivalence is accepted or not.
+#'  \item ci:          Confidence interval at the 1 - 2*alpha level.
+#'  \item theta:       The difference of means used for the test.
+#'  \item sigma:       The standard error used for the test.
+#'  \item nu:          The number of degrees of freedom used for the test.
+#'  \item alpha:       The significance level used for the test.
+#'  \item delta:       The (bio)equivalence limits used for the test.
+#'  \item method:      The method used for the test (alpha-TOST and delta-TOST).
+#'  \item setting:     The setting used (univariate or multivariate)
+#' }
+#' @export
+#' @examples
+#' data(skin)
+#'
+#' theta_hat = diff(apply(skin,2,mean))
+#' nu = nrow(skin) - 1
+#' sig_hat = sd(apply(skin,1,diff))/sqrt(nu)
+#'
+#' # alpha-TOST
+#' atost = ctost(theta = theta_hat, sigma = sig_hat, nu = nu,
+#'               alpha = 0.05, delta = log(1.25), method = "alpha")
+#' atost
+#' compare_to_tost(atost)
+#'
+#' # delta-TOST
+#' dtost = ctost(theta = theta_hat, sigma = sig_hat, nu = nu,
+#'               alpha = 0.05, delta = log(1.25), method = "delta")
+#' dtost
+#' compare_to_tost(dtost)
+ctost = function(theta, sigma, nu, delta, alpha = 0.05, method = "alpha", ...){
+
+  # Check inputs
+  if (alpha < 0.0000001 || alpha > 0.5){
+    stop("alpha must be in (0, 0.5).")
+  }
+
+  n_theta = length(theta)
+
+  if (n_theta == 1){
+    # Univariate setting
+    setting = "univariate"
+    if (length(sigma) > 1 || length(delta) > 1){
+      stop("sigma and delta must be scalars in univariate settings.")
+    }
+  }else{
+    setting = "multivariate"
+    stop("Multivariate settings are not implemented... coming soon.")
+  }
+
+  if (!(method %in% c("alpha", "delta"))){
+    stop("Available methods are 'alpha' (for the alpha-TOST) and 'delta' (for the delta-TOST).")
+  }
+
+  if (method == "delta" && setting == "multivariate"){
+    stop("The delta-TOST is currently not implemented in multivariate settings.")
+  }
+
+  if (setting == "univariate"){
+    # alpha-TOST
+    if (method == "alpha"){
+      corrected_alpha = alphahat.fun(sigma = sigma, nu = nu, alpha = alpha, delta = delta)
+      decision = abs(theta) < (delta - qt(1 - corrected_alpha, df = nu) * sigma)
+      ci = theta + c(-1, 1) * qt(1 - corrected_alpha, df = nu) * sigma
+      out = list(decision = decision, ci = ci, theta = theta,
+                 sigma = sigma, nu = nu, alpha = alpha,
+                 corrected_alpha = corrected_alpha,
+                 delta = delta, method = "alpha-TOST",
+                 setting = setting)
+      class(out) = "tost"
+      return(out)
+    }
+
+    # delta-TOST
+    if (method == "delta"){
+      corrected_delta = deltahat.fun(sigma = sigma, alpha = alpha, delta = delta, nu = nu)
+      decision = abs(theta) < (corrected_delta - qt(1 - alpha, df = nu) * sigma)
+      ci = theta + c(-1, 1) * qt(1 - alpha, df = nu) * sigma
+      out = list(decision = decision, ci = ci, theta = theta,
+                 sigma = sigma, nu = nu, alpha = alpha,
+                 corrected_delta = corrected_delta,
+                 delta = delta, method = "delta-TOST",
+                 setting = setting)
+      class(out) = "tost"
+      return(out)
+    }
+
+  }else{
+    # Multivariate
+  }
+}
+
+
+
 #' @title ipowen4 function from the OwenQ package
 #' @author Stéphane Laurent
 #' @keywords internal
@@ -158,6 +275,8 @@ tost = function(theta, sigma, nu, alpha, delta){
 #'  \item delta:       The (bio)equivalence limits used for the test.
 #'  \item method:      The method used for the test (here the "alpha-TOST").
 #' }
+#' @keywords internal
+#'
 #' @examples
 #' data(skin)
 #'
@@ -168,8 +287,6 @@ tost = function(theta, sigma, nu, alpha, delta){
 #'               alpha = 0.05, delta = log(1.25))
 #' res_atost
 #' compare_to_tost(res_atost)
-#'
-#' @export
 atost = function(theta, sigma, nu, alpha, delta){
   corrected_alpha = alphahat.fun(sigma = sigma, nu = nu, alpha = alpha, delta = delta)
   decision = abs(theta) < (delta - qt(1 - corrected_alpha, df = nu) * sigma)
@@ -238,6 +355,9 @@ alphahat.fun = function(sigma, nu, alpha, delta, tol=1e-7){
 #'  \item delta:       The (bio)equivalence limits used for the test.
 #'  \item method:      The method used for the test (here the "delta-TOST").
 #' }
+#'
+#' @keywords internal
+#'
 #' @examples
 #' data(skin)
 #'
@@ -249,7 +369,6 @@ alphahat.fun = function(sigma, nu, alpha, delta, tol=1e-7){
 #' res_dtost
 #' compare_to_tost(res_dtost)
 #'
-#' @export
 dtost = function(theta, sigma, nu, alpha, delta){
   corrected_delta = deltahat.fun(sigma = sigma, alpha = alpha, delta = delta, nu = nu)
   decision = abs(theta) < (corrected_delta - qt(1 - alpha, df = nu) * sigma)
@@ -363,9 +482,9 @@ obj_fun_delta_hat = function(delta_star, sigma, alpha, delta, nu){
   10^8*(omega - alpha)^2
 }
 
-#' Print Results of (Bio)Equivalence Assessment
+#' Print Results of (Bio)Equivalence Assessment in Univariate Settings
 #'
-#' @param x      A \code{tost} object, which is the output of one of the following functions `tost`, `atost` or `dtost`.
+#' @param x      A \code{tost} object, which is the output of one of the following functions `tost` or `ctost`.
 #' @param ticks  Number of ticks to print the confidence interval in the console.
 #' @param rn     Number of digits to consider when printing the results.
 #' @param ...    Further arguments to be passed to or from methods.
@@ -535,14 +654,14 @@ print.tost = function(x, ticks = 30, rn = 5, ...){
   cat("\n")
 }
 
-#' @title Comparison of a Corrective Procedure to the results of the Two One-Sided Tests (TOST)
+#' @title Comparison of a Corrective Procedure to the results of the Two One-Sided Tests (TOST) in Univariate Settings
 #'
-#' @description This function renders a comparison of the alpha-TOST or the delta-TOST outputs obtained with the functions `atost` or `dtost`, respectively, to the TOST output obtained with `tost`.
+#' @description This function renders a comparison of the alpha-TOST or the delta-TOST outputs obtained with the function `ctost` to the TOST output obtained with `tost`.
 #'
-#' @param x A \code{tost} object, which is the output of one of the following functions: `atost` or `dtost`.
+#' @param x A \code{tost} object, which is the output of one of the function: `ctost`.
 #' @param ticks an integer indicating the number of segments that will be printed to represent the confidence intervals.
 #' @param rn integer indicating the number of decimals places to be used (see function `round`) for the printed results.
-#' @return Pints a comparison between the TOST results (i.e., output of `tost`) and either the alpha-TOST or the delta-TOST results (i.e., outputs of `atost` or `dtost`, respectively).
+#' @return Pints a comparison between the TOST results (i.e., output of `tost`) and either the alpha-TOST or the delta-TOST results.
 #'
 #' @importFrom cli cli_text col_green col_red
 #'

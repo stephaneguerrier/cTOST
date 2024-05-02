@@ -13,6 +13,7 @@ Maintainer: Stéphane Guerrier <stef.guerrier@gmail.com>
 Description: A system containing easy-to-use tools to compute the bioequivalence assessment in the univariate framework using the methods proposed in Boulaguiem et al. (2024) <https://doi.org/10.1002/sim.9993>.
 Depends:
     PowerTOST,
+    mvtnorm,
     cli,
     knitr,
     R (>= 4.0)

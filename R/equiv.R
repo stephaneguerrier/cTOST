@@ -8,6 +8,7 @@
 #' @param delta                 A \code{numeric} value corresponding to (bio)equivalence limit. We assume symmetry, i.e, the (bio)equivalence interval corresponds to (-delta,delta)
 #' @param method                A \code{character} value corresponding to the considered finite sample adjustment method, see Details below for more information.
 #' @param alpha                 A \code{numeric} value specifying the significance level (default: alpha = 0.05).
+#' @param B                     TO DOCUMENT ???
 #' @param ...                   Additional parameters.
 #'
 #'
@@ -51,7 +52,7 @@
 #'               alpha = 0.05, delta = log(1.25), method = "delta")
 #' dtost
 #' compare_to_tost(dtost)
-ctost = function(theta, sigma, nu, delta, alpha = 0.05, method = "alpha", ...){
+ctost = function(theta, sigma, nu, delta, alpha = 0.05, method = "alpha", B = 10^4, ...){
 
   # Check inputs
   if (alpha < 0.0000001 || alpha > 0.5){
@@ -68,7 +69,14 @@ ctost = function(theta, sigma, nu, delta, alpha = 0.05, method = "alpha", ...){
     }
   }else{
     setting = "multivariate"
-    stop("Multivariate settings are not implemented... coming soon.")
+    if (!is.matrix(sigma) || ncol(sigma) != nrow(sigma)){
+      stop("sigma must be a square matrix.")
+    }
+
+    if (length(delta) > 1){
+      stop("delta is assumed to be a scalar, implying that we consider the alternative theta in (-delta, delta) in each dimension.")
+    }
+
   }
 
   if (!(method %in% c("alpha", "delta"))){
@@ -110,6 +118,29 @@ ctost = function(theta, sigma, nu, delta, alpha = 0.05, method = "alpha", ...){
 
   }else{
     # Multivariate
+    if (method == "delta"){
+      stop("Multivariate delta-TOST is not implemented.")
+    }
+    if (method == "alpha"){
+
+
+      corrected_alpha = get_alpha_TOST_MC_mv(alpha = alpha, Sigma = sigma,
+                                           nu = nu, delta = delta, B = B)
+
+      delta_vec = rep(delta, ncol(sigma))
+      t_alpha = qt(1 - corrected_alpha$min, df=nu)
+      lower = theta - t_alpha * sqrt(diag(sigma))
+      upper = theta + t_alpha * sqrt(diag(sigma))
+      decision = (lower > -delta_vec) & (upper < delta_vec)
+
+      out = list(decision = decision, ci = cbind(lower, upper), theta = theta,
+                 sigma = sigma, nu = nu, alpha = alpha,
+                 corrected_alpha = corrected_alpha$min,
+                 delta = delta, method = "alpha-TOST", setting = setting)
+      class(out) = "mtost"
+      return(out)
+
+    }
   }
 }
 

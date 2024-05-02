@@ -151,20 +151,52 @@ dtost
 
 ### 3.2. Multivariate settings
 
-#### 3.2.1. Multivariate TOST
-
-```{r}
+```{r, eval = FALSE}
 data(ticlopidine)
 n = nrow(ticlopidine)
 p = ncol(ticlopidine)
 nu = n-1
-theta_hat = colMeans(dat)
+theta_hat = colMeans(ticlopidine)
 Sigma_hat = cov(ticlopidine)/n
-delta = log(1.25)
-a = tost(theta = theta_hat, sigma = Sigma_hat, nu = nu, delta = delta)
+```
+
+#### 3.2.1. Multivariate TOST
+
+```{r, eval = FALSE}
+mtost = tost(theta = theta_hat, sigma = Sigma_hat, nu = nu, delta = log(1.25))
+mtost
+```
+
+```{asciicast}
+library(cTOST)
+data(ticlopidine)
+n = nrow(ticlopidine)
+p = ncol(ticlopidine)
+nu = n-1
+theta_hat = colMeans(ticlopidine)
+Sigma_hat = cov(ticlopidine)/n
+mtost = tost(theta = theta_hat, sigma = Sigma_hat, nu = nu, delta = log(1.25))
+mtost
 ```
 
 #### 3.2.2. Multivariate $\alpha$-TOST
+
+```{r, eval = FALSE}
+matost = ctost(theta = theta_hat, sigma = Sigma_hat, nu = nu, delta = log(1.25))
+matost
+```
+
+```{asciicast}
+library(cTOST)
+data(ticlopidine)
+n = nrow(ticlopidine)
+p = ncol(ticlopidine)
+nu = n-1
+theta_hat = colMeans(ticlopidine)
+Sigma_hat = cov(ticlopidine)/n
+matost = ctost(theta = theta_hat, sigma = Sigma_hat, nu = nu, delta = log(1.25))
+matost
+```
 
 ## 4. How to cite
 

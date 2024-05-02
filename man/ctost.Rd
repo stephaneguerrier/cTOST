@@ -4,7 +4,7 @@
 \alias{ctost}
 \title{Finite Sample Adjusted (Bio)Equivalence Testing}
 \usage{
-ctost(theta, sigma, nu, delta, alpha = 0.05, method = "alpha", ...)
+ctost(theta, sigma, nu, delta, alpha = 0.05, method = "alpha", B = 10^4, ...)
 }
 \arguments{
 \item{theta}{A \code{numeric} value corresponding to the difference of means.}
@@ -18,6 +18,8 @@ ctost(theta, sigma, nu, delta, alpha = 0.05, method = "alpha", ...)
 \item{alpha}{A \code{numeric} value specifying the significance level (default: alpha = 0.05).}
 
 \item{method}{A \code{character} value corresponding to the considered finite sample adjustment method, see Details below for more information.}
+
+\item{B}{TO DOCUMENT ???}
 
 \item{...}{Additional parameters.}
 }

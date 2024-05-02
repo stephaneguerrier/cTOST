@@ -6,7 +6,7 @@
 <!-- badges: start -->
 
 [![Licence](https://img.shields.io/badge/licence-AGPL--3.0-blue.svg)](https://opensource.org/licenses/AGPL-3.0)
-[![Last-changedate](https://img.shields.io/badge/last%20change-2024--04--11-green.svg)](https://github.com/yboulag/cTOST)
+[![Last-changedate](https://img.shields.io/badge/last%20change-2024--05--02-green.svg)](https://github.com/yboulag/cTOST)
 [![R-CMD-check](https://github.com/yboulag/cTOST/actions/workflows/R-CMD-check.yaml/badge.svg)](https://github.com/yboulag/cTOST/actions/workflows/R-CMD-check.yaml)
 [![CRAN RStudio mirror
 downloads](http://cranlogs.r-pkg.org/badges/cTOST)](https://www.r-pkg.org/pkg/cTOST)
@@ -14,19 +14,15 @@ downloads](http://cranlogs.r-pkg.org/badges/cTOST)](https://www.r-pkg.org/pkg/cT
 downloads](https://cranlogs.r-pkg.org/badges/grand-total/cTOST)](https://www.r-pkg.org/pkg/cTOST)
 <!-- badges: end -->
 
-## Overview
+## `cTOST` Overview
 
-This repository holds the `cTOST` R package. This package contains the
-function `tost` which provides an assessment of equivalence in the
-univariate framework based on the state-of-the-art Two One-Sided Tests
-(TOST). In addition, the package contains the functions `atost` and
-`dtost`, two corrective procedures applied to the TOST in the univariate
-framework in order to ensure the preservation of the Type I error rate
-at the desired nominal level and a uniform increase in power. These two
-functions output an assessment of equivalence in the univariate
-framework after their respective corrections is applied. More details
-can be found in Boulaguiem et al. (2023) that you can access via this
-[link](https://www.biorxiv.org/content/10.1101/2023.03.11.532179v3).
+This R package contains the functions to test equivalence in univariate
+and multivariate settings based on the Two One-Sided Tests (TOST). In
+addition, the package contains different corrective procedures applied
+to the standard TOST in order to adjust the size of the procedure at the
+desired nominal level leading to more powerful procedures. This package
+implements the $\alpha$-TOST and $\delta$-TOST methods proposed in
+Boulaguiem et al. (2024a) and in Boulaguiem et al. (2024b).
 
 ## Install Instructions
 
@@ -44,21 +40,25 @@ install.packages("devtools")
 The package is then installed with the following command:
 
 ``` r
-devtools::install_github("yboulag/cTOST")
+devtools::install_github("stephaneguerrier/cTOST")
 ```
 
 Note that Windows users are assumed that have Rtools installed (if this
 is not the case, please visit this
 [link](https://cran.r-project.org/bin/windows/Rtools/).
 
+## How to use
+
+TO DO
+
 ## How to cite
 
-    @Manual{boulaguiem2023ctost,
+    @Manual{boulaguiem2024ctost,
       title = {cTOST: Finite Sample Correction of The TOST in The Univariate Framework},
-      author = {Younes Boulaguiem and Stéphane Guerrier and Dominique-Laurent Couturier},
-      year = {2023},
-      note = {R package version 1.0.0},
-      url = {https://github.com/yboulag/cTOST},
+      author = {Boulaguiem, Y. and Insolia, L. and Couturier, D.-L. and Guerrier, S.},
+      year = {2024},
+      note = {R package version 1.1.0},
+      url = {https://github.com/stephaneguerrier},
     }
 
 ## License
@@ -72,6 +72,10 @@ a synopsis of the restrictions placed upon the code.
 ## References
 
 Boulaguiem, Y., Quartier, J., Lapteva, M., Kalia, Y. N., Victoria-Feser,
-M. P., Guerrier, S., & Couturier, D. L., “*Finite Sample Adjustments for
-Average Equivalence Testing*”, Statistics in Medicine, 2023,
+M. P., Guerrier, S. & Couturier, D. L., “*Finite Sample Adjustments for
+Average Equivalence Testing*”, Statistics in Medicine, 2024a,
 <https://doi.org/10.1002/sim.9993>.
+
+Boulaguiem, Y., Insolia, L., Victoria-Feser, M. P., Couturier, D. L. &
+Guerrier, S., “*Multivariate Adjustments for Average Equivalence
+Testing*”, submitted manuscript, 2024b.

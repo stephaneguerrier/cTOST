@@ -53,12 +53,6 @@
   </a>
 </li>
 <li>
-  <a href="../articles/get_started.html">Get started</a>
-</li>
-<li>
-  <a href="../articles/reproducibility.html">Reproducibility</a>
-</li>
-<li>
   <a href="../reference/index.html">Reference</a>
 </li>
       </ul>
@@ -85,7 +79,7 @@
       <h1 data-toc-skip>Results Reproducibility</h1>
             
       
-      <small class="dont-index">Source: <a href="https://github.com/yboulag/cTOST/blob/HEAD/vignettes/reproducibility.Rmd" class="external-link"><code>vignettes/reproducibility.Rmd</code></a></small>
+      <small class="dont-index">Source: <a href="https://github.com/stephaneguerrier/cTOST/blob/HEAD/vignettes/reproducibility.Rmd" class="external-link"><code>vignettes/reproducibility.Rmd</code></a></small>
       <div class="hidden name"><code>reproducibility.Rmd</code></div>
 
     </div>
@@ -109,10 +103,7 @@ an RData file called <code>skin</code>.</p>
 <p>The results presented in Figure 4 of <span class="citation">Boulaguiem et al. (2023)</span> can be reproduced as
 follows:</p>
 <div class="sourceCode" id="cb1"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://github.com/yboulag/cTOST" class="external-link">cTOST</a></span><span class="op">)</span></span>
-<span><span class="co">#&gt; Loading required package: PowerTOST</span></span>
-<span><span class="co">#&gt; Loading required package: cli</span></span>
-<span><span class="co">#&gt; Loading required package: knitr</span></span>
+<code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://github.com/stephaneguerrier/cTOST" class="external-link">cTOST</a></span><span class="op">)</span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/utils/data.html" class="external-link">data</a></span><span class="op">(</span><span class="va">skin</span><span class="op">)</span></span>
 <span></span>
 <span><span class="co"># Empty plot</span></span>
@@ -128,7 +119,6 @@ follows:</p>
 <span><span class="fu"><a href="https://rdrr.io/r/graphics/axis.html" class="external-link">axis</a></span><span class="op">(</span><span class="fl">1</span>, at <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">1</span>,<span class="fl">2</span><span class="op">)</span>, <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"Reference"</span>, <span class="st">"Generic"</span><span class="op">)</span>,tick<span class="op">=</span><span class="cn">FALSE</span><span class="op">)</span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/graphics/axis.html" class="external-link">axis</a></span><span class="op">(</span><span class="fl">2</span>, at <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/Log.html" class="external-link">log</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">250</span>,<span class="fl">500</span>,<span class="fl">1000</span>,<span class="fl">2000</span>,<span class="fl">4000</span><span class="op">)</span><span class="op">)</span>, <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">250</span>,<span class="fl">500</span>,<span class="fl">1000</span>,<span class="fl">2000</span>,<span class="fl">4000</span><span class="op">)</span>, las<span class="op">=</span><span class="fl">2</span><span class="op">)</span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/graphics/axis.html" class="external-link">axis</a></span><span class="op">(</span><span class="fl">2</span>, at <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/mean.html" class="external-link">mean</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/Extremes.html" class="external-link">min</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/unlist.html" class="external-link">unlist</a></span><span class="op">(</span><span class="va">skin</span><span class="op">)</span><span class="op">)</span>,<span class="fu"><a href="https://rdrr.io/r/base/Log.html" class="external-link">log</a></span><span class="op">(</span><span class="fl">4000</span><span class="op">)</span><span class="op">)</span><span class="op">)</span>, <span class="fu"><a href="https://rdrr.io/r/base/expression.html" class="external-link">expression</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/paste.html" class="external-link">paste</a></span><span class="op">(</span><span class="st">"ECZ deposition (ng/cm"</span><span class="op">^</span><span class="fl">2</span><span class="op">*</span><span class="st">")"</span><span class="op">)</span><span class="op">)</span>,padj<span class="op">=</span><span class="op">-</span><span class="fl">4.5</span>, tick <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span></span></code></pre></div>
-<p><img src="reproducibility_files/figure-html/unnamed-chunk-2-1.png" width="100%"></p>
 <div class="section level3">
 <h3 id="bioequivalence-assessment">Bioequivalence assessment<a class="anchor" aria-label="anchor" href="#bioequivalence-assessment"></a>
 </h3>
@@ -153,22 +143,13 @@ bioequivalence:</p>
 <div class="sourceCode" id="cb3"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">res_tost</span> <span class="op">=</span> <span class="fu"><a href="../reference/tost.html">tost</a></span><span class="op">(</span>theta <span class="op">=</span> <span class="va">theta_hat</span>, sigma <span class="op">=</span> <span class="va">sig_hat</span>, nu <span class="op">=</span> <span class="va">nu</span>, alpha <span class="op">=</span> <span class="fl">0.05</span>, delta <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/Log.html" class="external-link">log</a></span><span class="op">(</span><span class="fl">1.25</span><span class="op">)</span><span class="op">)</span></span>
 <span><span class="va">res_tost</span></span></code></pre></div>
-<div class="asciicast" style="color: #172431;font-family: 'Fira Code',Monaco,Consolas,Menlo,'Bitstream Vera Sans Mono','Powerline Symbols',monospace;line-height: 1.300000">
-<pre>
-#&gt; Loading required package: PowerTOST                                             
-#&gt; Loading required package: knitr                                                 
-#&gt; Warning message:                                                                
-#&gt; package ‘cTOST’ was built under R version 4.3.2                                 
-#&gt; <span style="color: #DC322F;">✖ Can't accept (bio)equivalence</span>                                                 
-#&gt; Equiv. Region:  |---------------0---------------|                               
-#&gt; Estim. Inter.:   <span style="color: #859900;">(---------------x--------------</span><span style="color: #DC322F;">--)</span>                             
-#&gt; CI =  (-0.21174 ; 0.25715)                                                      
-#&gt;                                                                                 
-#&gt; Method: TOST                                                                    
-#&gt; alpha = 0.05; Equiv. lim. = +/- 0.22314                                         
-#&gt; Mean = 0.02270; Stand. dev. = 0.13428; df = 16                                  
-</pre>
-</div>
+<pre class="asciicast"><code><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://github.com/stephaneguerrier/cTOST" class="external-link">cTOST</a></span><span class="op">)</span></span>
+<span><span class="fu"><a href="https://rdrr.io/r/utils/data.html" class="external-link">data</a></span><span class="op">(</span><span class="va">skin</span><span class="op">)</span></span>
+<span><span class="va">theta_hat</span> <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/diff.html" class="external-link">diff</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/apply.html" class="external-link">apply</a></span><span class="op">(</span><span class="va">skin</span>,<span class="fl">2</span>,<span class="va">mean</span><span class="op">)</span><span class="op">)</span></span>
+<span><span class="va">nu</span> <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/nrow.html" class="external-link">nrow</a></span><span class="op">(</span><span class="va">skin</span><span class="op">)</span> <span class="op">-</span> <span class="fl">1</span></span>
+<span><span class="va">sig_hat</span> <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/stats/sd.html" class="external-link">sd</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/apply.html" class="external-link">apply</a></span><span class="op">(</span><span class="va">skin</span>,<span class="fl">1</span>,<span class="va">diff</span><span class="op">)</span><span class="op">)</span><span class="op">/</span><span class="fu"><a href="https://rdrr.io/r/base/MathFun.html" class="external-link">sqrt</a></span><span class="op">(</span><span class="va">nu</span><span class="op">)</span></span>
+<span><span class="va">res_tost</span> <span class="op">=</span> <span class="fu"><a href="../reference/tost.html">tost</a></span><span class="op">(</span>theta <span class="op">=</span> <span class="va">theta_hat</span>, sigma <span class="op">=</span> <span class="va">sig_hat</span>, nu <span class="op">=</span> <span class="va">nu</span>, alpha <span class="op">=</span> <span class="fl">0.05</span>, delta <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/Log.html" class="external-link">log</a></span><span class="op">(</span><span class="fl">1.25</span><span class="op">)</span><span class="op">)</span></span>
+<span><span class="va">res_tost</span></span></code></pre>
 </div>
 <div class="section level4">
 <h4 id="delta-tost">
@@ -177,38 +158,25 @@ bioequivalence:</p>
 <p>Using the <span class="math inline">\(\delta\)</span>-TOST, we still
 cannot accept bioequivalence, even though the corrected region is
 larger:</p>
-<div class="sourceCode" id="cb4"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb5"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">res_dtost</span> <span class="op">=</span> <span class="fu"><a href="../reference/dtost.html">dtost</a></span><span class="op">(</span>theta <span class="op">=</span> <span class="va">theta_hat</span>, sigma <span class="op">=</span> <span class="va">sig_hat</span>, nu <span class="op">=</span> <span class="va">nu</span>, alpha <span class="op">=</span> <span class="fl">0.05</span>, delta <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/Log.html" class="external-link">log</a></span><span class="op">(</span><span class="fl">1.25</span><span class="op">)</span><span class="op">)</span></span>
 <span><span class="va">res_dtost</span></span></code></pre></div>
-<div class="asciicast" style="color: #172431;font-family: 'Fira Code',Monaco,Consolas,Menlo,'Bitstream Vera Sans Mono','Powerline Symbols',monospace;line-height: 1.300000">
-<pre>
-#&gt; <span style="color: #DC322F;">✖ Can't accept (bio)equivalence</span>                                                 
-#&gt; Corr. Equiv. Region:  |----------------0----------------|                       
-#&gt;       Estim. Inter.:     <span style="color: #859900;">(--------------x--------------</span><span style="color: #DC322F;">-)</span>                       
-#&gt; CI =  (-0.21174 ; 0.25715)                                                      
-#&gt;                                                                                 
-#&gt; Method: delta-TOST                                                              
-#&gt; alpha = 0.05; Equiv. lim. = +/- 0.22314                                         
-#&gt; Corrected Equiv. lim. = +/- 0.25473                                             
-#&gt; Mean = 0.02270; Stand. dev. = 0.13428; df = 16                                  
-</pre>
-</div>
-<div class="sourceCode" id="cb5"><pre class="downlit sourceCode r">
+<pre class="asciicast"><code><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://github.com/stephaneguerrier/cTOST" class="external-link">cTOST</a></span><span class="op">)</span></span>
+<span><span class="fu"><a href="https://rdrr.io/r/utils/data.html" class="external-link">data</a></span><span class="op">(</span><span class="va">skin</span><span class="op">)</span></span>
+<span><span class="va">theta_hat</span> <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/diff.html" class="external-link">diff</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/apply.html" class="external-link">apply</a></span><span class="op">(</span><span class="va">skin</span>,<span class="fl">2</span>,<span class="va">mean</span><span class="op">)</span><span class="op">)</span></span>
+<span><span class="va">nu</span> <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/nrow.html" class="external-link">nrow</a></span><span class="op">(</span><span class="va">skin</span><span class="op">)</span> <span class="op">-</span> <span class="fl">1</span></span>
+<span><span class="va">sig_hat</span> <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/stats/sd.html" class="external-link">sd</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/apply.html" class="external-link">apply</a></span><span class="op">(</span><span class="va">skin</span>,<span class="fl">1</span>,<span class="va">diff</span><span class="op">)</span><span class="op">)</span><span class="op">/</span><span class="fu"><a href="https://rdrr.io/r/base/MathFun.html" class="external-link">sqrt</a></span><span class="op">(</span><span class="va">nu</span><span class="op">)</span></span>
+<span><span class="va">res_dtost</span> <span class="op">=</span> <span class="fu"><a href="../reference/dtost.html">dtost</a></span><span class="op">(</span>theta <span class="op">=</span> <span class="va">theta_hat</span>, sigma <span class="op">=</span> <span class="va">sig_hat</span>, nu <span class="op">=</span> <span class="va">nu</span>, alpha <span class="op">=</span> <span class="fl">0.05</span>, delta <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/Log.html" class="external-link">log</a></span><span class="op">(</span><span class="fl">1.25</span><span class="op">)</span><span class="op">)</span></span>
+<span><span class="va">res_dtost</span></span></code></pre>
+<div class="sourceCode" id="cb7"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="../reference/compare_to_tost.html">compare_to_tost</a></span><span class="op">(</span><span class="va">res_dtost</span><span class="op">)</span></span></code></pre></div>
-<div class="asciicast" style="color: #172431;font-family: 'Fira Code',Monaco,Consolas,Menlo,'Bitstream Vera Sans Mono','Powerline Symbols',monospace;line-height: 1.300000">
-<pre>
-#&gt; TOST:       <span style="color: #DC322F;">✖ Can't accept (bio)equivalence</span>                                     
-#&gt; delta-TOST: <span style="color: #DC322F;">✖ Can't accept (bio)equivalence</span>                                     
-#&gt;                                                                                 
-#&gt; Stand. Equiv. Region:    |--------------0--------------|                        
-#&gt;  Corr. Equiv. Region:  |----------------0----------------|                      
-#&gt;                 TOST:     <span style="color: #859900;">(--------------x-------------</span><span style="color: #DC322F;">--)</span>                      
-#&gt;           delta-TOST:     <span style="color: #859900;">(--------------x--------------</span><span style="color: #DC322F;">-)</span>                      
-#&gt;                                                                                 
-#&gt;  Standard Equiv. lim. = +/- 0.22314                                             
-#&gt; Corrected Equiv. lim. = +/- 0.25473                                             
-</pre>
-</div>
+<pre class="asciicast"><code><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://github.com/stephaneguerrier/cTOST" class="external-link">cTOST</a></span><span class="op">)</span></span>
+<span><span class="fu"><a href="https://rdrr.io/r/utils/data.html" class="external-link">data</a></span><span class="op">(</span><span class="va">skin</span><span class="op">)</span></span>
+<span><span class="va">theta_hat</span> <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/diff.html" class="external-link">diff</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/apply.html" class="external-link">apply</a></span><span class="op">(</span><span class="va">skin</span>,<span class="fl">2</span>,<span class="va">mean</span><span class="op">)</span><span class="op">)</span></span>
+<span><span class="va">nu</span> <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/nrow.html" class="external-link">nrow</a></span><span class="op">(</span><span class="va">skin</span><span class="op">)</span> <span class="op">-</span> <span class="fl">1</span></span>
+<span><span class="va">sig_hat</span> <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/stats/sd.html" class="external-link">sd</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/apply.html" class="external-link">apply</a></span><span class="op">(</span><span class="va">skin</span>,<span class="fl">1</span>,<span class="va">diff</span><span class="op">)</span><span class="op">)</span><span class="op">/</span><span class="fu"><a href="https://rdrr.io/r/base/MathFun.html" class="external-link">sqrt</a></span><span class="op">(</span><span class="va">nu</span><span class="op">)</span></span>
+<span><span class="va">res_dtost</span> <span class="op">=</span> <span class="fu"><a href="../reference/dtost.html">dtost</a></span><span class="op">(</span>theta <span class="op">=</span> <span class="va">theta_hat</span>, sigma <span class="op">=</span> <span class="va">sig_hat</span>, nu <span class="op">=</span> <span class="va">nu</span>, alpha <span class="op">=</span> <span class="fl">0.05</span>, delta <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/Log.html" class="external-link">log</a></span><span class="op">(</span><span class="fl">1.25</span><span class="op">)</span><span class="op">)</span></span>
+<span><span class="fu"><a href="../reference/compare_to_tost.html">compare_to_tost</a></span><span class="op">(</span><span class="va">res_dtost</span><span class="op">)</span></span></code></pre>
 </div>
 <div class="section level4">
 <h4 id="alpha-tost">
@@ -216,40 +184,25 @@ larger:</p>
 </h4>
 <p>However, the <span class="math inline">\(\alpha\)</span>-TOST allows
 us to accept bioequivalence:</p>
-<div class="sourceCode" id="cb6"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb9"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">res_atost</span> <span class="op">=</span> <span class="fu"><a href="../reference/atost.html">atost</a></span><span class="op">(</span>theta <span class="op">=</span> <span class="va">theta_hat</span>, sigma <span class="op">=</span> <span class="va">sig_hat</span>, nu <span class="op">=</span> <span class="va">nu</span>, alpha <span class="op">=</span> <span class="fl">0.05</span>, delta <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/Log.html" class="external-link">log</a></span><span class="op">(</span><span class="fl">1.25</span><span class="op">)</span><span class="op">)</span></span>
 <span><span class="va">res_atost</span></span></code></pre></div>
-<div class="asciicast" style="color: #172431;font-family: 'Fira Code',Monaco,Consolas,Menlo,'Bitstream Vera Sans Mono','Powerline Symbols',monospace;line-height: 1.300000">
-<pre>
-#&gt; <span style="color: #859900;">✔ Accept (bio)equivalence</span>                                                       
-#&gt; Equiv. Region:  |----------------0----------------|                             
-#&gt; Estim. Inter.:     <span style="color: #859900;">(---------------x--------------)</span>                             
-#&gt; CI =  (-0.17654 ; 0.22194)                                                      
-#&gt;                                                                                 
-#&gt; Method: alpha-TOST                                                              
-#&gt; alpha = 0.05; Equiv. lim. = +/- 0.22314                                         
-#&gt; Corrected alpha = 0.07866                                                       
-#&gt; Mean = 0.02270; Stand. dev. = 0.13428; df = 16                                  
-</pre>
-</div>
-<div class="sourceCode" id="cb7"><pre class="downlit sourceCode r">
+<pre class="asciicast"><code><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://github.com/stephaneguerrier/cTOST" class="external-link">cTOST</a></span><span class="op">)</span></span>
+<span><span class="fu"><a href="https://rdrr.io/r/utils/data.html" class="external-link">data</a></span><span class="op">(</span><span class="va">skin</span><span class="op">)</span></span>
+<span><span class="va">theta_hat</span> <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/diff.html" class="external-link">diff</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/apply.html" class="external-link">apply</a></span><span class="op">(</span><span class="va">skin</span>,<span class="fl">2</span>,<span class="va">mean</span><span class="op">)</span><span class="op">)</span></span>
+<span><span class="va">nu</span> <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/nrow.html" class="external-link">nrow</a></span><span class="op">(</span><span class="va">skin</span><span class="op">)</span> <span class="op">-</span> <span class="fl">1</span></span>
+<span><span class="va">sig_hat</span> <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/stats/sd.html" class="external-link">sd</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/apply.html" class="external-link">apply</a></span><span class="op">(</span><span class="va">skin</span>,<span class="fl">1</span>,<span class="va">diff</span><span class="op">)</span><span class="op">)</span><span class="op">/</span><span class="fu"><a href="https://rdrr.io/r/base/MathFun.html" class="external-link">sqrt</a></span><span class="op">(</span><span class="va">nu</span><span class="op">)</span></span>
+<span><span class="va">res_atost</span> <span class="op">=</span> <span class="fu"><a href="../reference/atost.html">atost</a></span><span class="op">(</span>theta <span class="op">=</span> <span class="va">theta_hat</span>, sigma <span class="op">=</span> <span class="va">sig_hat</span>, nu <span class="op">=</span> <span class="va">nu</span>, alpha <span class="op">=</span> <span class="fl">0.05</span>, delta <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/Log.html" class="external-link">log</a></span><span class="op">(</span><span class="fl">1.25</span><span class="op">)</span><span class="op">)</span></span>
+<span><span class="va">res_atost</span></span></code></pre>
+<div class="sourceCode" id="cb11"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="../reference/compare_to_tost.html">compare_to_tost</a></span><span class="op">(</span><span class="va">res_atost</span><span class="op">)</span></span></code></pre></div>
-<div class="asciicast" style="color: #172431;font-family: 'Fira Code',Monaco,Consolas,Menlo,'Bitstream Vera Sans Mono','Powerline Symbols',monospace;line-height: 1.300000">
-<pre>
-#&gt; TOST:       <span style="color: #DC322F;">✖ Can't accept (bio)equivalence</span>                                     
-#&gt; alpha-TOST: <span style="color: #859900;">✔ Accept (bio)equivalence</span>                                           
-#&gt;                                                                                 
-#&gt; Equiv. Region:  |---------------0---------------|                               
-#&gt; TOST:            <span style="color: #859900;">(---------------x--------------</span><span style="color: #DC322F;">--)</span>                             
-#&gt; alpha-TOST:        <span style="color: #859900;">(-------------x--------------)</span>                               
-#&gt;                                                                                 
-#&gt;                  CI - low      CI - high                                        
-#&gt; TOST:            -0.21174       0.25715                                         
-#&gt; alpha-TOST:      -0.17654       0.22194                                         
-#&gt;                                                                                 
-#&gt; Equiv. lim. = +/- 0.22314                                                       
-</pre>
-</div>
+<pre class="asciicast"><code><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://github.com/stephaneguerrier/cTOST" class="external-link">cTOST</a></span><span class="op">)</span></span>
+<span><span class="fu"><a href="https://rdrr.io/r/utils/data.html" class="external-link">data</a></span><span class="op">(</span><span class="va">skin</span><span class="op">)</span></span>
+<span><span class="va">theta_hat</span> <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/diff.html" class="external-link">diff</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/apply.html" class="external-link">apply</a></span><span class="op">(</span><span class="va">skin</span>,<span class="fl">2</span>,<span class="va">mean</span><span class="op">)</span><span class="op">)</span></span>
+<span><span class="va">nu</span> <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/nrow.html" class="external-link">nrow</a></span><span class="op">(</span><span class="va">skin</span><span class="op">)</span> <span class="op">-</span> <span class="fl">1</span></span>
+<span><span class="va">sig_hat</span> <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/stats/sd.html" class="external-link">sd</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/apply.html" class="external-link">apply</a></span><span class="op">(</span><span class="va">skin</span>,<span class="fl">1</span>,<span class="va">diff</span><span class="op">)</span><span class="op">)</span><span class="op">/</span><span class="fu"><a href="https://rdrr.io/r/base/MathFun.html" class="external-link">sqrt</a></span><span class="op">(</span><span class="va">nu</span><span class="op">)</span></span>
+<span><span class="va">res_atost</span> <span class="op">=</span> <span class="fu"><a href="../reference/atost.html">atost</a></span><span class="op">(</span>theta <span class="op">=</span> <span class="va">theta_hat</span>, sigma <span class="op">=</span> <span class="va">sig_hat</span>, nu <span class="op">=</span> <span class="va">nu</span>, alpha <span class="op">=</span> <span class="fl">0.05</span>, delta <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/Log.html" class="external-link">log</a></span><span class="op">(</span><span class="fl">1.25</span><span class="op">)</span><span class="op">)</span></span>
+<span><span class="fu"><a href="../reference/compare_to_tost.html">compare_to_tost</a></span><span class="op">(</span><span class="va">res_atost</span><span class="op">)</span></span></code></pre>
 </div>
 </div>
 <div class="section level3">
@@ -258,7 +211,7 @@ us to accept bioequivalence:</p>
 <p>To visually assess bioequivalence with the interval inclusion
 principal, we reproduce Figure 5 of <span class="citation">Boulaguiem et
 al. (2023)</span> with the following code:</p>
-<div class="sourceCode" id="cb8"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb13"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># Nominal level and zquivalence bounds</span></span>
 <span><span class="va">alpha</span> <span class="op">=</span> <span class="fl">0.05</span></span>
 <span><span class="va">delta</span> <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/Log.html" class="external-link">log</a></span><span class="op">(</span><span class="fl">1.25</span><span class="op">)</span></span>
@@ -312,7 +265,6 @@ al. (2023)</span> with the following code:</p>
 <span>     labels <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"-0.3"</span>, <span class="fu"><a href="https://rdrr.io/r/base/expression.html" class="external-link">expression</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/paste.html" class="external-link">paste</a></span><span class="op">(</span><span class="st">"-"</span>,<span class="va">delta</span><span class="op">)</span><span class="op">)</span>, <span class="st">"-0.1"</span>, <span class="st">"0"</span>, <span class="st">"0.1"</span>,</span>
 <span>                <span class="fu"><a href="https://rdrr.io/r/base/expression.html" class="external-link">expression</a></span><span class="op">(</span><span class="va">delta</span><span class="op">)</span>, <span class="st">"0.3"</span><span class="op">)</span>,padj<span class="op">=</span><span class="op">-</span><span class="fl">0.15</span>,cex.axis<span class="op">=</span><span class="fl">1.3</span><span class="op">)</span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/graphics/mtext.html" class="external-link">mtext</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/expression.html" class="external-link">expression</a></span><span class="op">(</span><span class="va">theta</span><span class="op">)</span>, side <span class="op">=</span> <span class="fl">1</span>, line <span class="op">=</span> <span class="fl">2.35</span>, cex <span class="op">=</span> <span class="fl">1.4</span><span class="op">)</span></span></code></pre></div>
-<p><img src="reproducibility_files/figure-html/unnamed-chunk-15-1.png" width="100%"></p>
 </div>
 </div>
 <div class="section level2">
@@ -347,7 +299,7 @@ Assess Bioequivalence in Topical Skin Delivery.”</span>
 
       <footer><div class="copyright">
   <p></p>
-<p>Developed by Younes Boulaguiem, Stéphane Guerrier, Dominique-Laurent Couturier.</p>
+<p>Developed by Stéphane Guerrier, Younes Boulaguiem, Dominique-Laurent Couturier, Luca Insolia.</p>
 </div>
 
 <div class="pkgdown">

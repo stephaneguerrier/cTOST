@@ -14,32 +14,32 @@ downloads](http://cranlogs.r-pkg.org/badges/cTOST)](https://www.r-pkg.org/pkg/cT
 downloads](https://cranlogs.r-pkg.org/badges/grand-total/cTOST)](https://www.r-pkg.org/pkg/cTOST)
 <!-- badges: end -->
 
-## `cTOST` Overview
+## 1. `cTOST` Overview
 
-This R package contains the functions to test equivalence in univariate
-and multivariate settings based on the Two One-Sided Tests (TOST). In
-addition, the package contains different corrective procedures applied
-to the standard TOST in order to adjust the size of the procedure at the
-desired nominal level leading to more powerful procedures. This package
-implements the $\alpha$-TOST and $\delta$-TOST methods proposed in
-Boulaguiem et al. (2024a) and in Boulaguiem et al. (2024b).
+This R package contains functions for testing equivalence in both
+univariate and multivariate settings, based on the Two One-Sided Tests
+(TOST). The `cTOST` package implements the $\alpha$-TOST and
+$\delta$-TOST methods proposed by Boulaguiem et al. (2024a, 2024b).
+These two corrective procedures that can be applied to the standard TOST
+to adjust the size of the procedure to the desired nominal level,
+resulting in more powerful procedures.
 
-## Install Instructions
+## 2. Install Instructions
 
-The `cTOST` package is available on GitHub at the moment. It is subject
-to ongoing updates that may lead to stability issues.
+The `cTOST` package is available on cran and on GitHub. The version on
+GitHub is subject to ongoing updates that may lead to stability issues.
 
-In order to install the package, it is required to pre-install the
-`devtools` dependency. Run the following command if you do not have it
-already installed:
+The package can from cran as follows:
+
+``` r
+install.packages("cTOST")
+```
+
+The package can also be install from GitHub using the `devtools`
+package:
 
 ``` r
 install.packages("devtools")
-```
-
-The package is then installed with the following command:
-
-``` r
 devtools::install_github("stephaneguerrier/cTOST")
 ```
 
@@ -47,11 +47,82 @@ Note that Windows users are assumed that have Rtools installed (if this
 is not the case, please visit this
 [link](https://cran.r-project.org/bin/windows/Rtools/).
 
-## How to use
+## 3. How to use
 
-TO DO
+We provide here a few examples on the usage of the `cTOST` package. More
+information can be found here: ???
 
-## How to cite
+### 3.1. Univariate settings
+
+To illustrate the use of the proposed method in the univariate settings,
+we consider the `skin` dataset analyzed in Boulaguiem et al. (2024a),
+which can be loaded as follows:
+
+``` r
+data(skin)
+theta_hat = diff(apply(skin,2,mean))
+nu = nrow(skin) - 1
+sig_hat = sd(apply(skin,1,diff))/sqrt(nu)
+```
+
+### 3.1.1. Standard TOST
+
+The standard TOST can be used as follows:
+
+``` r
+stost = tost(theta = theta_hat, sigma = sig_hat, nu = nu, delta = log(1.25))
+stost
+```
+
+<img src="README_files/figure-gfm//unnamed-chunk-6.svg" width="100%" />
+
+#### 3.1.2. $\alpha$-TOST
+
+The $\alpha$-TOST can be used through the function `ctost` as follows:
+
+``` r
+atost = ctost(theta = theta_hat, sigma = sig_hat, nu = nu, 
+              delta = log(1.25), method = "alpha")
+atost
+```
+
+<img src="README_files/figure-gfm//unnamed-chunk-8.svg" width="100%" />
+
+It is possible to compare the results of the $\alpha$-TOST (or
+$\delta$-TOST, see below) with the standard TOST as follows:
+
+``` r
+compare_to_tost(atost)
+```
+
+<img src="README_files/figure-gfm//unnamed-chunk-10.svg" width="100%" />
+
+### 3.1.3. $\delta$-TOST
+
+The $\delta$-TOST can be used through the function `ctost` as follows:
+
+``` r
+dtost = ctost(theta = theta_hat, sigma = sig_hat, nu = nu, 
+              delta = log(1.25), method = "delta")
+dtost
+#> ✖ Can't accept (bio)equivalence
+#> Corr. Equiv. Region:  |----------------0----------------|
+#>       Estim. Inter.:     (--------------x---------------)
+#> CI =  (-0.21174 ; 0.25715)
+#> 
+#> Method: delta-TOST
+#> alpha = 0.05; Equiv. lim. = +/- 0.22314
+#> Corrected Equiv. lim. = +/- 0.25473
+#> Mean = 0.02270; Stand. dev. = 0.13428; df = 16
+```
+
+<img src="README_files/figure-gfm//unnamed-chunk-12.svg" width="100%" />
+
+### 3.2. Multivariate settings
+
+COMING SOON
+
+## 4. How to cite
 
     @Manual{boulaguiem2024ctost,
       title = {cTOST: Finite Sample Correction of The TOST in The Univariate Framework},
@@ -61,7 +132,7 @@ TO DO
       url = {https://github.com/stephaneguerrier},
     }
 
-## License
+## 5. License
 
 The license this source code is released under is the GNU AFFERO GENERAL
 PUBLIC LICENSE (AGPL) v3.0. Please see the LICENSE file for full text.
@@ -69,7 +140,7 @@ Otherwise, please consult
 [GNU](https://www.gnu.org/licenses/agpl-3.0.en.html) which will provide
 a synopsis of the restrictions placed upon the code.
 
-## References
+## 6. References
 
 Boulaguiem, Y., Quartier, J., Lapteva, M., Kalia, Y. N., Victoria-Feser,
 M. P., Guerrier, S. & Couturier, D. L., “*Finite Sample Adjustments for

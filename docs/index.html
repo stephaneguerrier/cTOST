@@ -83,13 +83,12 @@
 <!-- badges: start -->
 
 <div class="section level2">
-<h2 id="ctost-overview">
-<code>cTOST</code> Overview<a class="anchor" aria-label="anchor" href="#ctost-overview"></a>
+<h2 id="id_1-ctost-overview">1. <code>cTOST</code> Overview<a class="anchor" aria-label="anchor" href="#id_1-ctost-overview"></a>
 </h2>
 <p>This R package contains the functions to test equivalence in univariate and multivariate settings based on the Two One-Sided Tests (TOST). In addition, the package contains different corrective procedures applied to the standard TOST in order to adjust the size of the procedure at the desired nominal level leading to more powerful procedures. This package implements the <span class="math inline"><em>α</em></span>-TOST and <span class="math inline"><em>δ</em></span>-TOST methods proposed in Boulaguiem et al. (2024a) and in Boulaguiem et al. (2024b).</p>
 </div>
 <div class="section level2">
-<h2 id="install-instructions">Install Instructions<a class="anchor" aria-label="anchor" href="#install-instructions"></a>
+<h2 id="id_2-install-instructions">2. Install Instructions<a class="anchor" aria-label="anchor" href="#id_2-install-instructions"></a>
 </h2>
 <p>The <code>cTOST</code> package is available on GitHub at the moment. It is subject to ongoing updates that may lead to stability issues.</p>
 <p>In order to install the package, it is required to pre-install the <code>devtools</code> dependency. Run the following command if you do not have it already installed:</p>
@@ -101,20 +100,60 @@
 <p>Note that Windows users are assumed that have Rtools installed (if this is not the case, please visit this <a href="https://cran.r-project.org/bin/windows/Rtools/" class="external-link">link</a>.</p>
 </div>
 <div class="section level2">
-<h2 id="how-to-use">How to use<a class="anchor" aria-label="anchor" href="#how-to-use"></a>
+<h2 id="id_3-how-to-use">3. How to use<a class="anchor" aria-label="anchor" href="#id_3-how-to-use"></a>
 </h2>
-<p>TO DO</p>
+<div class="section level3">
+<h3 id="id_31-uni">3.1 Uni<a class="anchor" aria-label="anchor" href="#id_31-uni"></a>
+</h3>
+<div class="sourceCode" id="cb3"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/utils/data.html" class="external-link">data</a></span><span class="op">(</span><span class="va">skin</span><span class="op">)</span></span>
+<span><span class="va">theta_hat</span> <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/diff.html" class="external-link">diff</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/apply.html" class="external-link">apply</a></span><span class="op">(</span><span class="va">skin</span>,<span class="fl">2</span>,<span class="va">mean</span><span class="op">)</span><span class="op">)</span></span>
+<span><span class="va">nu</span> <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/nrow.html" class="external-link">nrow</a></span><span class="op">(</span><span class="va">skin</span><span class="op">)</span> <span class="op">-</span> <span class="fl">1</span></span>
+<span><span class="va">sig_hat</span> <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/stats/sd.html" class="external-link">sd</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/apply.html" class="external-link">apply</a></span><span class="op">(</span><span class="va">skin</span>,<span class="fl">1</span>,<span class="va">diff</span><span class="op">)</span><span class="op">)</span><span class="op">/</span><span class="fu"><a href="https://rdrr.io/r/base/MathFun.html" class="external-link">sqrt</a></span><span class="op">(</span><span class="va">nu</span><span class="op">)</span></span></code></pre></div>
+<div class="section level4">
+<h4 id="id_311-alpha-tost">3.1.1 <span class="math inline"><em>α</em></span>-TOST<a class="anchor" aria-label="anchor" href="#id_311-alpha-tost"></a>
+</h4>
+<div class="sourceCode" id="cb4"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="va">atost</span> <span class="op">=</span> <span class="fu"><a href="reference/ctost.html">ctost</a></span><span class="op">(</span>theta <span class="op">=</span> <span class="va">theta_hat</span>, sigma <span class="op">=</span> <span class="va">sig_hat</span>, nu <span class="op">=</span> <span class="va">nu</span>, </span>
+<span>              delta <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/Log.html" class="external-link">log</a></span><span class="op">(</span><span class="fl">1.25</span><span class="op">)</span>, method <span class="op">=</span> <span class="st">"alpha"</span><span class="op">)</span></span>
+<span><span class="va">atost</span></span></code></pre></div>
+<p><img src="README_files/figure-gfm//unnamed-chunk-6.svg" width="100%"></p>
+</div>
+</div>
+<div class="section level3">
+<h3 id="delta-tost">
+<span class="math inline"><em>δ</em></span>-TOST<a class="anchor" aria-label="anchor" href="#delta-tost"></a>
+</h3>
+<div class="sourceCode" id="cb5"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="va">dtost</span> <span class="op">=</span> <span class="fu"><a href="reference/ctost.html">ctost</a></span><span class="op">(</span>theta <span class="op">=</span> <span class="va">theta_hat</span>, sigma <span class="op">=</span> <span class="va">sig_hat</span>, nu <span class="op">=</span> <span class="va">nu</span>, </span>
+<span>              delta <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/Log.html" class="external-link">log</a></span><span class="op">(</span><span class="fl">1.25</span><span class="op">)</span>, method <span class="op">=</span> <span class="st">"delta"</span><span class="op">)</span></span>
+<span><span class="va">dtost</span></span>
+<span><span class="co">#&gt; ✖ Can't accept (bio)equivalence</span></span>
+<span><span class="co">#&gt; Corr. Equiv. Region:  |----------------0----------------|</span></span>
+<span><span class="co">#&gt;       Estim. Inter.:     (--------------x---------------)</span></span>
+<span><span class="co">#&gt; CI =  (-0.21174 ; 0.25715)</span></span>
+<span><span class="co">#&gt; </span></span>
+<span><span class="co">#&gt; Method: delta-TOST</span></span>
+<span><span class="co">#&gt; alpha = 0.05; Equiv. lim. = +/- 0.22314</span></span>
+<span><span class="co">#&gt; Corrected Equiv. lim. = +/- 0.25473</span></span>
+<span><span class="co">#&gt; Mean = 0.02270; Stand. dev. = 0.13428; df = 16</span></span></code></pre></div>
+<p><img src="README_files/figure-gfm//unnamed-chunk-8.svg" width="100%"></p>
+</div>
+<div class="section level3">
+<h3 id="comparison-with-tost">Comparison with TOST<a class="anchor" aria-label="anchor" href="#comparison-with-tost"></a>
+</h3>
+</div>
 </div>
 <div class="section level2">
 <h2 id="how-to-cite">How to cite<a class="anchor" aria-label="anchor" href="#how-to-cite"></a>
 </h2>
-<div class="sourceCode" id="cb3"><pre class="sourceCode R"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1" tabindex="-1"></a><span class="sc">@</span>Manual{boulaguiem2024ctost,</span>
-<span id="cb3-2"><a href="#cb3-2" tabindex="-1"></a>  title <span class="ot">=</span> {cTOST<span class="sc">:</span> Finite Sample Correction of The TOST <span class="cf">in</span> The Univariate Framework},</span>
-<span id="cb3-3"><a href="#cb3-3" tabindex="-1"></a>  author <span class="ot">=</span> {Boulaguiem, Y. and Insolia, L. and Couturier, D.<span class="sc">-</span>L. and Guerrier, S.},</span>
-<span id="cb3-4"><a href="#cb3-4" tabindex="-1"></a>  year <span class="ot">=</span> {<span class="dv">2024</span>},</span>
-<span id="cb3-5"><a href="#cb3-5" tabindex="-1"></a>  note <span class="ot">=</span> {R package version <span class="dv">1</span>.<span class="fl">1.0</span>},</span>
-<span id="cb3-6"><a href="#cb3-6" tabindex="-1"></a>  url <span class="ot">=</span> {https<span class="sc">:</span><span class="er">//</span>github.com<span class="sc">/</span>stephaneguerrier},</span>
-<span id="cb3-7"><a href="#cb3-7" tabindex="-1"></a>}</span></code></pre></div>
+<div class="sourceCode" id="cb6"><pre class="sourceCode R"><code class="sourceCode r"><span id="cb6-1"><a href="#cb6-1" tabindex="-1"></a><span class="sc">@</span>Manual{boulaguiem2024ctost,</span>
+<span id="cb6-2"><a href="#cb6-2" tabindex="-1"></a>  title <span class="ot">=</span> {cTOST<span class="sc">:</span> Finite Sample Correction of The TOST <span class="cf">in</span> The Univariate Framework},</span>
+<span id="cb6-3"><a href="#cb6-3" tabindex="-1"></a>  author <span class="ot">=</span> {Boulaguiem, Y. and Insolia, L. and Couturier, D.<span class="sc">-</span>L. and Guerrier, S.},</span>
+<span id="cb6-4"><a href="#cb6-4" tabindex="-1"></a>  year <span class="ot">=</span> {<span class="dv">2024</span>},</span>
+<span id="cb6-5"><a href="#cb6-5" tabindex="-1"></a>  note <span class="ot">=</span> {R package version <span class="dv">1</span>.<span class="fl">1.0</span>},</span>
+<span id="cb6-6"><a href="#cb6-6" tabindex="-1"></a>  url <span class="ot">=</span> {https<span class="sc">:</span><span class="er">//</span>github.com<span class="sc">/</span>stephaneguerrier},</span>
+<span id="cb6-7"><a href="#cb6-7" tabindex="-1"></a>}</span></code></pre></div>
 </div>
 <div class="section level2">
 <h2 id="license">License<a class="anchor" aria-label="anchor" href="#license"></a>

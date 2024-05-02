@@ -6,8 +6,7 @@ reference:
   - title: TOST functions
     contents:
     - tost
-    - dtost
-    - atost
+    - ctost
   - title: Data
     contents:
     - skin

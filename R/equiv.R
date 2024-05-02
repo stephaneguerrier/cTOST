@@ -207,8 +207,9 @@ ci = function(alpha, theta, sigma_nu, nu, ...){
 #' @param theta                 A \code{numeric} value corresponding to the difference of means (e.g. between a generic and reference drug).
 #' @param sigma                 A \code{numeric} value corresponding to the standard error.
 #' @param nu                    A \code{numeric} value corresponding to the number of degrees of freedom.
-#' @param alpha                 A \code{numeric} value specifying the significance level.
 #' @param delta                 A \code{numeric} value corresponding to (bio)equivalence limit. We assume symmetry, i.e, the (bio)equivalence interval corresponds to (-delta,delta)
+#' @param alpha                 A \code{numeric} value specifying the significance level (default = 0.05)
+#' @param ...                   Additional parameters.
 #'
 #' @author Younes Boulaguiem, Stéphane Guerrier, Dominique-Laurent Couturier, Luca Insolia
 #'
@@ -217,7 +218,7 @@ ci = function(alpha, theta, sigma_nu, nu, ...){
 #'  \item decision:    A boolean variable indicating whether (bio)equivalence is accepted or not.
 #'  \item ci:          Confidence interval at the 1 - 2*alpha level.
 #'  \item theta:       The difference of means used for the test.
-#'  \item sigma:       The standard error used for the test.
+#'  \item sigma:       The standard deviation (univariate) or covariance matrix (multivariate) used for the test.
 #'  \item nu:          The number of degrees of freedom used for the test.
 #'  \item alpha:       The significance level used for the test.
 #'  \item delta:       The (bio)equivalence limits used for the test.
@@ -234,14 +235,51 @@ ci = function(alpha, theta, sigma_nu, nu, ...){
 #'      alpha = 0.05, delta = log(1.25))
 #'
 #' @export
-tost = function(theta, sigma, nu, alpha, delta){
-  decision = abs(theta) < (delta - qt(1 - alpha, df = nu) * sigma)
-  ci = theta + c(-1, 1) * qt(1 - alpha, df = nu) * sigma
-  out = list(decision = as.vector(decision), ci = ci, theta = theta,
-             sigma = sigma, nu = nu, alpha = alpha,
-             delta = delta, method = "TOST")
-  class(out) = "tost"
-  out
+tost = function(theta, sigma, nu, delta, alpha = 0.05,...){
+
+  n_theta = length(theta)
+
+  if (n_theta == 1){
+    # Univariate setting
+    setting = "univariate"
+    if (length(sigma) > 1 || length(delta) > 1){
+      stop("sigma and delta must be scalars in univariate settings.")
+    }
+
+  }else{
+    # Multivariate setting
+    setting = "multivariate"
+
+    if (!is.matrix(sigma) || ncol(sigma) != nrow(sigma)){
+      stop("sigma must be a square matrix.")
+    }
+
+    if (length(delta) > 1){
+      stop("delta is assumed to be a scalar, implying that we consider the alternative theta in (-delta, delta) in each dimension.")
+    }
+  }
+
+  if (setting == "univariate"){
+    decision = abs(theta) < (delta - qt(1 - alpha, df = nu) * sigma)
+    ci = theta + c(-1, 1) * qt(1 - alpha, df = nu) * sigma
+    out = list(decision = as.vector(decision), ci = ci, theta = theta,
+               sigma = sigma, nu = nu, alpha = alpha,
+               delta = delta, method = "TOST", setting = setting)
+    class(out) = "tost"
+    return(out)
+  }else{
+    delta_vec = rep(delta, ncol(sigma))
+    t_alpha = qt(1 - alpha, df=nu)
+    lower = theta - t_alpha * sqrt(diag(sigma))
+    upper = theta + t_alpha * sqrt(diag(sigma))
+    decision = (lower > -delta_vec) & (upper < delta_vec)
+
+    out = list(decision = decision, ci = cbind(lower, upper), theta = theta,
+               sigma = sigma, nu = nu, alpha = alpha,
+               delta = delta, method = "TOST", setting = setting)
+    class(out) = "mtost"
+    return(out)
+  }
 }
 
 

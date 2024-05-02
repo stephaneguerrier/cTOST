@@ -4,7 +4,7 @@
 \alias{tost}
 \title{Two One-Sided Test (TOST) for (Bio)Equivalence Testing}
 \usage{
-tost(theta, sigma, nu, alpha, delta)
+tost(theta, sigma, nu, delta, alpha = 0.05, ...)
 }
 \arguments{
 \item{theta}{A \code{numeric} value corresponding to the difference of means (e.g. between a generic and reference drug).}
@@ -13,9 +13,11 @@ tost(theta, sigma, nu, alpha, delta)
 
 \item{nu}{A \code{numeric} value corresponding to the number of degrees of freedom.}
 
-\item{alpha}{A \code{numeric} value specifying the significance level.}
-
 \item{delta}{A \code{numeric} value corresponding to (bio)equivalence limit. We assume symmetry, i.e, the (bio)equivalence interval corresponds to (-delta,delta)}
+
+\item{alpha}{A \code{numeric} value specifying the significance level (default = 0.05)}
+
+\item{...}{Additional parameters.}
 }
 \value{
 A \code{tost} object with the structure:
@@ -23,7 +25,7 @@ A \code{tost} object with the structure:
  \item decision:    A boolean variable indicating whether (bio)equivalence is accepted or not.
  \item ci:          Confidence interval at the 1 - 2*alpha level.
  \item theta:       The difference of means used for the test.
- \item sigma:       The standard error used for the test.
+ \item sigma:       The standard deviation (univariate) or covariance matrix (multivariate) used for the test.
  \item nu:          The number of degrees of freedom used for the test.
  \item alpha:       The significance level used for the test.
  \item delta:       The (bio)equivalence limits used for the test.

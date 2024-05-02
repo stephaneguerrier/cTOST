@@ -24,3 +24,17 @@
 #' nu <- nrow(skin)-1
 #' sigma_nu <- sd(apply(skin,1,diff))/sqrt(nu)
 "skin"
+
+#' ????????
+#'
+#' @docType data
+#' @usage data(ticlopidine)
+#'
+#' @description ??????
+#'
+#' @format ????
+#' @references ????
+#'
+#' @examples
+#' data(ticlopidine)
+"ticlopidine"

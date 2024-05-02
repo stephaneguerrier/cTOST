@@ -19,6 +19,7 @@ knitr::opts_chunk$set(
 asciicast::init_knitr_engine(
   startup = quote({
     library(cli)
+    library(cTOST)
     set.seed(1) }),
   echo = FALSE,
   echo_input = FALSE)
@@ -60,7 +61,7 @@ Note that Windows users are assumed that have Rtools installed (if this is not t
 
 ## 3. How to use
 
-We provide here a few examples on the usage of the `cTOST` package. More information can be found here: ???
+We provide here a few examples on the usage of the `cTOST` package.
 
 ### 3.1. Univariate settings
 
@@ -150,7 +151,20 @@ dtost
 
 ### 3.2. Multivariate settings
 
-COMING SOON
+#### 3.2.1. Multivariate TOST
+
+```{r}
+data(ticlopidine)
+n = nrow(ticlopidine)
+p = ncol(ticlopidine)
+nu = n-1
+theta_hat = colMeans(dat)
+Sigma_hat = cov(ticlopidine)/n
+delta = log(1.25)
+a = tost(theta = theta_hat, sigma = Sigma_hat, nu = nu, delta = delta)
+```
+
+#### 3.2.2. Multivariate $\alpha$-TOST
 
 ## 4. How to cite
 

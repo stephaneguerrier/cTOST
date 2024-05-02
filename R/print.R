@@ -170,6 +170,181 @@ print.tost = function(x, ticks = 30, rn = 5, ...){
   cat("\n")
 }
 
+
+#' Print Results of (Bio)Equivalence Assessment in Multivariate Settings
+#'
+#' @param x      A \code{mtost} object, which is the output of one of the following functions `tost` or `ctost`.
+#' @param ticks  Number of ticks to print the confidence interval in the console.
+#' @param rn     Number of digits to consider when printing the results.
+#' @param ...    Further arguments to be passed to or from methods.
+#' @return       Prints object.
+#' @importFrom   cli cli_text col_green col_red
+#'
+#' @rdname print.mtost
+#'
+#' @export
+print.mtost = function(x, ticks = 30, rn = 5, ...){
+  p = length(x$decision)
+
+  if (all(x$decision)){
+    cli_text(col_green("{symbol$tick} Accept (bio)equivalence"))
+  }else{
+    cli_text(col_red("{symbol$cross} Can't accept (bio)equivalence"))
+  }
+
+  rg = range(c(x$ci, x$delta, -x$delta))
+  rg_delta = rg[2] - rg[1]
+  std_be_interval = round(ticks*(c(-x$delta, x$delta) - rg[1])/rg_delta) + 1
+  std_zero = round(-ticks*rg[1]/rg_delta) + 1
+
+  lower_be = upper_be = std_fit_interval_center = rep(NA, p)
+  std_fit_interval = matrix(NA, p, 2)
+  for (i in 1:p){
+    lower_be[i] = x$ci[i,1] > -x$delta
+    upper_be[i] = x$ci[i,2] < x$delta
+    std_fit_interval[i,] = round(ticks*(x$ci[i,] - rg[1])/rg_delta) + 1
+    std_fit_interval_center[i] = round(ticks*(sum(x$ci[i,])/2 - rg[1])/rg_delta) + 1
+  }
+
+  names_var = colnames(x$sigma)
+  names_len = nchar(names_var)
+
+
+  cat("Equiv. Region:  ")
+
+  if (nchar("Equiv. Region:   ") < max(names_len)){
+    cat(paste(rep(" ", max(names_len) - nchar("Equiv. Region:   ")), collapse = ""))
+  }
+  cat(" ")
+
+  for (i in 1:(ticks+1)){
+    if (i >= std_be_interval[1] && i <= std_be_interval[2]){
+      if (i == std_be_interval[1]){
+        cat(("|-"))
+      }else{
+        if (i ==  std_be_interval[2]){
+          cat(("-|"))
+        }else{
+          if (i == std_zero){
+            cat(("-0-"))
+          }else{
+            cat(("-"))
+          }
+        }
+      }
+    }else{
+      cat(" ")
+    }
+  }
+
+  cat("\n")
+
+  for (h in 1:p){
+    if (max(names_len) > names_len[h]){
+      cat(names_var[h])
+      cat(paste(rep(" ", max(names_len) - names_len[h]), collapse = ""))
+      cat(" ")
+    }else{
+      cat(names_var[h])
+      cat(" ")
+    }
+
+    if (nchar("Equiv. Region:   ") > max(names_len)){
+      cat(paste(rep(" ", nchar("Equiv. Region:  ") - max(names_len)), collapse = ""))
+    }
+
+
+    for (i in 1:(ticks+1)){
+      if (i >= std_fit_interval[h,1] && i <= std_fit_interval[h,2]){
+        if (i == std_fit_interval[h,1]){
+          if (i > std_be_interval[1] && i < std_be_interval[2]){
+            cat(col_green("(-"))
+          }else{
+            if (lower_be[h]){
+              cat(col_green("(-"))
+            }else{
+              cat(col_red("(-"))
+            }
+          }
+
+        }else{
+          if (i ==  std_fit_interval[h,2]){
+            if (i > std_be_interval[1] && i < std_be_interval[2]){
+              cat(col_green("-)"))
+            }else{
+              if (upper_be[h]){
+                cat(col_green("-)"))
+              }else{
+                cat(col_red("-)"))
+              }
+            }
+
+          }else{
+            if (i == std_fit_interval_center[h]){
+              if (i >= std_be_interval[1] && i <= std_be_interval[2]){
+                cat(col_green("-x-"))
+              }else{
+                cat(col_red("-x-"))
+              }
+            }else{
+              if (i >= std_be_interval[1] && i <= std_be_interval[2]){
+                cat(col_green("-"))
+              }else{
+                cat(col_red("-"))
+              }
+            }
+          }
+        }
+      }else{
+        cat(" ")
+      }
+    }
+    cat("\n")
+  }
+
+  cat("\n")
+  cat("CIs:")
+  cat("\n")
+
+  for (i in 1:p){
+    if (max(names_len) > names_len[i]){
+      cat(names_var[i])
+      cat(paste(rep(" ", max(names_len) - names_len[i]), collapse = ""))
+      cat("  ")
+    }else{
+      cat(names_var[i])
+      cat("  ")
+    }
+
+    cat("(")
+    cat(format(round(x$ci[i,1], rn), nsmall = rn))
+    cat(" ; ")
+    cat(format(round(x$ci[i,2], rn), nsmall = rn))
+    cat(")     ")
+    if (x$decision[i]){
+      cli_text(col_green("{symbol$tick}"))
+    }else{
+      cli_text(col_red("{symbol$cross}"))
+    }
+  }
+  cat("\n")
+
+  cat("Method: ")
+  cat(x$method)
+  cat("\n")
+  cat("alpha = ")
+  cat(x$alpha)
+  cat("; ")
+  cat("Equiv. lim. = +/- ")
+  cat(format(round(x$delta, rn), nsmall = rn))
+  cat("\n")
+  if (x$method == "alpha-TOST"){
+    cat("Corrected alpha = ")
+    cat(format(round(x$corrected_alpha, rn), nsmall = rn))
+    cat("\n")
+  }
+}
+
 #' @title Comparison of a Corrective Procedure to the results of the Two One-Sided Tests (TOST) in Univariate Settings
 #'
 #' @description This function renders a comparison of the alpha-TOST or the delta-TOST outputs obtained with the function `ctost` to the TOST output obtained with `tost`.

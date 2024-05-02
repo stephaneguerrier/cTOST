@@ -276,9 +276,8 @@ tost = function(theta, sigma, nu, alpha, delta){
 #' theta_hat = diff(apply(skin,2,mean))
 #' nu = nrow(skin) - 1
 #' sig_hat = sd(apply(skin,1,diff))/sqrt(nu)
-#' res_atost = atost(theta = theta_hat, sigma = sig_hat, nu = nu,
+#' res_atost = cTOST:::atost(theta = theta_hat, sigma = sig_hat, nu = nu,
 #'               alpha = 0.05, delta = log(1.25))
-#' res_atost
 #' compare_to_tost(res_atost)
 atost = function(theta, sigma, nu, alpha, delta){
   corrected_alpha = alphahat.fun(sigma = sigma, nu = nu, alpha = alpha, delta = delta)
@@ -324,9 +323,8 @@ atost = function(theta, sigma, nu, alpha, delta){
 #' theta_hat = diff(apply(skin,2,mean))
 #' nu = nrow(skin) - 1
 #' sig_hat = sd(apply(skin,1,diff))/sqrt(nu)
-#' res_dtost = dtost(theta = theta_hat, sigma = sig_hat, nu = nu,
+#' res_dtost = cTOST:::dtost(theta = theta_hat, sigma = sig_hat, nu = nu,
 #'               alpha = 0.05, delta = log(1.25))
-#' res_dtost
 #' compare_to_tost(res_dtost)
 #'
 dtost = function(theta, sigma, nu, alpha, delta){

@@ -28,6 +28,7 @@ A \code{tost} object with the structure:
  \item alpha:       The significance level used for the test.
  \item delta:       The (bio)equivalence limits used for the test.
  \item method:      The method used for the test (here the "TOST").
+ \item setting:     The setting used (univariate or multivariate).
 }
 }
 \description{
@@ -44,5 +45,5 @@ tost(theta = theta_hat, sigma = sig_hat, nu = nu,
 
 }
 \author{
-Younes Boulaguiem, Stéphane Guerrier, Dominique-Laurent Couturier
+Younes Boulaguiem, Stéphane Guerrier, Dominique-Laurent Couturier, Luca Insolia
 }

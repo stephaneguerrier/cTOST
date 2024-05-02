@@ -21,10 +21,6 @@ navbar:
   left:
   - icon: fa-home
     href: index.html
-  - text: Get started
-    href: articles/get_started.html
-  - text: Reproducibility
-    href: articles/reproducibility.html
   - text: Reference
     href: reference/index.html
   right:

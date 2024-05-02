@@ -10,7 +10,7 @@ vignette: >
   %\VignetteEncoding{UTF-8}
 ---
 
-```{r, include = FALSE, cache = FALSE}
+```{r, include = FALSE, cache = FALSE, eval=FALSE}
 knitr::opts_chunk$set(
   collapse = TRUE,
   comment = "#>",
@@ -31,7 +31,7 @@ In the following we use the methodology developed in this paper for the evaluati
 
 The results presented in Figure 4 of @boulaguiem2023finite can be reproduced as follows:
 
-```{r, eval=TRUE}
+```{r, eval=FALSE}
 library(cTOST)
 data(skin)
 
@@ -54,7 +54,7 @@ axis(2, at = mean(c(min(unlist(skin)),log(4000))), expression(paste("ECZ deposit
 
 In order to assess bioequivalence, we extract each of means between the two groups, the number of degrees of freedom, and the standard error:
 
-```{r, eval=TRUE}
+```{r, eval=FALSE}
 # Difference in means between the two groups
 theta_hat = diff(apply(skin,2,mean)) 
 
@@ -75,7 +75,7 @@ res_tost = tost(theta = theta_hat, sigma = sig_hat, nu = nu, alpha = 0.05, delta
 res_tost
 ```
 
-```{asciicast}
+```{asciicast, eval=FALSE}
 library(cTOST)
 data(skin)
 theta_hat = diff(apply(skin,2,mean))
@@ -94,7 +94,7 @@ res_dtost = dtost(theta = theta_hat, sigma = sig_hat, nu = nu, alpha = 0.05, del
 res_dtost
 ```
 
-```{asciicast}
+```{asciicast, eval=FALSE}
 library(cTOST)
 data(skin)
 theta_hat = diff(apply(skin,2,mean))
@@ -108,7 +108,7 @@ res_dtost
 compare_to_tost(res_dtost)
 ```
 
-```{asciicast}
+```{asciicast, eval=FALSE}
 library(cTOST)
 data(skin)
 theta_hat = diff(apply(skin,2,mean))
@@ -126,7 +126,7 @@ res_atost = atost(theta = theta_hat, sigma = sig_hat, nu = nu, alpha = 0.05, del
 res_atost
 ```
 
-```{asciicast}
+```{asciicast, eval=FALSE}
 library(cTOST)
 data(skin)
 theta_hat = diff(apply(skin,2,mean))
@@ -140,7 +140,7 @@ res_atost
 compare_to_tost(res_atost)
 ```
 
-```{asciicast}
+```{asciicast, eval=FALSE}
 library(cTOST)
 data(skin)
 theta_hat = diff(apply(skin,2,mean))
@@ -154,11 +154,11 @@ compare_to_tost(res_atost)
 
 To visually assess bioequivalence with the interval inclusion principal, we reproduce Figure 5 of @boulaguiem2023finite with the following code: 
 
-```{r include=FALSE}
+```{r include=FALSE, eval=FALSE}
 res_atost = atost(theta = theta_hat, sigma = sig_hat, nu = nu, alpha = 0.05, delta = log(1.25))
 ```
 
-```{r, eval=TRUE}
+```{r, eval=FALSE}
 # Nominal level and zquivalence bounds
 alpha = 0.05
 delta = log(1.25)

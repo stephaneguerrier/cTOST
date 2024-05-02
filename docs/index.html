@@ -18,7 +18,7 @@
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.12.1/css/v4-shims.min.css" integrity="sha256-wZjR52fzng1pJHwx4aV2AO3yyTOXrcDW7jBpJtTwVxw=" crossorigin="anonymous">
 <!-- clipboard.js --><script src="https://cdnjs.cloudflare.com/ajax/libs/clipboard.js/2.0.6/clipboard.min.js" integrity="sha256-inc5kl9MA1hkeYUt+EC3BhlIgyp/2jDIyBLS6k3UxPI=" crossorigin="anonymous"></script><!-- headroom.js --><script src="https://cdnjs.cloudflare.com/ajax/libs/headroom/0.11.0/headroom.min.js" integrity="sha256-AsUX4SJE1+yuDu5+mAVzJbuYNPHj/WroHuZ8Ir/CkE0=" crossorigin="anonymous"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/headroom/0.11.0/jQuery.headroom.min.js" integrity="sha256-ZX/yNShbjqsohH1k95liqY9Gd8uOiE1S4vZc+9KQ1K4=" crossorigin="anonymous"></script><!-- pkgdown --><link href="pkgdown.css" rel="stylesheet">
 <script src="pkgdown.js"></script><meta property="og:title" content="Finite Sample Correction of the Two One-Sided Tests in the Univariate Framework">
-<meta property="og:description" content="A system containing easy-to-use tools to compute the bioequivalence assessment in the univariate framework using the methods proposed in Boulaguiem et al. (2023) &lt;doi:10.1101/2023.03.11.532179&gt;.">
+<meta property="og:description" content="A system containing easy-to-use tools to compute the bioequivalence assessment in the univariate framework using the methods proposed in Boulaguiem et al. (2024) &lt;https://doi.org/10.1002/sim.9993&gt;.">
 <meta property="og:image" content="/logo.png">
 <!-- mathjax --><script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/MathJax.js" integrity="sha256-nvJJv9wWKEm88qvoQl9ekL2J+k/RWIsaSScxxlsrv8k=" crossorigin="anonymous"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/config/TeX-AMS-MML_HTMLorMML.js" integrity="sha256-84DKXVJXs0/F8OTMzX4UR909+jtl4G7SPypPavF+GfA=" crossorigin="anonymous"></script><!--[if lt IE 9]>
 <script src="https://oss.maxcdn.com/html5shiv/3.7.3/html5shiv.min.js"></script>
@@ -53,12 +53,6 @@
   </a>
 </li>
 <li>
-  <a href="articles/get_started.html">Get started</a>
-</li>
-<li>
-  <a href="articles/reproducibility.html">Reproducibility</a>
-</li>
-<li>
   <a href="reference/index.html">Reference</a>
 </li>
       </ul>
@@ -89,9 +83,10 @@
 <!-- badges: start -->
 
 <div class="section level2">
-<h2 id="overview">Overview<a class="anchor" aria-label="anchor" href="#overview"></a>
+<h2 id="ctost-overview">
+<code>cTOST</code> Overview<a class="anchor" aria-label="anchor" href="#ctost-overview"></a>
 </h2>
-<p>This repository holds the <code>cTOST</code> R package. This package contains the function <code>tost</code> which provides an assessment of equivalence in the univariate framework based on the state-of-the-art Two One-Sided Tests (TOST). In addition, the package contains the functions <code>atost</code> and <code>dtost</code>, two corrective procedures applied to the TOST in the univariate framework in order to ensure the preservation of the Type I error rate at the desired nominal level and a uniform increase in power. These two functions output an assessment of equivalence in the univariate framework after their respective corrections is applied. More details can be found in Boulaguiem et al. (2023) that you can access via this <a href="https://www.biorxiv.org/content/10.1101/2023.03.11.532179v3" class="external-link">link</a>.</p>
+<p>This R package contains the functions to test equivalence in univariate and multivariate settings based on the Two One-Sided Tests (TOST). In addition, the package contains different corrective procedures applied to the standard TOST in order to adjust the size of the procedure at the desired nominal level leading to more powerful procedures. This package implements the <span class="math inline"><em>α</em></span>-TOST and <span class="math inline"><em>δ</em></span>-TOST methods proposed in Boulaguiem et al. (2024a) and in Boulaguiem et al. (2024b).</p>
 </div>
 <div class="section level2">
 <h2 id="install-instructions">Install Instructions<a class="anchor" aria-label="anchor" href="#install-instructions"></a>
@@ -102,18 +97,23 @@
 <code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/utils/install.packages.html" class="external-link">install.packages</a></span><span class="op">(</span><span class="st">"devtools"</span><span class="op">)</span></span></code></pre></div>
 <p>The package is then installed with the following command:</p>
 <div class="sourceCode" id="cb2"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="fu">devtools</span><span class="fu">::</span><span class="fu"><a href="https://remotes.r-lib.org/reference/install_github.html" class="external-link">install_github</a></span><span class="op">(</span><span class="st">"yboulag/cTOST"</span><span class="op">)</span></span></code></pre></div>
+<code class="sourceCode R"><span><span class="fu">devtools</span><span class="fu">::</span><span class="fu"><a href="https://remotes.r-lib.org/reference/install_github.html" class="external-link">install_github</a></span><span class="op">(</span><span class="st">"stephaneguerrier/cTOST"</span><span class="op">)</span></span></code></pre></div>
 <p>Note that Windows users are assumed that have Rtools installed (if this is not the case, please visit this <a href="https://cran.r-project.org/bin/windows/Rtools/" class="external-link">link</a>.</p>
+</div>
+<div class="section level2">
+<h2 id="how-to-use">How to use<a class="anchor" aria-label="anchor" href="#how-to-use"></a>
+</h2>
+<p>TO DO</p>
 </div>
 <div class="section level2">
 <h2 id="how-to-cite">How to cite<a class="anchor" aria-label="anchor" href="#how-to-cite"></a>
 </h2>
-<div class="sourceCode" id="cb3"><pre class="sourceCode R"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1" tabindex="-1"></a><span class="sc">@</span>Manual{boulaguiem2023ctost,</span>
+<div class="sourceCode" id="cb3"><pre class="sourceCode R"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1" tabindex="-1"></a><span class="sc">@</span>Manual{boulaguiem2024ctost,</span>
 <span id="cb3-2"><a href="#cb3-2" tabindex="-1"></a>  title <span class="ot">=</span> {cTOST<span class="sc">:</span> Finite Sample Correction of The TOST <span class="cf">in</span> The Univariate Framework},</span>
-<span id="cb3-3"><a href="#cb3-3" tabindex="-1"></a>  author <span class="ot">=</span> {Younes Boulaguiem and Stéphane Guerrier and Dominique<span class="sc">-</span>Laurent Couturier},</span>
-<span id="cb3-4"><a href="#cb3-4" tabindex="-1"></a>  year <span class="ot">=</span> {<span class="dv">2023</span>},</span>
-<span id="cb3-5"><a href="#cb3-5" tabindex="-1"></a>  note <span class="ot">=</span> {R package version <span class="dv">1</span>.<span class="fl">0.0</span>},</span>
-<span id="cb3-6"><a href="#cb3-6" tabindex="-1"></a>  url <span class="ot">=</span> {https<span class="sc">:</span><span class="er">//</span>github.com<span class="sc">/</span>yboulag<span class="sc">/</span>cTOST},</span>
+<span id="cb3-3"><a href="#cb3-3" tabindex="-1"></a>  author <span class="ot">=</span> {Boulaguiem, Y. and Insolia, L. and Couturier, D.<span class="sc">-</span>L. and Guerrier, S.},</span>
+<span id="cb3-4"><a href="#cb3-4" tabindex="-1"></a>  year <span class="ot">=</span> {<span class="dv">2024</span>},</span>
+<span id="cb3-5"><a href="#cb3-5" tabindex="-1"></a>  note <span class="ot">=</span> {R package version <span class="dv">1</span>.<span class="fl">1.0</span>},</span>
+<span id="cb3-6"><a href="#cb3-6" tabindex="-1"></a>  url <span class="ot">=</span> {https<span class="sc">:</span><span class="er">//</span>github.com<span class="sc">/</span>stephaneguerrier},</span>
 <span id="cb3-7"><a href="#cb3-7" tabindex="-1"></a>}</span></code></pre></div>
 </div>
 <div class="section level2">
@@ -124,7 +124,8 @@
 <div class="section level2">
 <h2 id="references">References<a class="anchor" aria-label="anchor" href="#references"></a>
 </h2>
-<p>Boulaguiem, Y., Quartier, J., Lapteva, M., Kalia, Y. N., Victoria-Feser, M. P., Guerrier, S., &amp; Couturier, D. L., “<em>Finite Sample Adjustments for Average Equivalence Testing</em>”, Statistics in Medicine, 2023, <a href="https://doi.org/10.1002/sim.9993" class="external-link uri">https://doi.org/10.1002/sim.9993</a>.</p>
+<p>Boulaguiem, Y., Quartier, J., Lapteva, M., Kalia, Y. N., Victoria-Feser, M. P., Guerrier, S. &amp; Couturier, D. L., “<em>Finite Sample Adjustments for Average Equivalence Testing</em>”, Statistics in Medicine, 2024a, <a href="https://doi.org/10.1002/sim.9993" class="external-link uri">https://doi.org/10.1002/sim.9993</a>.</p>
+<p>Boulaguiem, Y., Insolia, L., Victoria-Feser, M. P., Couturier, D. L. &amp; Guerrier, S., “<em>Multivariate Adjustments for Average Equivalence Testing</em>”, submitted manuscript, 2024b.</p>
 </div>
 </div>
   </div>
@@ -134,8 +135,8 @@
 <h2 data-toc-skip>Links</h2>
 <ul class="list-unstyled">
 <li><a href="https://cloud.r-project.org/package=cTOST" class="external-link">View on CRAN</a></li>
-<li><a href="https://github.com/yboulag/cTOST/" class="external-link">Browse source code</a></li>
-<li><a href="https://github.com/yboulag/cTOST/issues" class="external-link">Report a bug</a></li>
+<li><a href="https://github.com/stephaneguerrier/cTOST/" class="external-link">Browse source code</a></li>
+<li><a href="https://github.com/stephaneguerrier/cTOST/issues" class="external-link">Report a bug</a></li>
 </ul>
 </div>
 
@@ -157,9 +158,10 @@
 <div class="developers">
 <h2 data-toc-skip>Developers</h2>
 <ul class="list-unstyled">
-<li>Younes Boulaguiem <br><small class="roles"> Author, maintainer, copyright holder </small>  </li>
-<li>Stéphane Guerrier <br><small class="roles"> Author, copyright holder </small>  </li>
+<li>Stéphane Guerrier <br><small class="roles"> Author, maintainer, copyright holder </small>  </li>
+<li>Younes Boulaguiem <br><small class="roles"> Author, copyright holder </small>  </li>
 <li>Dominique-Laurent Couturier <br><small class="roles"> Author, copyright holder </small>  </li>
+<li>Luca Insolia <br><small class="roles"> Author, copyright holder </small>  </li>
 <li><a href="authors.html">More about authors...</a></li>
 </ul>
 </div>
@@ -168,7 +170,7 @@
 <h2 data-toc-skip>Dev status</h2>
 <ul class="list-unstyled">
 <li><a href="https://opensource.org/licenses/AGPL-3.0" class="external-link"><img src="https://img.shields.io/badge/licence-AGPL--3.0-blue.svg" alt="Licence"></a></li>
-<li><a href="https://github.com/yboulag/cTOST" class="external-link"><img src="https://img.shields.io/badge/last%20change-2024--04--11-green.svg" alt="Last-changedate"></a></li>
+<li><a href="https://github.com/yboulag/cTOST" class="external-link"><img src="https://img.shields.io/badge/last%20change-2024--05--02-green.svg" alt="Last-changedate"></a></li>
 <li><a href="https://github.com/yboulag/cTOST/actions/workflows/R-CMD-check.yaml" class="external-link"><img src="https://github.com/yboulag/cTOST/actions/workflows/R-CMD-check.yaml/badge.svg" alt="R-CMD-check"></a></li>
 <li><a href="https://www.r-pkg.org/pkg/cTOST" class="external-link"><img src="http://cranlogs.r-pkg.org/badges/cTOST" alt="CRAN RStudio mirror downloads"></a></li>
 <li><a href="https://www.r-pkg.org/pkg/cTOST" class="external-link"><img src="https://cranlogs.r-pkg.org/badges/grand-total/cTOST" alt="CRAN RStudio mirror downloads"></a></li>
@@ -181,7 +183,7 @@
 
       <footer><div class="copyright">
   <p></p>
-<p>Developed by Younes Boulaguiem, Stéphane Guerrier, Dominique-Laurent Couturier.</p>
+<p>Developed by Stéphane Guerrier, Younes Boulaguiem, Dominique-Laurent Couturier, Luca Insolia.</p>
 </div>
 
 <div class="pkgdown">

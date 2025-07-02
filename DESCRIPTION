@@ -1,16 +1,17 @@
 Package: cTOST
 Type: Package
-Title: Finite Sample Correction of the Two One-Sided Tests in the Univariate Framework
-Version: 1.0.0
+Title: Finite Sample Correction of the Two One-Sided Tests
+Version: 1.1.0
 Authors@R: c(
     person("Stéphane", "Guerrier", email = "stef.guerrier@gmail.com", role = c("aut","cre","cph")),
     person("Younes", "Boulaguiem", role = c("aut","cph")),
     person("Dominique-Laurent", "Couturier", role = c("aut","cph")),
     person("Luca", "Insolia", role = c("aut","cph")),
-    person("Stéphane", "Laurent", role = "cph")
+    person("Jun", "Wu", role = "aut"),
+    person("Yogeshvar N.", "Kalia", role = "ctb")
     )
 Maintainer: Stéphane Guerrier <stef.guerrier@gmail.com>
-Description: A system containing easy-to-use tools to compute the bioequivalence assessment in the univariate framework using the methods proposed in Boulaguiem et al. (2024) <https://doi.org/10.1002/sim.9993>.
+Description: Provides tools for bioequivalence assessment in univariate and multivariate settings. It implements the adjustement procedures proposed Boulaguiem et al. (2024, <https://doi.org/10.1002/sim.9993>), Boulaguiem et al. (2025, <https://arxiv.org/abs/2411.16429>) and Insolia et al. (2025).
 Depends:
     PowerTOST,
     mvtnorm,
@@ -18,14 +19,13 @@ Depends:
     knitr,
     R (>= 4.0)
 Imports:
-    OwenQ,
     rmarkdown
 Suggests:
     asciicast
 License: AGPL-3
 Encoding: UTF-8
 LazyData: true
-RoxygenNote: 7.2.3
+RoxygenNote: 7.3.2
 VignetteBuilder: knitr
 URL: https://github.com/stephaneguerrier/cTOST
 BugReports: https://github.com/stephaneguerrier/cTOST/issues

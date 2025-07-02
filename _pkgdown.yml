@@ -1,27 +1,4 @@
+url: ~
 template:
-  params:
-    bootswatch: flatly
+  bootstrap: 5
 
-reference:
-  - title: TOST functions
-    contents:
-    - tost
-    - ctost
-  - title: Data
-    contents:
-    - skin
-  - title: Print and comparison
-    contents:
-    - compare_to_tost
-    - print.tost
-
-
-navbar:
-  left:
-  - icon: fa-home
-    href: index.html
-  - text: Reference
-    href: reference/index.html
-  right:
-  - icon: fa-github
-    href: https://github.com/yboulag/cTOST

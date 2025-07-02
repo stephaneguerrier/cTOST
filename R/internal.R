@@ -132,9 +132,3 @@ alphahat.fun = function(sigma, nu, alpha, delta, tol=1e-7){
   ifelse(k==K,NA,alpha.k[k])
 }
 
-#' @title ipowen4 function from the OwenQ package
-#' @author Stéphane Laurent
-#' @keywords internal
-ipowen4 <- function(...) {
-  asNamespace("OwenQ")$ipowen4(...)
-}

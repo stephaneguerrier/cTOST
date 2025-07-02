@@ -2,48 +2,56 @@
 % Please edit documentation in R/equiv.R
 \name{tost}
 \alias{tost}
-\title{Two One-Sided Test (TOST) for (Bio)Equivalence Testing}
+\title{Two One-Sided Tests (TOST) for (Bio)Equivalence Assessment}
 \usage{
 tost(theta, sigma, nu, delta, alpha = 0.05, ...)
 }
 \arguments{
-\item{theta}{A \code{numeric} value corresponding to the difference of means (e.g. between a generic and reference drug).}
+\item{theta}{A \code{numeric} value or vector representing the estimated difference(s) (e.g., between a generic and reference product).}
 
-\item{sigma}{A \code{numeric} value corresponding to the standard error.}
+\item{sigma}{A \code{numeric} value (univariate) or \code{matrix} (multivariate) corresponding to the estimated variance of the estimate \code{theta}.}
 
-\item{nu}{A \code{numeric} value corresponding to the number of degrees of freedom.}
+\item{nu}{A \code{numeric} value specifying the degrees of freedom. In the multivariate case, it is assumed to be the same across all dimensions.}
 
-\item{delta}{A \code{numeric} value corresponding to (bio)equivalence limit. We assume symmetry, i.e, the (bio)equivalence interval corresponds to (-delta,delta)}
+\item{delta}{A \code{numeric} value or vector defining the (bio)equivalence margin(s). The procedure assumes symmetry, i.e., the (bio)equivalence region is \eqn{(-\delta, \delta)}. In the multivariate case, it is assumed to be the same across all dimensions.}
 
-\item{alpha}{A \code{numeric} value specifying the significance level (default = 0.05)}
+\item{alpha}{A \code{numeric} value specifying the significance level (default is 0.05).}
 
-\item{...}{Additional parameters.}
+\item{...}{Additional arguments.}
 }
 \value{
-A \code{tost} object with the structure:
+A \code{tost} object with the following elements:
 \itemize{
- \item decision:    A boolean variable indicating whether (bio)equivalence is accepted or not.
- \item ci:          Confidence interval at the 1 - 2*alpha level.
- \item theta:       The difference of means used for the test.
- \item sigma:       The standard deviation (univariate) or covariance matrix (multivariate) used for the test.
- \item nu:          The number of degrees of freedom used for the test.
- \item alpha:       The significance level used for the test.
- \item delta:       The (bio)equivalence limits used for the test.
- \item method:      The method used for the test (here the "TOST").
- \item setting:     The setting used (univariate or multivariate).
+  \item \code{decision}:    A logical indicating whether (bio)equivalence is accepted.
+  \item \code{ci}:          Confidence region at the \eqn{1 - 2\alpha} level.
+  \item \code{theta}:       The estimated difference(s) used in the test.
+  \item \code{sigma}:       The estimated variance of \code{theta}, a \code{numeric} in univariate settings or \code{matrix} in multivariate settings.
+  \item \code{nu}:          Degrees of freedom.
+  \item \code{alpha}:       Significance level.
+  \item \code{delta}:       (Bio)equivalence margin(s).
+  \item \code{method}:      A character string describing the method used ("TOST").
+  \item \code{setting}:     A character string indicating the setting ("univariate" or "multivariate").
 }
 }
 \description{
-This function performs a Two One-Sided Test (TOST) for (bio)equivalence testing.
+Performs the Two One-Sided Tests (TOST) procedure for (bio)equivalence assessment in both univariate and multivariate settings.
 }
 \examples{
+# Univariate case
 data(skin)
-
-theta_hat = diff(apply(skin,2,mean))
-nu = nrow(skin) - 1
-sig_hat = sd(apply(skin,1,diff))/sqrt(nu)
+theta_hat <- diff(colMeans(skin))
+nu <- nrow(skin) - 1
+sig_hat <- sd(apply(skin, 1, diff)) / sqrt(nu)
 tost(theta = theta_hat, sigma = sig_hat, nu = nu,
      alpha = 0.05, delta = log(1.25))
+
+# Multivariate case
+data(ticlopidine)
+n = nrow(ticlopidine)
+nu = n-1
+theta_hat = colMeans(ticlopidine)
+Sigma_hat = cov(ticlopidine)/n
+tost(theta = theta_hat, sigma = Sigma_hat, nu = nu, delta = log(1.25))
 
 }
 \author{

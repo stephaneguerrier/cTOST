@@ -90,7 +90,7 @@ ctost = function(theta, sigma, nu, delta, alpha = 0.05, method = "alpha", B = 10
   if (setting == "univariate"){
     # alpha-TOST
     if (method == "alpha"){
-      corrected_alpha = alphahat.fun(sigma = sigma, nu = nu, alpha = alpha, delta = delta)
+      corrected_alpha = get_alpha_TOST(alpha = alpha, sigma = sigma, nu = nu, delta = delta)$root
       decision = abs(theta) < (delta - qt(1 - corrected_alpha, df = nu) * sigma)
       ci = theta + c(-1, 1) * qt(1 - corrected_alpha, df = nu) * sigma
       out = list(decision = decision, ci = ci, theta = theta,
@@ -104,7 +104,7 @@ ctost = function(theta, sigma, nu, delta, alpha = 0.05, method = "alpha", B = 10
 
     # delta-TOST
     if (method == "delta"){
-      corrected_delta = deltahat.fun(sigma = sigma, alpha = alpha, delta = delta, nu = nu)
+      corrected_delta = get_delta_TOST(sigma = sigma, alpha = alpha, delta = delta, nu = nu)$root
       decision = abs(theta) < (corrected_delta - qt(1 - alpha, df = nu) * sigma)
       ci = theta + c(-1, 1) * qt(1 - alpha, df = nu) * sigma
       out = list(decision = decision, ci = ci, theta = theta,

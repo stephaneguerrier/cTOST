@@ -17,7 +17,7 @@ obj_fun_alpha_TOST(test, alpha, sigma, nu, delta, theta = NULL, ...)
 
 \item{delta}{The (bio)equivalence bound used for the TOST decision.}
 
-\item{theta}{Parameter value (typically equivalence bounds)}
+\item{theta}{Parameter value (typically equivalence bound)}
 
 \item{...}{Additional parameters.}
 }

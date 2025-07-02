@@ -28,6 +28,6 @@ get_alpha_TOST(
 \item{...}{Additional parameters.}
 }
 \description{
-This function applies the  alpha-TOST corrective procedure to obtain the corrected level.
+This function applies the alpha-TOST corrective procedure to obtain the corrected level.
 }
 \keyword{internal}

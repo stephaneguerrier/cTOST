@@ -13,13 +13,12 @@
 #'
 #'
 #' @details
-#' In univariate settings, two methods are available: alpha-TOST (using method = 'alpha') and delta-TOST (using method = 'delta').
+#' In univariate settings, two methods are available: optimal (add ref), alpha-TOST (using method = 'alpha') and delta-TOST (using method = 'delta').
 #' The alpha-TOST and delta-TOST are introduced in Boulaguiem et al. (2024, <https://doi.org/10.1002/sim.9993>). The former is a corrective procedure of the significance level applied to the TOST while the latter
 #' adjusts the equivalence limits. In general, the alpha-TOST appears to outperform the delta-TOST.
 #'
 #' In multivariate setting, the only available method is the (multivariate) alpha-TOST (using method = 'alpha') introduced in Boulaguiem et al. (2024, bioarxiv).
 #'
-#' @author Younes Boulaguiem, Stéphane Guerrier, Dominique-Laurent Couturier, Luca Insolia
 #'
 #' @return A \code{tost} object with the structure:
 #' \itemize{
@@ -30,7 +29,7 @@
 #'  \item nu:          The number of degrees of freedom used for the test.
 #'  \item alpha:       The significance level used for the test.
 #'  \item delta:       The (bio)equivalence limits used for the test.
-#'  \item method:      The method used for the test (alpha-TOST and delta-TOST).
+#'  \item method:      The method used for the test (optimal-TOST, alpha-TOST and delta-TOST).
 #'  \item setting:     The setting used (univariate or multivariate)
 #' }
 #' @export
@@ -88,12 +87,14 @@ ctost = function(theta, sigma, nu, delta, alpha = 0.05, method = "alpha", B = 10
 
   if (setting == "univariate"){
     # alpha-TOST
+    # Transform variance into standard deviation
+    sigma = sqrt(sigma)
     if (method == "alpha"){
       corrected_alpha = get_alpha_TOST(alpha = alpha, sigma = sigma, nu = nu, delta = delta)$root
       decision = abs(theta) < (delta - qt(1 - corrected_alpha, df = nu) * sigma)
       ci = theta + c(-1, 1) * qt(1 - corrected_alpha, df = nu) * sigma
       out = list(decision = decision, ci = ci, theta = theta,
-                 sigma = sigma, nu = nu, alpha = alpha,
+                 sigma = sigma^2, nu = nu, alpha = alpha,
                  corrected_alpha = corrected_alpha,
                  delta = delta, method = "alpha-TOST",
                  setting = setting)
@@ -107,7 +108,7 @@ ctost = function(theta, sigma, nu, delta, alpha = 0.05, method = "alpha", B = 10
       decision = abs(theta) < (corrected_delta - qt(1 - alpha, df = nu) * sigma)
       ci = theta + c(-1, 1) * qt(1 - alpha, df = nu) * sigma
       out = list(decision = decision, ci = ci, theta = theta,
-                 sigma = sigma, nu = nu, alpha = alpha,
+                 sigma = sigma^2, nu = nu, alpha = alpha,
                  corrected_delta = corrected_delta,
                  delta = delta, method = "delta-TOST",
                  setting = setting)
@@ -145,7 +146,6 @@ ctost = function(theta, sigma, nu, delta, alpha = 0.05, method = "alpha", B = 10
 
 
 #' @title Power function
-#' @author Younes Boulaguiem, Stéphane Guerrier, Dominique-Laurent Couturier, Luca Insolia
 #' @param alpha                 A \code{numeric} value specifying the significance level (default = \code{0.05}).
 #' @param theta                 A \code{numeric} value corresponding to the estimated parameter of interest (such as a difference of means).
 #' @param sigma_nu              A \code{numeric} value corresponding to the estimated standard error.
@@ -243,8 +243,6 @@ ci = function(alpha, theta, sigma_nu, nu, ...){
 #' @param alpha      A \code{numeric} value specifying the significance level (default is 0.05).
 #' @param ...        Additional arguments.
 #'
-#' @author Younes Boulaguiem, Stéphane Guerrier, Dominique-Laurent Couturier, Luca Insolia
-#'
 #' @return A \code{tost} object with the following elements:
 #' \itemize{
 #'   \item \code{decision}:    A logical indicating whether (bio)equivalence is accepted.
@@ -282,6 +280,9 @@ tost = function(theta, sigma, nu, delta, alpha = 0.05,...){
 
   if (n_theta == 1){
     # Univariate setting
+    # Variance -> standard dev
+    sigma = sqrt(sigma)
+
     setting = "univariate"
     if (length(sigma) > 1 || length(delta) > 1){
       stop("sigma and delta must be scalars in univariate settings.")
@@ -304,7 +305,7 @@ tost = function(theta, sigma, nu, delta, alpha = 0.05,...){
     decision = abs(theta) < (delta - qt(1 - alpha, df = nu) * sigma)
     ci = theta + c(-1, 1) * qt(1 - alpha, df = nu) * sigma
     out = list(decision = as.vector(decision), ci = ci, theta = theta,
-               sigma = sigma, nu = nu, alpha = alpha,
+               sigma = sigma^2, nu = nu, alpha = alpha,
                delta = delta, method = "TOST", setting = setting)
     class(out) = "tost"
     return(out)

@@ -163,7 +163,7 @@ print.tost = function(x, ticks = 30, rn = 5, ...){
   cat(format(round(x$theta, rn), nsmall = rn))
   cat("; ")
   cat("Stand. dev. = ")
-  cat(format(round(x$sigma, rn), nsmall = rn))
+  cat(format(round(sqrt(x$sigma), rn), nsmall = rn))
   cat("; ")
   cat("df = ")
   cat(x$nu)

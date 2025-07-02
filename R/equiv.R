@@ -76,7 +76,6 @@ ctost = function(theta, sigma, nu, delta, alpha = 0.05, method = "alpha", B = 10
     if (length(delta) > 1){
       stop("delta is assumed to be a scalar, implying that we consider the alternative theta in (-delta, delta) in each dimension.")
     }
-
   }
 
   if (!(method %in% c("alpha", "delta"))){

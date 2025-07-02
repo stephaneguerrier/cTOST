@@ -8,7 +8,9 @@
 #' @param delta                 A \code{numeric} value corresponding to (bio)equivalence limit. We assume symmetry, i.e, the (bio)equivalence interval corresponds to (-delta,delta)
 #' @param method                A \code{character} value corresponding to the considered finite sample adjustment method, see Details below for more information.
 #' @param alpha                 A \code{numeric} value specifying the significance level (default: alpha = 0.05).
-#' @param B                     TO DOCUMENT ???
+#' @param B                     TO DOCUMENT
+#' @param correction                  TO DOCUMENT
+#' @param seed                        TO DOCUMENT
 #' @param ...                   Additional parameters.
 #'
 #'
@@ -51,7 +53,7 @@
 #'               alpha = 0.05, delta = log(1.25), method = "delta")
 #' dtost
 #' compare_to_tost(dtost)
-ctost = function(theta, sigma, nu, delta, alpha = 0.05, method = "alpha", B = 10^4, ...){
+ctost = function(theta, sigma, nu, delta, alpha = 0.05, method = "optimal", B = 10^4, seed = 101010, correction = "offline", ...){
 
   # Check inputs
   if (alpha < 0.0000001 || alpha > 0.5){
@@ -77,7 +79,7 @@ ctost = function(theta, sigma, nu, delta, alpha = 0.05, method = "alpha", B = 10
     }
   }
 
-  if (!(method %in% c("alpha", "delta"))){
+  if (!(method %in% c("alpha", "delta", "optimal"))){
     stop("Available methods are 'alpha' (for the alpha-TOST) and 'delta' (for the delta-TOST).")
   }
 
@@ -85,10 +87,19 @@ ctost = function(theta, sigma, nu, delta, alpha = 0.05, method = "alpha", B = 10
     stop("The delta-TOST is currently not implemented in multivariate settings.")
   }
 
+  if (method == "optimal" && setting == "multivariate"){
+    stop("The cTOST (optimal) is currently not implemented in multivariate settings.")
+  }
+
   if (setting == "univariate"){
     # alpha-TOST
     # Transform variance into standard deviation
     sigma = sqrt(sigma)
+    if (method == "optimal"){
+      return(xtost(theta_hat = theta, sig_hat = sigma, nu = nu, alpha = alpha, delta = delta, correction = correction,
+            B = B, seed = seed))
+    }
+
     if (method == "alpha"){
       corrected_alpha = get_alpha_TOST(alpha = alpha, sigma = sigma, nu = nu, delta = delta)$root
       decision = abs(theta) < (delta - qt(1 - corrected_alpha, df = nu) * sigma)

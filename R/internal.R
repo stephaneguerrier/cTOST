@@ -113,6 +113,7 @@ power_xTOST = function(theta, sig_hat, delta, ...){
 #' @param delta_star ...
 #' @param ... description
 #'
+#' @keywords internal
 #' @importFrom stats qnorm dnorm
 #'
 size_xTOST = function(sig_hat, delta, delta_star, ...){
@@ -129,50 +130,57 @@ size_xTOST = function(sig_hat, delta, delta_star, ...){
 #' @param B description
 #' @param tol description
 #'
+#' @keywords internal
 #' @importFrom stats pnorm
 #'
-get_c_of_0 = function(delta, sig_hat, alpha, B = 1000, tol = 10^(-8)){
+get_c_of_0 = function(delta, sigma, alpha, B = 1000, tol = 10^(-8), l=1, optim = "NR"){
   c0 = delta
   alpha0 = alpha
+  # argzero
+  if(optim=="uniroot"){
+    c_uniroot_ = uniroot(obj_fun_c_of_0, interval=c(10^-8,l),
+                         alpha=alpha0, sigma=sigma, delta=c0,tol=.Machine$double.eps)
+    size_uniroot = size_xTOST(sig_hat=sigma,delta=c0,delta_star=c_uniroot_$root)
+    out = list(c = c_uniroot_$root, size = size_uniroot)
+  }else if(optim=="NR"){
+    # Sequence of c's
+    m=30
+    cte_vect = rep(NA, m)
 
-  # Sequence of c's
-  m = 30
-  cte_vect = rep(NA, m)
+    # Initial approximaiton
+    c_init = c0 - sigma*qnorm(1 - alpha0)
+    if (c_init < 0){
+      c_init = c0/2
+    }
+    cte_vect[1] = c_init
 
-  # Initial approx
-  c_init = c0 - sig_hat*qnorm(1 - alpha0)
-  if (c_init < 0){
-    c_init = c0/2
-  }
-  cte_vect[1] = c_init
+    # Start newton raphson
+    for (i in 1:(B-1)){
+      delta = (pnorm((c0 + cte_vect[i])/sigma) - pnorm((c0 - cte_vect[i])/sigma) - alpha0)*sigma /
+        (dnorm((c0 + cte_vect[i])/sigma) + dnorm((c0 - cte_vect[i])/sigma))
+      cte_vect[i+1] = cte_vect[i] - delta
 
-  # Start newton raphson
-  for (i in 1:(B-1)){
-    delta = (pnorm((c0 + cte_vect[i])/sig_hat) - pnorm((c0 - cte_vect[i])/sig_hat) - alpha0)*sig_hat /
-      (dnorm((c0 + cte_vect[i])/sig_hat) + dnorm((c0 - cte_vect[i])/sig_hat))
-    cte_vect[i+1] = cte_vect[i] - delta
+      if (cte_vect[i+1] < tol || cte_vect[i+1] > c0){
+        cte_vect[i+1] = c0 - tol
+      }
 
-    if (cte_vect[i+1] < tol || cte_vect[i+1] > c0){
-      cte_vect[i+1] = c0 - tol
+      if (abs(delta) < tol){
+        out = list(c = cte_vect[i+1], converged = TRUE, iter = i+1)
+        break
+      }
     }
 
-    if (abs(delta) < tol){
-      out = list(c = cte_vect[i+1], converged = TRUE, iter = i+1)
-      break
+    if(i < B-1){
+      size_NR = size_xTOST(sig_hat=sigma, delta=c0, delta_star=out$c)
+      out = list(c = out$c, size=size_NR, converged = out$converged, iter = out$iter)
+    }else{
+      size_NR = size_xTOST(sig_hat=sigma, delta=c0, delta_star=cte_vect[B])
+      out = list(c = cte_vect[B], size=size_NR, converged = F, iter = B)
     }
-  }
-
-  if(i < B-1){
-    size_NR = size_xTOST(sig_hat=sig_hat, delta=c0, delta_star=out$c)
-    out = list(c = out$c, size=size_NR, converged = out$converged, iter = out$iter)
-  }else{
-    size_NR = size_xTOST(sig_hat=sig_hat, delta=c0, delta_star=cte_vect[B])
-    out = list(c = cte_vect[B], size=size_NR, converged = F, iter = B)
   }
 
   out
 }
-
 #' TO BE DOCUMENTED
 #'
 #' @param theta_hat The estimated mean.
@@ -186,18 +194,8 @@ get_c_of_0 = function(delta, sig_hat, alpha, B = 1000, tol = 10^(-8)){
 
 #' @return TO BE DOCUMENTED
 #'
-#' @examples
-#' data(skin)
+#' @keywords internal
 #'
-#' theta_hat = diff(apply(skin,2,mean))
-#' nu = nrow(skin) - 1
-#' sig_hat = sd(apply(skin,1,diff))/sqrt(nu)
-#' res_xtost = xtost(theta_hat = theta_hat, sig_hat = sig_hat, nu = nu,
-#'               alpha = 0.05, delta = log(1.25))
-#' res_xtost
-#' compare_to_tost(res_xtost)
-#'
-#' @export
 xtost = function(theta_hat, sig_hat, nu, alpha, delta, correction = "no", B = 10^4, seed = 85){
 
   if (!(correction %in% c("no", "bootstrap", "offline"))){
@@ -207,35 +205,43 @@ xtost = function(theta_hat, sig_hat, nu, alpha, delta, correction = "no", B = 10
   if (correction == "bootstrap"){
     res = rep(NA, B)
     for (i in 1:B){
-      dat = simulate_data(mu = delta, sigma = sig_hat,
+      dat = simulate_data(mu = delta, sigma = sig_hat^2,
                           nu = nu, seed = seed + i)
-      c_0_hat = get_c_of_0(delta = delta, sig_hat = dat$sig_hat, alpha = alpha)
+      c_0_hat = get_c_of_0(delta = delta, sigma = dat$sig_hat, alpha = alpha)
       res[i] = abs(dat$theta_hat) < c_0_hat$c
     }
     correct_alpha = 2*alpha - mean(res)
   }
 
   if (correction == "offline"){
-    data_to_correct = aTOST:::correct_x_tost
-    index_sigma = which.min(abs(data_to_correct$sigma - sig_hat))
-    index_nu = which.min(abs(data_to_correct$nu - nu))
-    correct_alpha = 2*alpha - data_to_correct$tier[index_nu, index_sigma]
+
+    index_alpha = which.min(abs(ctost_offline_adj$alphas - alpha))
+    index_sigma = which.min(abs(ctost_offline_adj$sigmas - sig_hat))
+    index_nu = which.min(abs(ctost_offline_adj$nus - nu))
+    correct_alpha = 2*alpha - ctost_offline_adj$tier[index_nu, index_sigma, index_alpha]
+    correct_alpha = max(correct_alpha, 1e-6) # CHECK-ME: to avoid close to zero or negatives
+    #  if (plot){
+    #    correct_alpha_all = 2*alpha - ctost_offline_adj$tier[,,index_alpha]
+    #    library(pheatmap)
+    #    pheatmap(correct_alpha_all, cluster_rows = FALSE, cluster_cols = FALSE)
+    #  }
+    correct_alpha
   }
 
   if (correction == "no"){
     correct_alpha = alpha # i.e. no correction
   }
 
-  c_0_hat = get_c_of_0(delta = delta, sig_hat = sig_hat, alpha = correct_alpha)
+  c_0_hat = get_c_of_0(delta = delta, sigma = sig_hat, alpha = correct_alpha)
   decision = abs(theta_hat) < c_0_hat$c
   ci_half_length = delta - c_0_hat$c
   ci = theta_hat + c(-1, 1) * ci_half_length
   out = list(decision = decision, ci = ci, theta_hat = theta_hat,
-             sig_hat = sig_hat, nu = nu, alpha = alpha,
+             sigma = sig_hat^2, nu = nu, alpha = alpha,
              c0 = c_0_hat$c,
              correction = correction,
              correct_alpha = correct_alpha,
-             delta = delta, method = "x-TOST")
+             delta = delta, method = "cTOST")
   class(out) = "tost"
   out
 }

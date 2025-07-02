@@ -4,7 +4,18 @@
 \alias{ctost}
 \title{Finite Sample Adjusted (Bio)Equivalence Testing}
 \usage{
-ctost(theta, sigma, nu, delta, alpha = 0.05, method = "alpha", B = 10^4, ...)
+ctost(
+  theta,
+  sigma,
+  nu,
+  delta,
+  alpha = 0.05,
+  method = "optimal",
+  B = 10^4,
+  seed = 101010,
+  correction = "offline",
+  ...
+)
 }
 \arguments{
 \item{theta}{A \code{numeric} value corresponding to the difference of means.}
@@ -19,7 +30,11 @@ ctost(theta, sigma, nu, delta, alpha = 0.05, method = "alpha", B = 10^4, ...)
 
 \item{method}{A \code{character} value corresponding to the considered finite sample adjustment method, see Details below for more information.}
 
-\item{B}{TO DOCUMENT ???}
+\item{B}{TO DOCUMENT}
+
+\item{seed}{TO DOCUMENT}
+
+\item{correction}{TO DOCUMENT}
 
 \item{...}{Additional parameters.}
 }
@@ -33,7 +48,7 @@ A \code{tost} object with the structure:
  \item nu:          The number of degrees of freedom used for the test.
  \item alpha:       The significance level used for the test.
  \item delta:       The (bio)equivalence limits used for the test.
- \item method:      The method used for the test (alpha-TOST and delta-TOST).
+ \item method:      The method used for the test (optimal-TOST, alpha-TOST and delta-TOST).
  \item setting:     The setting used (univariate or multivariate)
 }
 }
@@ -41,7 +56,7 @@ A \code{tost} object with the structure:
 This function is used to compute finite sample corrected version of the standard (univariate or multivariate) TOST.
 }
 \details{
-In univariate settings, two methods are available: alpha-TOST (using method = 'alpha') and delta-TOST (using method = 'delta').
+In univariate settings, two methods are available: optimal (add ref), alpha-TOST (using method = 'alpha') and delta-TOST (using method = 'delta').
 The alpha-TOST and delta-TOST are introduced in Boulaguiem et al. (2024, <https://doi.org/10.1002/sim.9993>). The former is a corrective procedure of the significance level applied to the TOST while the latter
 adjusts the equivalence limits. In general, the alpha-TOST appears to outperform the delta-TOST.
 
@@ -65,7 +80,4 @@ dtost = ctost(theta = theta_hat, sigma = sig_hat, nu = nu,
               alpha = 0.05, delta = log(1.25), method = "delta")
 dtost
 compare_to_tost(dtost)
-}
-\author{
-Younes Boulaguiem, Stéphane Guerrier, Dominique-Laurent Couturier, Luca Insolia
 }

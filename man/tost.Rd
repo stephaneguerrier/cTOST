@@ -54,6 +54,3 @@ Sigma_hat = cov(ticlopidine)/n
 tost(theta = theta_hat, sigma = Sigma_hat, nu = nu, delta = log(1.25))
 
 }
-\author{
-Younes Boulaguiem, Stéphane Guerrier, Dominique-Laurent Couturier, Luca Insolia
-}

@@ -71,7 +71,7 @@ To illustrate the use of the proposed method in the univariate settings, we cons
 data(skin)
 theta_hat = diff(apply(skin,2,mean))
 nu = nrow(skin) - 1
-sig_hat = sd(apply(skin,1,diff))/sqrt(nu)
+sig_hat = var(apply(skin,1,diff))/nu
 ```
 
 ### 3.1.1. Standard TOST
@@ -88,12 +88,32 @@ library(cTOST)
 data(skin)
 theta_hat = diff(apply(skin,2,mean))
 nu = nrow(skin) - 1
-sig_hat = sd(apply(skin,1,diff))/sqrt(nu)
+sig_hat = var(apply(skin,1,diff))/nu
 stost = tost(theta = theta_hat, sigma = sig_hat, nu = nu, delta = log(1.25))
 stost
 ```
 
-#### 3.1.2. $\alpha$-TOST
+#### 3.1.2. cTOST
+
+The cTOST can be used through the function `ctost` as follows:
+
+```{r, eval = F}
+opt_tost = ctost(theta = theta_hat, sigma = sig_hat, nu = nu, 
+              delta = log(1.25), method = "optimal")
+opt_tost
+```
+
+```{asciicast}
+library(cTOST)
+data(skin)
+theta_hat = diff(apply(skin,2,mean))
+nu = nrow(skin) - 1
+sig_hat = var(apply(skin,1,diff))/nu
+opt_tost = ctost(theta = theta_hat, sigma = sig_hat, nu = nu, delta = log(1.25), method = "alpha")
+opt_tost
+```
+
+#### 3.1.3. $\alpha$-TOST
 
 The $\alpha$-TOST can be used through the function `ctost` as follows:
 
@@ -108,7 +128,7 @@ library(cTOST)
 data(skin)
 theta_hat = diff(apply(skin,2,mean))
 nu = nrow(skin) - 1
-sig_hat = sd(apply(skin,1,diff))/sqrt(nu)
+sig_hat = var(apply(skin,1,diff))/nu
 atost = ctost(theta = theta_hat, sigma = sig_hat, nu = nu, delta = log(1.25), method = "alpha")
 atost
 ```
@@ -124,12 +144,12 @@ library(cTOST)
 data(skin)
 theta_hat = diff(apply(skin,2,mean))
 nu = nrow(skin) - 1
-sig_hat = sd(apply(skin,1,diff))/sqrt(nu)
+sig_hat = var(apply(skin,1,diff))/nu
 atost = ctost(theta = theta_hat, sigma = sig_hat, nu = nu, delta = log(1.25), method = "alpha")
 compare_to_tost(atost)
 ```
 
-### 3.1.3. $\delta$-TOST
+### 3.1.4. $\delta$-TOST
 
 The $\delta$-TOST can be used through the function `ctost` as follows:
 
@@ -144,7 +164,7 @@ library(cTOST)
 data(skin)
 theta_hat = diff(apply(skin,2,mean))
 nu = nrow(skin) - 1
-sig_hat = sd(apply(skin,1,diff))/sqrt(nu)
+sig_hat = var(apply(skin,1,diff))/nu
 dtost = ctost(theta = theta_hat, sigma = sig_hat, nu = nu, delta = log(1.25), method = "delta")
 dtost
 ```

@@ -145,7 +145,7 @@ print.tost = function(x, ticks = 30, rn = 5, ...){
     cat("\n")
   }
 
-  if (x$method == "x-TOST"){
+  if (x$method == "cTOST"){
     cat("Estimated c(0) = ")
     cat(format(round(x$c0, rn), nsmall = rn))
     cat("\n")
@@ -361,7 +361,7 @@ compare_to_tost = function(x, ticks = 30, rn = 5){
   result_tost = tost(theta = x$theta, sigma = x$sigma, nu = x$nu,
                      alpha = x$alpha, delta = x$delta)
 
-  if (!(x$method %in% c("alpha-TOST", "delta-TOST", "x-TOST"))){
+  if (!(x$method %in% c("alpha-TOST", "delta-TOST", "cTOST"))){
     stop("This method is not compatible")
   }
 
@@ -547,7 +547,7 @@ compare_to_tost = function(x, ticks = 30, rn = 5){
     cat("\n")
   }
 
-  if (x$method %in% c("alpha-TOST", "x-TOST")){
+  if (x$method %in% c("alpha-TOST", "cTOST")){
 
     lower_be_atost = x$ci[1] > -x$delta
     upper_be_atost = x$ci[2] < x$delta
@@ -569,7 +569,7 @@ compare_to_tost = function(x, ticks = 30, rn = 5){
     if (x$method == "alpha-TOST"){
       cat("alpha-TOST: ")
     }else{
-      cat("x-TOST: ")
+      cat("cTOST: ")
     }
 
     if (x$decision){
@@ -664,7 +664,7 @@ compare_to_tost = function(x, ticks = 30, rn = 5){
     if (x$method == "alpha-TOST"){
       cat("alpha-TOST:     ")
     }else{
-      cat("x-TOST:         ")
+      cat("cTOST:         ")
     }
 
     for (i in 1:(ticks+1)){

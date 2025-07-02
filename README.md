@@ -6,8 +6,8 @@
 <!-- badges: start -->
 
 [![Licence](https://img.shields.io/badge/licence-AGPL--3.0-blue.svg)](https://opensource.org/licenses/AGPL-3.0)
-[![Last-changedate](https://img.shields.io/badge/last%20change-2024--12--04-green.svg)](https://github.com/yboulag/cTOST)
-[![R-CMD-check](https://github.com/yboulag/cTOST/actions/workflows/R-CMD-check.yaml/badge.svg)](https://github.com/yboulag/cTOST/actions/workflows/R-CMD-check.yaml)
+[![Last-changedate](https://img.shields.io/badge/last%20change-2025--07--02-green.svg)](https://github.com/yboulag/cTOST)
+[![R-CMD-check](https://github.com/yboulag/cTOST/actions/workflows/R-CMD-check.yaml/badge.svg)](https://github.com/stephaneguerrier/cTOST/actions/workflows/R-CMD-check.yaml)
 [![CRAN RStudio mirror
 downloads](http://cranlogs.r-pkg.org/badges/cTOST)](https://www.r-pkg.org/pkg/cTOST)
 [![CRAN RStudio mirror
@@ -61,7 +61,7 @@ which can be loaded as follows:
 data(skin)
 theta_hat = diff(apply(skin,2,mean))
 nu = nrow(skin) - 1
-sig_hat = sd(apply(skin,1,diff))/sqrt(nu)
+sig_hat = var(apply(skin,1,diff))/nu
 ```
 
 ### 3.1.1. Standard TOST
@@ -111,7 +111,7 @@ dtost
 #> 
 #> Method: delta-TOST
 #> alpha = 0.05; Equiv. lim. = +/- 0.22314
-#> Corrected Equiv. lim. = +/- 0.25473
+#> Corrected Equiv. lim. = +/- 0.25470
 #> Mean = 0.02270; Stand. dev. = 0.13428; df = 16
 ```
 

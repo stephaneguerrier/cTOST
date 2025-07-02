@@ -25,7 +25,4 @@ The function returns a \code{numeric} value that corresponds to a probability.
 \description{
 Power function
 }
-\author{
-Younes Boulaguiem, Stéphane Guerrier, Dominique-Laurent Couturier, Luca Insolia
-}
 \keyword{internal}

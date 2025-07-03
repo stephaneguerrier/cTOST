@@ -11,7 +11,6 @@
 #' simulate_data(mu = 10, sigma = 2, nu = 10)
 #'
 #' @importFrom stats rnorm rchisq
-#' @export
 simulate_data = function(mu, sigma, nu, seed = 18){
   set.seed(seed)
   theta_hat = rnorm(1, mean = mu, sd = sigma)

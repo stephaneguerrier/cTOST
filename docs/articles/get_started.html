@@ -5,69 +5,53 @@
 <meta charset="utf-8">
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-<meta name="description" content="cTOST">
 <title>`cTOST` Vignette • cTOST</title>
-<!-- favicons --><link rel="icon" type="image/png" sizes="16x16" href="../favicon-16x16.png">
-<link rel="icon" type="image/png" sizes="32x32" href="../favicon-32x32.png">
-<link rel="apple-touch-icon" type="image/png" sizes="180x180" href="../apple-touch-icon.png">
-<link rel="apple-touch-icon" type="image/png" sizes="120x120" href="../apple-touch-icon-120x120.png">
-<link rel="apple-touch-icon" type="image/png" sizes="76x76" href="../apple-touch-icon-76x76.png">
-<link rel="apple-touch-icon" type="image/png" sizes="60x60" href="../apple-touch-icon-60x60.png">
+<!-- favicons --><link rel="icon" type="image/png" sizes="96x96" href="../favicon-96x96.png">
+<link rel="icon" type="”image/svg+xml”" href="../favicon.svg">
+<link rel="apple-touch-icon" sizes="180x180" href="../apple-touch-icon.png">
+<link rel="icon" sizes="any" href="../favicon.ico">
+<link rel="manifest" href="../site.webmanifest">
 <script src="../deps/jquery-3.6.0/jquery-3.6.0.min.js"></script><meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-<link href="../deps/bootstrap-5.2.2/bootstrap.min.css" rel="stylesheet">
-<script src="../deps/bootstrap-5.2.2/bootstrap.bundle.min.js"></script><!-- Font Awesome icons --><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.12.1/css/all.min.css" integrity="sha256-mmgLkCYLUQbXn0B1SRqzHar6dCnv9oZFPEC1g1cwlkk=" crossorigin="anonymous">
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.12.1/css/v4-shims.min.css" integrity="sha256-wZjR52fzng1pJHwx4aV2AO3yyTOXrcDW7jBpJtTwVxw=" crossorigin="anonymous">
-<!-- bootstrap-toc --><script src="https://cdn.jsdelivr.net/gh/afeld/bootstrap-toc@v1.0.1/dist/bootstrap-toc.min.js" integrity="sha256-4veVQbu7//Lk5TSmc7YV48MxtMy98e26cf5MrgZYnwo=" crossorigin="anonymous"></script><!-- headroom.js --><script src="https://cdnjs.cloudflare.com/ajax/libs/headroom/0.11.0/headroom.min.js" integrity="sha256-AsUX4SJE1+yuDu5+mAVzJbuYNPHj/WroHuZ8Ir/CkE0=" crossorigin="anonymous"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/headroom/0.11.0/jQuery.headroom.min.js" integrity="sha256-ZX/yNShbjqsohH1k95liqY9Gd8uOiE1S4vZc+9KQ1K4=" crossorigin="anonymous"></script><!-- clipboard.js --><script src="https://cdnjs.cloudflare.com/ajax/libs/clipboard.js/2.0.6/clipboard.min.js" integrity="sha256-inc5kl9MA1hkeYUt+EC3BhlIgyp/2jDIyBLS6k3UxPI=" crossorigin="anonymous"></script><!-- search --><script src="https://cdnjs.cloudflare.com/ajax/libs/fuse.js/6.4.6/fuse.js" integrity="sha512-zv6Ywkjyktsohkbp9bb45V6tEMoWhzFzXis+LrMehmJZZSys19Yxf1dopHx7WzIKxr5tK2dVcYmaCk2uqdjF4A==" crossorigin="anonymous"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/autocomplete.js/0.38.0/autocomplete.jquery.min.js" integrity="sha512-GU9ayf+66Xx2TmpxqJpliWbT5PiGYxpaG8rfnBEk1LL8l1KGkRShhngwdXK1UgqhAzWpZHSiYPc09/NwDQIGyg==" crossorigin="anonymous"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/mark.js/8.11.1/mark.min.js" integrity="sha512-5CYOlHXGh6QpOFA/TeTylKLWfB3ftPsde7AnmhuitiTX4K5SqCLBeKro6sPS8ilsz1Q4NRx3v8Ko2IBiszzdww==" crossorigin="anonymous"></script><!-- pkgdown --><script src="../pkgdown.js"></script><meta property="og:title" content="`cTOST` Vignette">
-<meta property="og:description" content="cTOST">
-<meta property="og:image" content="/logo.png">
-<!-- mathjax --><script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/MathJax.js" integrity="sha256-nvJJv9wWKEm88qvoQl9ekL2J+k/RWIsaSScxxlsrv8k=" crossorigin="anonymous"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/config/TeX-AMS-MML_HTMLorMML.js" integrity="sha256-84DKXVJXs0/F8OTMzX4UR909+jtl4G7SPypPavF+GfA=" crossorigin="anonymous"></script><!--[if lt IE 9]>
-<script src="https://oss.maxcdn.com/html5shiv/3.7.3/html5shiv.min.js"></script>
-<script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
-<![endif]-->
+<link href="../deps/bootstrap-5.3.1/bootstrap.min.css" rel="stylesheet">
+<script src="../deps/bootstrap-5.3.1/bootstrap.bundle.min.js"></script><link href="../deps/font-awesome-6.5.2/css/all.min.css" rel="stylesheet">
+<link href="../deps/font-awesome-6.5.2/css/v4-shims.min.css" rel="stylesheet">
+<script src="../deps/headroom-0.11.0/headroom.min.js"></script><script src="../deps/headroom-0.11.0/jQuery.headroom.min.js"></script><script src="../deps/bootstrap-toc-1.0.1/bootstrap-toc.min.js"></script><script src="../deps/clipboard.js-2.0.11/clipboard.min.js"></script><script src="../deps/search-1.0.0/autocomplete.jquery.min.js"></script><script src="../deps/search-1.0.0/fuse.min.js"></script><script src="../deps/search-1.0.0/mark.min.js"></script><!-- pkgdown --><script src="../pkgdown.js"></script><meta property="og:title" content="`cTOST` Vignette">
 </head>
 <body>
     <a href="#main" class="visually-hidden-focusable">Skip to contents</a>
-    
 
-    <nav class="navbar fixed-top navbar-light navbar-expand-lg bg-light"><div class="container">
-    
+
+    <nav class="navbar navbar-expand-lg fixed-top bg-light" data-bs-theme="light" aria-label="Site navigation"><div class="container">
+
     <a class="navbar-brand me-2" href="../index.html">cTOST</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">1.0.0</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">1.1.0</small>
 
-    
+
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
       <span class="navbar-toggler-icon"></span>
     </button>
 
     <div id="navbar" class="collapse navbar-collapse ms-3">
       <ul class="navbar-nav me-auto">
-<li class="nav-item">
-  <a class="nav-link" href="../reference/index.html">Reference</a>
-</li>
+<li class="nav-item"><a class="nav-link" href="../reference/index.html">Reference</a></li>
 <li class="active nav-item dropdown">
-  <a href="#" class="nav-link dropdown-toggle" data-bs-toggle="dropdown" role="button" aria-expanded="false" aria-haspopup="true" id="dropdown-articles">Articles</a>
-  <div class="dropdown-menu" aria-labelledby="dropdown-articles">
-    <a class="dropdown-item" href="../articles/get_started.html">`cTOST` Vignette</a>
-    <a class="dropdown-item" href="../articles/reproducibility.html">Results Reproducibility</a>
-  </div>
+  <button class="nav-link dropdown-toggle" type="button" id="dropdown-articles" data-bs-toggle="dropdown" aria-expanded="false" aria-haspopup="true">Articles</button>
+  <ul class="dropdown-menu" aria-labelledby="dropdown-articles">
+<li><a class="dropdown-item" href="../articles/get_started.html">`cTOST` Vignette</a></li>
+    <li><a class="dropdown-item" href="../articles/reproducibility.html">Results Reproducibility</a></li>
+  </ul>
 </li>
       </ul>
-<form class="form-inline my-2 my-lg-0" role="search">
-        <input type="search" class="form-control me-sm-2" aria-label="Toggle navigation" name="search-input" data-search-index="../search.json" id="search-input" placeholder="Search for" autocomplete="off">
-</form>
-
-      <ul class="navbar-nav">
-<li class="nav-item">
-  <a class="external-link nav-link" href="https://github.com/stephaneguerrier/cTOST/" aria-label="github">
-    <span class="fab fa fab fa-github fa-lg"></span>
-     
-  </a>
-</li>
+<ul class="navbar-nav">
+<li class="nav-item"><form class="form-inline" role="search">
+ <input class="form-control" type="search" name="search-input" id="search-input" autocomplete="off" aria-label="Search site" placeholder="Search for" data-search-index="../search.json">
+</form></li>
+<li class="nav-item"><a class="external-link nav-link" href="https://github.com/stephaneguerrier/cTOST/" aria-label="GitHub"><span class="fa fab fa-github fa-lg"></span></a></li>
       </ul>
 </div>
 
-    
+
   </div>
 </nav><div class="container template-article">
 
@@ -94,32 +78,34 @@ their most common application in the context of generic drug
 manufacturing <span class="citation">Senn (2021)</span> where the aim is
 to determine whether a parameter like the mean variation of treatment
 response between a reference and a generic drug falls within a
-predetermined equivalence range that we denote <span class="math inline">\((-c,c)\)</span>, indicating that drugs are
-equivalent. Deviations within this region would be considered
-insignificant as they are too small to reflect the dissimilarity of the
-therapeutic effects between the compared treatments. In contrast to
-standard hypothesis testing for equality of means, where the null
-hypothesis assumes that both means are equal, and the alternative
-assumes they are not, equivalence testing reverses the roles of the
-hypothesis formulations and considers a region rather than a point.
-Specifically, it defines the alternative as the equivalence region
-within which the parameter of interest must lie for the treatments to be
-considered equivalent, and the null hypothesis as the opposite. This
-paradigm puts the burden of proof on equivalence, rather than
-non-equality, and emphasizes the importance of assessing the similarity
-of treatments in addition to their differences.</p>
+predetermined equivalence range that we denote
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mo stretchy="true" form="prefix">(</mo><mi>−</mi><mi>c</mi><mo>,</mo><mi>c</mi><mo stretchy="true" form="postfix">)</mo></mrow><annotation encoding="application/x-tex">(-c,c)</annotation></semantics></math>,
+indicating that drugs are equivalent. Deviations within this region
+would be considered insignificant as they are too small to reflect the
+dissimilarity of the therapeutic effects between the compared
+treatments. In contrast to standard hypothesis testing for equality of
+means, where the null hypothesis assumes that both means are equal, and
+the alternative assumes they are not, equivalence testing reverses the
+roles of the hypothesis formulations and considers a region rather than
+a point. Specifically, it defines the alternative as the equivalence
+region within which the parameter of interest must lie for the
+treatments to be considered equivalent, and the null hypothesis as the
+opposite. This paradigm puts the burden of proof on equivalence, rather
+than non-equality, and emphasizes the importance of assessing the
+similarity of treatments in addition to their differences.</p>
 </div>
 <div class="section level2">
 <h2 id="mathematical-setup">Mathematical setup<a class="anchor" aria-label="anchor" href="#mathematical-setup"></a>
 </h2>
 <p>More formally, the hypotheses of interest are defined as</p>
-<p><span class="math display">\[\begin{equation*}
-    H_0: \; \theta \not\in \Theta_1 \quad vs. \quad H_1: \; \theta \in
-\Theta_1 := (\theta_L, \, \theta_U),
-\end{equation*}\]</span></p>
-<p>where <span class="math inline">\(\Theta_1=(\theta_L,\theta_U)\)</span> denotes the
-range of equivalence whose limits are known constants, and are usually
-symmetrical so we define <span class="math inline">\(c:=\theta_U=-\theta_L\)</span>.</p>
+<p><math display="block" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mi>H</mi><mn>0</mn></msub><mo>:</mo><mspace width="0.278em"></mspace><mi>θ</mi><mo>∉</mo><msub><mi>Θ</mi><mn>1</mn></msub><mspace width="1.0em"></mspace><mi>v</mi><mi>s</mi><mi>.</mi><mspace width="1.0em"></mspace><msub><mi>H</mi><mn>1</mn></msub><mo>:</mo><mspace width="0.278em"></mspace><mi>θ</mi><mo>∈</mo><msub><mi>Θ</mi><mn>1</mn></msub><mo>:=</mo><mrow><mo stretchy="true" form="prefix">(</mo><msub><mi>θ</mi><mi>L</mi></msub><mo>,</mo><mspace width="0.167em"></mspace><msub><mi>θ</mi><mi>U</mi></msub><mo stretchy="true" form="postfix">)</mo></mrow><mo>,</mo></mrow><annotation encoding="application/x-tex">\begin{equation*}
+    H_0: \; \theta \not\in \Theta_1 \quad vs. \quad H_1: \; \theta \in \Theta_1 := (\theta_L, \, \theta_U),
+\end{equation*}</annotation></semantics></math></p>
+<p>where
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mi>Θ</mi><mn>1</mn></msub><mo>=</mo><mrow><mo stretchy="true" form="prefix">(</mo><msub><mi>θ</mi><mi>L</mi></msub><mo>,</mo><msub><mi>θ</mi><mi>U</mi></msub><mo stretchy="true" form="postfix">)</mo></mrow></mrow><annotation encoding="application/x-tex">\Theta_1=(\theta_L,\theta_U)</annotation></semantics></math>
+denotes the range of equivalence whose limits are known constants, and
+are usually symmetrical so we define
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>c</mi><mo>:=</mo><msub><mi>θ</mi><mi>U</mi></msub><mo>=</mo><mi>−</mi><msub><mi>θ</mi><mi>L</mi></msub></mrow><annotation encoding="application/x-tex">c:=\theta_U=-\theta_L</annotation></semantics></math>.</p>
 <p>Existing approaches, such as the state-of-the-art Two One-Sided Tests
 (TOST) <span class="citation">Schuirmann (1987)</span>, have
 demonstrated conservativeness and decreased power, particularly for
@@ -127,100 +113,109 @@ highly variable responses. This can be demonstrated by computing the
 power function which would be evaluated at different points of the
 parameter space. In particular, evaluating it at the equivalence bounds
 yields the size and shows that it is strictly bounded by the
-significance level <span class="math inline">\(\alpha\)</span>. To see
-this more clearly, consider a canonical form for the average equivalence
-problem in the univariate framework, which consists of two independent
-random variables <span class="math inline">\(\widehat{\theta}\)</span>
-and <span class="math inline">\(\widehat{\sigma}_{\nu}\)</span> with
-distributions</p>
-<p><span class="math display">\[\begin{equation*}
-    \widehat{\theta} \sim N\left(\theta, \sigma_{\nu}^2\right), \quad
-\text{and} \quad \nu\frac{\widehat{\sigma}_{\nu}^2}{\sigma_{\nu}^2} \sim
-\chi^2_{\nu},
-\end{equation*}\]</span> where <span class="math inline">\(\theta\)</span> is the parameter of interest,
-<span class="math inline">\(\sigma_{\nu}\)</span> is the standard error
-and <span class="math inline">\(\nu\)</span> are the degrees of
-freedom.</p>
+significance level
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mi>α</mi><annotation encoding="application/x-tex">\alpha</annotation></semantics></math>.
+To see this more clearly, consider a canonical form for the average
+equivalence problem in the univariate framework, which consists of two
+independent random variables
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mover><mi>θ</mi><mo accent="true">̂</mo></mover><annotation encoding="application/x-tex">\widehat{\theta}</annotation></semantics></math>
+and
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><msub><mover><mi>σ</mi><mo accent="true">̂</mo></mover><mi>ν</mi></msub><annotation encoding="application/x-tex">\widehat{\sigma}_{\nu}</annotation></semantics></math>
+with distributions</p>
+<p><math display="block" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mover><mi>θ</mi><mo accent="true">̂</mo></mover><mo>∼</mo><mi>N</mi><mrow><mo stretchy="true" form="prefix">(</mo><mi>θ</mi><mo>,</mo><msubsup><mi>σ</mi><mi>ν</mi><mn>2</mn></msubsup><mo stretchy="true" form="postfix">)</mo></mrow><mo>,</mo><mspace width="1.0em"></mspace><mtext mathvariant="normal">and</mtext><mspace width="1.0em"></mspace><mi>ν</mi><mfrac><msubsup><mover><mi>σ</mi><mo accent="true">̂</mo></mover><mi>ν</mi><mn>2</mn></msubsup><msubsup><mi>σ</mi><mi>ν</mi><mn>2</mn></msubsup></mfrac><mo>∼</mo><msubsup><mi>χ</mi><mi>ν</mi><mn>2</mn></msubsup><mo>,</mo></mrow><annotation encoding="application/x-tex">\begin{equation*}
+    \widehat{\theta} \sim N\left(\theta, \sigma_{\nu}^2\right), \quad \text{and} \quad \nu\frac{\widehat{\sigma}_{\nu}^2}{\sigma_{\nu}^2} \sim \chi^2_{\nu},
+\end{equation*}</annotation></semantics></math> where
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mi>θ</mi><annotation encoding="application/x-tex">\theta</annotation></semantics></math>
+is the parameter of interest,
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><msub><mi>σ</mi><mi>ν</mi></msub><annotation encoding="application/x-tex">\sigma_{\nu}</annotation></semantics></math>
+is the standard error and
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mi>ν</mi><annotation encoding="application/x-tex">\nu</annotation></semantics></math>
+are the degrees of freedom.</p>
 <p>The TOST is based on two test statistics</p>
-<p><span class="math display">\[\begin{equation*}
-T_L := \frac{\widehat{\theta}+c}{\widehat{\sigma}_{\nu}}\sim
-t_\nu\left(\frac{\theta+c}{\sigma_\nu}\right), \quad\text{and}\quad T_U
-:= \frac{\widehat{\theta}-c}{\widehat{\sigma}_{\nu}}\sim
-t_\nu\left(\frac{\theta-c}{\sigma_\nu}\right).
-\end{equation*}\]</span> <span class="math inline">\(\text{H}_{0}\)</span> is rejected in favor of
-equivalence if both tests simultaneously reject their marginal null
-hypotheses, i.e.,</p>
-<p><span class="math display">\[\begin{equation*}
-     T_L \geq t_{1-\alpha,\nu}, \quad \text{ and} \quad T_U \leq
--t_{1-\alpha,\nu}.
-\end{equation*}\]</span></p>
+<p><math display="block" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mi>T</mi><mi>L</mi></msub><mo>:=</mo><mfrac><mrow><mover><mi>θ</mi><mo accent="true">̂</mo></mover><mo>+</mo><mi>c</mi></mrow><msub><mover><mi>σ</mi><mo accent="true">̂</mo></mover><mi>ν</mi></msub></mfrac><mo>∼</mo><msub><mi>t</mi><mi>ν</mi></msub><mrow><mo stretchy="true" form="prefix">(</mo><mfrac><mrow><mi>θ</mi><mo>+</mo><mi>c</mi></mrow><msub><mi>σ</mi><mi>ν</mi></msub></mfrac><mo stretchy="true" form="postfix">)</mo></mrow><mo>,</mo><mspace width="1.0em"></mspace><mtext mathvariant="normal">and</mtext><mspace width="1.0em"></mspace><msub><mi>T</mi><mi>U</mi></msub><mo>:=</mo><mfrac><mrow><mover><mi>θ</mi><mo accent="true">̂</mo></mover><mo>−</mo><mi>c</mi></mrow><msub><mover><mi>σ</mi><mo accent="true">̂</mo></mover><mi>ν</mi></msub></mfrac><mo>∼</mo><msub><mi>t</mi><mi>ν</mi></msub><mrow><mo stretchy="true" form="prefix">(</mo><mfrac><mrow><mi>θ</mi><mo>−</mo><mi>c</mi></mrow><msub><mi>σ</mi><mi>ν</mi></msub></mfrac><mo stretchy="true" form="postfix">)</mo></mrow><mi>.</mi></mrow><annotation encoding="application/x-tex">\begin{equation*}
+T_L := \frac{\widehat{\theta}+c}{\widehat{\sigma}_{\nu}}\sim t_\nu\left(\frac{\theta+c}{\sigma_\nu}\right), \quad\text{and}\quad T_U := \frac{\widehat{\theta}-c}{\widehat{\sigma}_{\nu}}\sim t_\nu\left(\frac{\theta-c}{\sigma_\nu}\right).
+\end{equation*}</annotation></semantics></math><math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><msub><mtext mathvariant="normal">H</mtext><mn>0</mn></msub><annotation encoding="application/x-tex">\text{H}_{0}</annotation></semantics></math>
+is rejected in favor of equivalence if both tests simultaneously reject
+their marginal null hypotheses, i.e.,</p>
+<p><math display="block" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mi>T</mi><mi>L</mi></msub><mo>≥</mo><msub><mi>t</mi><mrow><mn>1</mn><mo>−</mo><mi>α</mi><mo>,</mo><mi>ν</mi></mrow></msub><mo>,</mo><mspace width="1.0em"></mspace><mrow><mspace width="0.333em"></mspace><mtext mathvariant="normal"> and</mtext></mrow><mspace width="1.0em"></mspace><msub><mi>T</mi><mi>U</mi></msub><mo>≤</mo><mi>−</mi><msub><mi>t</mi><mrow><mn>1</mn><mo>−</mo><mi>α</mi><mo>,</mo><mi>ν</mi></mrow></msub><mi>.</mi></mrow><annotation encoding="application/x-tex">\begin{equation*}
+     T_L \geq t_{1-\alpha,\nu}, \quad \text{ and} \quad T_U \leq -t_{1-\alpha,\nu}.
+\end{equation*}</annotation></semantics></math></p>
 <p>By rearranging the terms, we can define a rejection region for the
-TOST: <span class="math display">\[\begin{equation*}
-    C_1 := \left\{\widehat{\theta} \in \mathbb{R},\,
-\widehat{\sigma}_{\nu} \in \mathbb{R}_+ \,\Big\vert
-\,  \vert\widehat{\theta}\vert  \leq  c - t_{1-\alpha,\nu}
-\hat{\sigma}_\nu  \right\}.
-\end{equation*}\]</span></p>
-<p>Given <span class="math inline">\(\alpha\)</span>, <span class="math inline">\(\theta\)</span>, <span class="math inline">\(\sigma_{\nu}\)</span>, <span class="math inline">\(\nu\)</span> and <span class="math inline">\(c\)</span>, the power function of the TOST
-corresponds to the probability of rejecting <span class="math inline">\(H_0\)</span>, i.e., the integral of the joint
-density of <span class="math inline">\((\hat{\theta},\hat{\sigma}_\nu)\)</span> over the
-rejection area <span class="math inline">\(C_1\)</span> (see also <span class="citation">Phillips (1990)</span>), that is <span class="math display">\[\begin{equation*}
+TOST:
+<math display="block" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mi>C</mi><mn>1</mn></msub><mo>:=</mo><mrow><mo stretchy="true" form="prefix">{</mo><mover><mi>θ</mi><mo accent="true">̂</mo></mover><mo>∈</mo><mi>ℝ</mi><mo>,</mo><mspace width="0.167em"></mspace><msub><mover><mi>σ</mi><mo accent="true">̂</mo></mover><mi>ν</mi></msub><mo>∈</mo><msub><mi>ℝ</mi><mo>+</mo></msub><mspace width="0.167em"></mspace><mo minsize="1.8" maxsize="1.8" stretchy="false" form="postfix">|</mo><mspace width="0.167em"></mspace><mo stretchy="false" form="postfix">|</mo><mover><mi>θ</mi><mo accent="true">̂</mo></mover><mo stretchy="false" form="postfix">|</mo><mo>≤</mo><mi>c</mi><mo>−</mo><msub><mi>t</mi><mrow><mn>1</mn><mo>−</mo><mi>α</mi><mo>,</mo><mi>ν</mi></mrow></msub><msub><mover><mi>σ</mi><mo accent="true">̂</mo></mover><mi>ν</mi></msub><mo stretchy="true" form="postfix">}</mo></mrow><mi>.</mi></mrow><annotation encoding="application/x-tex">\begin{equation*}
+    C_1 := \left\{\widehat{\theta} \in \mathbb{R},\, \widehat{\sigma}_{\nu} \in \mathbb{R}_+ \,\Big\vert \,  \vert\widehat{\theta}\vert  \leq  c - t_{1-\alpha,\nu} \hat{\sigma}_\nu  \right\}.
+\end{equation*}</annotation></semantics></math></p>
+<p>Given
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mi>α</mi><annotation encoding="application/x-tex">\alpha</annotation></semantics></math>,
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mi>θ</mi><annotation encoding="application/x-tex">\theta</annotation></semantics></math>,
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><msub><mi>σ</mi><mi>ν</mi></msub><annotation encoding="application/x-tex">\sigma_{\nu}</annotation></semantics></math>,
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mi>ν</mi><annotation encoding="application/x-tex">\nu</annotation></semantics></math>
+and
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mi>c</mi><annotation encoding="application/x-tex">c</annotation></semantics></math>,
+the power function of the TOST corresponds to the probability of
+rejecting
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><msub><mi>H</mi><mn>0</mn></msub><annotation encoding="application/x-tex">H_0</annotation></semantics></math>,
+i.e., the integral of the joint density of
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mo stretchy="true" form="prefix">(</mo><mover><mi>θ</mi><mo accent="true">̂</mo></mover><mo>,</mo><msub><mover><mi>σ</mi><mo accent="true">̂</mo></mover><mi>ν</mi></msub><mo stretchy="true" form="postfix">)</mo></mrow><annotation encoding="application/x-tex">(\hat{\theta},\hat{\sigma}_\nu)</annotation></semantics></math>
+over the rejection area
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><msub><mi>C</mi><mn>1</mn></msub><annotation encoding="application/x-tex">C_1</annotation></semantics></math>
+(see also <span class="citation">Phillips (1990)</span>), that is
+<math display="block" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mtable><mtr><mtd columnalign="right" style="text-align: right"><mi>p</mi><mrow><mo stretchy="true" form="prefix">(</mo><mi>α</mi><mo>,</mo><mi>θ</mi><mo>,</mo><msub><mi>σ</mi><mi>ν</mi></msub><mo>,</mo><mi>ν</mi><mo>,</mo><mi>c</mi><mo stretchy="true" form="postfix">)</mo></mrow><mo>:=</mo></mtd><mtd columnalign="left" style="text-align: left"><mo>Pr</mo><mrow><mo stretchy="true" form="prefix">(</mo><msub><mi>T</mi><mi>L</mi></msub><mo>≥</mo><msub><mi>t</mi><mrow><mn>1</mn><mo>−</mo><mi>α</mi><mo>,</mo><mi>ν</mi></mrow></msub><mspace width="0.278em"></mspace><mrow><mspace width="0.333em"></mspace><mtext mathvariant="normal"> and</mtext></mrow><mspace width="0.278em"></mspace><msub><mi>T</mi><mi>U</mi></msub><mo>≤</mo><mi>−</mi><msub><mi>t</mi><mrow><mn>1</mn><mo>−</mo><mi>α</mi><mo>,</mo><mi>ν</mi></mrow></msub><mspace width="0.167em"></mspace><mo minsize="1.2" maxsize="1.2" stretchy="false" form="prefix">|</mo><mspace width="0.278em"></mspace><mi>α</mi><mo>,</mo><mi>θ</mi><mo>,</mo><msub><mi>σ</mi><mi>ν</mi></msub><mo>,</mo><mi>ν</mi><mo>,</mo><mi>c</mi><mo stretchy="true" form="postfix">)</mo></mrow></mtd></mtr><mtr><mtd columnalign="right" style="text-align: right"><mo>=</mo></mtd><mtd columnalign="left" style="text-align: left"><msubsup><mo>∫</mo><mn>0</mn><mi>∞</mi></msubsup><mi>I</mi><mrow><mo stretchy="true" form="prefix">(</mo><msub><mover><mi>σ</mi><mo accent="true">̂</mo></mover><mi>ν</mi></msub><msub><mi>t</mi><mrow><mn>1</mn><mo>−</mo><mi>α</mi><mo>,</mo><mi>ν</mi></mrow></msub><mo>&lt;</mo><mi>c</mi><mo stretchy="true" form="postfix">)</mo></mrow><mrow><mo stretchy="true" form="prefix">{</mo><mi>Φ</mi><mrow><mo stretchy="true" form="prefix">(</mo><mfrac><mrow><mi>c</mi><mo>+</mo><msub><mi>t</mi><mrow><mi>α</mi><mo>,</mo><mi>ν</mi></mrow></msub><msub><mover><mi>σ</mi><mo accent="true">̂</mo></mover><mi>ν</mi></msub><mo>−</mo><mi>θ</mi></mrow><msub><mi>σ</mi><mi>ν</mi></msub></mfrac><mo stretchy="true" form="postfix">)</mo></mrow><mo>−</mo><mi>Φ</mi><mrow><mo stretchy="true" form="prefix">(</mo><mi>−</mi><mfrac><mrow><mi>c</mi><mo>+</mo><msub><mi>t</mi><mrow><mi>α</mi><mo>,</mo><mi>ν</mi></mrow></msub><msub><mover><mi>σ</mi><mo accent="true">̂</mo></mover><mi>ν</mi></msub><mo>+</mo><mi>θ</mi></mrow><msub><mi>σ</mi><mi>ν</mi></msub></mfrac><mo stretchy="true" form="postfix">)</mo></mrow><mo stretchy="true" form="postfix">}</mo></mrow></mtd></mtr><mtr><mtd columnalign="right" style="text-align: right"><mphantom><mo>=</mo></mphantom></mtd><mtd columnalign="left" style="text-align: left"><mi>×</mi><msub><mi>f</mi><mi>W</mi></msub><mrow><mo stretchy="true" form="prefix">(</mo><msub><mover><mi>σ</mi><mo accent="true">̂</mo></mover><mi>ν</mi></msub><mo stretchy="false" form="prefix">|</mo><msub><mi>σ</mi><mi>ν</mi></msub><mo>,</mo><mi>ν</mi><mo stretchy="true" form="postfix">)</mo></mrow><mi>d</mi><msub><mover><mi>σ</mi><mo accent="true">̂</mo></mover><mi>ν</mi></msub><mi>.</mi></mtd></mtr></mtable><annotation encoding="application/x-tex">\begin{equation*}
     \begin{aligned}
-        p(\alpha, \theta, \sigma_{\nu}, \nu, c) :=&amp; \Pr\left(T_L
-\geq t_{1-\alpha,\nu}\; \text{{ and}} \;  T_U \leq
--t_{1-\alpha,\nu}\,  \big|\;  \alpha, \theta, \sigma_{\nu}, \nu, c
-\right)\\
-        =&amp;\int_0^\infty I(\widehat\sigma_\nu t_{1-\alpha,\nu} &lt;
-c)\left\{\Phi\left(\frac{c+t_{\alpha,\nu}
-\widehat\sigma_\nu-\theta}{\sigma_\nu}\right)
-    -\Phi\left(-\frac{c+ t_{\alpha,\nu}
-\widehat\sigma_\nu+\theta}{\sigma_\nu}
+        p(\alpha, \theta, \sigma_{\nu}, \nu, c) :=&amp; \Pr\left(T_L \geq t_{1-\alpha,\nu}\; \text{{ and}} \;  T_U \leq -t_{1-\alpha,\nu}\,  \big|\;  \alpha, \theta, \sigma_{\nu}, \nu, c \right)\\
+        =&amp;\int_0^\infty I(\widehat\sigma_\nu t_{1-\alpha,\nu} &lt; c)\left\{\Phi\left(\frac{c+t_{\alpha,\nu} \widehat\sigma_\nu-\theta}{\sigma_\nu}\right)
+    -\Phi\left(-\frac{c+ t_{\alpha,\nu} \widehat\sigma_\nu+\theta}{\sigma_\nu}
     \right) \right\} \\
-        \phantom{=}&amp;\times f_W ( \widehat\sigma_\nu \lvert
-\sigma_\nu,\nu)d\widehat\sigma_\nu.
+        \phantom{=}&amp;\times f_W ( \widehat\sigma_\nu \lvert \sigma_\nu,\nu)d\widehat\sigma_\nu.
     \end{aligned}
-\end{equation*}\]</span> Noting that the vector <span class="math inline">\((T_L,T_U)\)</span> has a bivariate non-central
-<span class="math inline">\(t\)</span>-distribution with non-centrality
-parameters <span class="math inline">\(\frac{\theta-c}{\sigma_\nu}\)</span> and <span class="math inline">\(\frac{\theta+c}{\sigma_\nu}\)</span> respectively,
-we can express the power function in terms of Owen’s <span class="math inline">\(Q\)</span>-function <span class="citation">Owen
-(1965)</span>: <span class="math display">\[\begin{equation*}
+\end{equation*}</annotation></semantics></math> Noting that the vector
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mo stretchy="true" form="prefix">(</mo><msub><mi>T</mi><mi>L</mi></msub><mo>,</mo><msub><mi>T</mi><mi>U</mi></msub><mo stretchy="true" form="postfix">)</mo></mrow><annotation encoding="application/x-tex">(T_L,T_U)</annotation></semantics></math>
+has a bivariate non-central
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mi>t</mi><annotation encoding="application/x-tex">t</annotation></semantics></math>-distribution
+with non-centrality parameters
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mfrac><mrow><mi>θ</mi><mo>−</mo><mi>c</mi></mrow><msub><mi>σ</mi><mi>ν</mi></msub></mfrac><annotation encoding="application/x-tex">\frac{\theta-c}{\sigma_\nu}</annotation></semantics></math>
+and
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mfrac><mrow><mi>θ</mi><mo>+</mo><mi>c</mi></mrow><msub><mi>σ</mi><mi>ν</mi></msub></mfrac><annotation encoding="application/x-tex">\frac{\theta+c}{\sigma_\nu}</annotation></semantics></math>
+respectively, we can express the power function in terms of Owen’s
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mi>Q</mi><annotation encoding="application/x-tex">Q</annotation></semantics></math>-function
+<span class="citation">Owen (1965)</span>:
+<math display="block" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mtable><mtr><mtd columnalign="right" style="text-align: right"><mi>p</mi><mrow><mo stretchy="true" form="prefix">(</mo><mi>α</mi><mo>,</mo><mi>θ</mi><mo>,</mo><msub><mi>σ</mi><mi>ν</mi></msub><mo>,</mo><mi>ν</mi><mo>,</mo><mi>c</mi><mo stretchy="true" form="postfix">)</mo></mrow><mo>:=</mo></mtd><mtd columnalign="left" style="text-align: left"><msub><mi>Q</mi><mi>ν</mi></msub><mrow><mo stretchy="true" form="prefix">(</mo><mi>−</mi><msub><mi>t</mi><mrow><mn>1</mn><mo>−</mo><mi>α</mi><mo>,</mo><mi>ν</mi></mrow></msub><mo>,</mo><mspace width="0.167em"></mspace><mfrac><mrow><mi>θ</mi><mo>−</mo><mi>c</mi></mrow><msub><mi>σ</mi><mi>ν</mi></msub></mfrac><mo>,</mo><mspace width="0.167em"></mspace><mfrac><mrow><mi>c</mi><msqrt><mi>ν</mi></msqrt></mrow><mrow><msub><mi>σ</mi><mi>ν</mi></msub><msub><mi>t</mi><mrow><mn>1</mn><mo>−</mo><mi>α</mi><mo>,</mo><mi>ν</mi></mrow></msub></mrow></mfrac><mo stretchy="true" form="postfix">)</mo></mrow><mo>−</mo><msub><mi>Q</mi><mi>ν</mi></msub><mrow><mo stretchy="true" form="prefix">(</mo><msub><mi>t</mi><mrow><mn>1</mn><mo>−</mo><mi>α</mi><mo>,</mo><mi>ν</mi></mrow></msub><mo>,</mo><mspace width="0.167em"></mspace><mfrac><mrow><mi>θ</mi><mo>+</mo><mi>c</mi></mrow><msub><mi>σ</mi><mi>ν</mi></msub></mfrac><mo>,</mo><mspace width="0.167em"></mspace><mfrac><mrow><mi>c</mi><msqrt><mi>ν</mi></msqrt></mrow><mrow><msub><mi>σ</mi><mi>ν</mi></msub><msub><mi>t</mi><mrow><mn>1</mn><mo>−</mo><mi>α</mi><mo>,</mo><mi>ν</mi></mrow></msub></mrow></mfrac><mo stretchy="true" form="postfix">)</mo></mrow><mi>.</mi></mtd></mtr></mtable><annotation encoding="application/x-tex">\begin{equation*}
     \begin{aligned}
-        p(\alpha, \theta, \sigma_{\nu}, \nu, c) :=&amp;
-Q_{\nu}\left(-t_{1-\alpha,\nu},\, \frac{\theta - c}{\sigma_{\nu}},\,
-\frac{c \sqrt{\nu}}{\sigma_{\nu} t_{1-\alpha,\nu}} \right) -
-Q_{\nu}\left(t_{1-\alpha,\nu},\, \frac{\theta + c}{\sigma_{\nu}},\,
-\frac{c \sqrt{\nu}}{\sigma_{\nu} t_{1-\alpha,\nu}} \right).
+        p(\alpha, \theta, \sigma_{\nu}, \nu, c) :=&amp; Q_{\nu}\left(-t_{1-\alpha,\nu},\, \frac{\theta - c}{\sigma_{\nu}},\, \frac{c \sqrt{\nu}}{\sigma_{\nu} t_{1-\alpha,\nu}} \right) - Q_{\nu}\left(t_{1-\alpha,\nu},\, \frac{\theta + c}{\sigma_{\nu}},\, \frac{c \sqrt{\nu}}{\sigma_{\nu} t_{1-\alpha,\nu}} \right).
     \end{aligned}
-\end{equation*}\]</span></p>
+\end{equation*}</annotation></semantics></math></p>
 </div>
 <div class="section level2">
 <h2 id="conservativeness-of-the-tost">Conservativeness of the TOST<a class="anchor" aria-label="anchor" href="#conservativeness-of-the-tost"></a>
 </h2>
-<p>This formulation allows to demonstrate that, for <span class="math inline">\(\sigma_{\nu}&gt;0\)</span>, the TOST is not
-size-<span class="math inline">\(\alpha\)</span> in finite samples as
-<span class="math display">\[\begin{equation*}
+<p>This formulation allows to demonstrate that, for
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mi>σ</mi><mi>ν</mi></msub><mo>&gt;</mo><mn>0</mn></mrow><annotation encoding="application/x-tex">\sigma_{\nu}&gt;0</annotation></semantics></math>,
+the TOST is not
+size-<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mi>α</mi><annotation encoding="application/x-tex">\alpha</annotation></semantics></math>
+in finite samples as
+<math display="block" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mtable><mtr><mtd columnalign="right" style="text-align: right"><msub><mi>ω</mi><mi>ν</mi></msub><mrow><mo stretchy="true" form="prefix">(</mo><mi>α</mi><mo>,</mo><mi>c</mi><mo>,</mo><msub><mi>σ</mi><mi>ν</mi></msub><mo stretchy="true" form="postfix">)</mo></mrow></mtd><mtd columnalign="left" style="text-align: left"><mo>:=</mo><munder><mo>sup</mo><mrow><mi>θ</mi><mspace width="0.167em"></mspace><mo>∈</mo><mspace width="0.167em"></mspace><msub><mi>Θ</mi><mn>0</mn></msub></mrow></munder><mspace width="0.278em"></mspace><mi>p</mi><mrow><mo stretchy="true" form="prefix">(</mo><mi>α</mi><mo>,</mo><mi>θ</mi><mo>,</mo><msub><mi>σ</mi><mi>ν</mi></msub><mo>,</mo><mi>ν</mi><mo>,</mo><mi>c</mi><mo stretchy="true" form="postfix">)</mo></mrow></mtd></mtr><mtr><mtd columnalign="right" style="text-align: right"></mtd><mtd columnalign="left" style="text-align: left"><mo>&lt;</mo><msub><mi>Q</mi><mi>ν</mi></msub><mrow><mo stretchy="true" form="prefix">(</mo><mi>−</mi><msub><mi>t</mi><mrow><mn>1</mn><mo>−</mo><mi>α</mi><mo>,</mo><mi>ν</mi></mrow></msub><mo>,</mo><mspace width="0.167em"></mspace><mn>0</mn><mo>,</mo><mspace width="0.167em"></mspace><mfrac><mrow><mi>c</mi><msqrt><mi>ν</mi></msqrt></mrow><mrow><msub><mi>σ</mi><mi>ν</mi></msub><msub><mi>t</mi><mrow><mn>1</mn><mo>−</mo><mi>α</mi><mo>,</mo><mi>ν</mi></mrow></msub></mrow></mfrac><mo stretchy="true" form="postfix">)</mo></mrow><mo>&lt;</mo><mo>Pr</mo><mrow><mo stretchy="true" form="prefix">(</mo><msub><mi>T</mi><mi>ν</mi></msub><mo>≤</mo><mi>−</mi><msub><mi>t</mi><mrow><mn>1</mn><mo>−</mo><mi>α</mi><mo>,</mo><mi>ν</mi></mrow></msub><mo stretchy="true" form="postfix">)</mo></mrow><mo>=</mo><mi>α</mi><mo>,</mo></mtd></mtr></mtable><annotation encoding="application/x-tex">\begin{equation*}
     \begin{aligned}
-    \omega_\nu(\alpha, c, \sigma_{\nu}) &amp;:= \sup_{\theta \, \in \,
-\Theta_0}\; p(\alpha, \theta, \sigma_{\nu}, \nu, c) \\
-    &amp;&lt; Q_{\nu}\left(-t_{1-\alpha,\nu},\, 0,\, \frac{c
-\sqrt{\nu}}{\sigma_{\nu} t_{1-\alpha,\nu}} \right) &lt; \Pr\left(T_{\nu}
-\leq -t_{1-\alpha,\nu}\right) = \alpha,
+    \omega_\nu(\alpha, c, \sigma_{\nu}) &amp;:= \sup_{\theta \, \in \, \Theta_0}\; p(\alpha, \theta, \sigma_{\nu}, \nu, c) \\
+    &amp;&lt; Q_{\nu}\left(-t_{1-\alpha,\nu},\, 0,\, \frac{c \sqrt{\nu}}{\sigma_{\nu} t_{1-\alpha,\nu}} \right) &lt; \Pr\left(T_{\nu} \leq -t_{1-\alpha,\nu}\right) = \alpha,
     \end{aligned}
-\end{equation*}\]</span> where <span class="math inline">\(\Theta_0:=\mathbb{R}\setminus(-c,c)\)</span>
+\end{equation*}</annotation></semantics></math> where
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mi>Θ</mi><mn>0</mn></msub><mo>:=</mo><mi>ℝ</mi><mo>\</mo><mrow><mo stretchy="true" form="prefix">(</mo><mi>−</mi><mi>c</mi><mo>,</mo><mi>c</mi><mo stretchy="true" form="postfix">)</mo></mrow></mrow><annotation encoding="application/x-tex">\Theta_0:=\mathbb{R}\setminus(-c,c)</annotation></semantics></math>
 corresponds to parameter space under the null.</p>
 </div>
 <div class="section level2">
 <h2 id="finite-sample-corrections-to-the-tost">Finite sample corrections to the TOST<a class="anchor" aria-label="anchor" href="#finite-sample-corrections-to-the-tost"></a>
 </h2>
-<p>As <span class="math inline">\(\omega_\nu(\gamma, \delta,
-\sigma_{\nu})\)</span> is continuously differentiable and strictly
-increasing in <span class="math inline">\(\gamma\)</span> and <span class="math inline">\(\delta\)</span>, solving the following matching
-paradigms represents a finite sample correction to the TOST and would
-ensure size-<span class="math inline">\(\alpha\)</span> tests: <span class="math display">\[\alpha^*:=\text{argzero}_{\gamma \in [\alpha,
-0.5)} \;\big[ \omega_\nu(\gamma, c, \sigma_{\nu}) -
-\alpha\big],\]</span> <span class="math display">\[c^*:=\text{argzero}_{\delta \in [1, \infty)}
-\;\big[ \omega_\nu(\alpha, \delta, \sigma_{\nu}) -
-\alpha\big].\]</span></p>
+<p>As
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mi>ω</mi><mi>ν</mi></msub><mrow><mo stretchy="true" form="prefix">(</mo><mi>γ</mi><mo>,</mo><mi>δ</mi><mo>,</mo><msub><mi>σ</mi><mi>ν</mi></msub><mo stretchy="true" form="postfix">)</mo></mrow></mrow><annotation encoding="application/x-tex">\omega_\nu(\gamma, \delta, \sigma_{\nu})</annotation></semantics></math>
+is continuously differentiable and strictly increasing in
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mi>γ</mi><annotation encoding="application/x-tex">\gamma</annotation></semantics></math>
+and
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mi>δ</mi><annotation encoding="application/x-tex">\delta</annotation></semantics></math>,
+solving the following matching paradigms represents a finite sample
+correction to the TOST and would ensure
+size-<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mi>α</mi><annotation encoding="application/x-tex">\alpha</annotation></semantics></math>
+tests:
+<math display="block" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msup><mi>α</mi><mo>*</mo></msup><mo>:=</mo><msub><mtext mathvariant="normal">argzero</mtext><mrow><mi>γ</mi><mo>∈</mo><mo stretchy="false" form="prefix">[</mo><mi>α</mi><mo>,</mo><mn>0.5</mn><mo stretchy="false" form="postfix">)</mo></mrow></msub><mspace width="0.278em"></mspace><mo minsize="1.2" maxsize="1.2" stretchy="false" form="prefix">[</mo><msub><mi>ω</mi><mi>ν</mi></msub><mrow><mo stretchy="true" form="prefix">(</mo><mi>γ</mi><mo>,</mo><mi>c</mi><mo>,</mo><msub><mi>σ</mi><mi>ν</mi></msub><mo stretchy="true" form="postfix">)</mo></mrow><mo>−</mo><mi>α</mi><mo minsize="1.2" maxsize="1.2" stretchy="false" form="postfix">]</mo><mo>,</mo></mrow><annotation encoding="application/x-tex">\alpha^*:=\text{argzero}_{\gamma \in [\alpha, 0.5)} \;\big[ \omega_\nu(\gamma, c, \sigma_{\nu}) - \alpha\big],</annotation></semantics></math><math display="block" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msup><mi>c</mi><mo>*</mo></msup><mo>:=</mo><msub><mtext mathvariant="normal">argzero</mtext><mrow><mi>δ</mi><mo>∈</mo><mo stretchy="false" form="prefix">[</mo><mn>1</mn><mo>,</mo><mi>∞</mi><mo stretchy="false" form="postfix">)</mo></mrow></msub><mspace width="0.278em"></mspace><mo minsize="1.2" maxsize="1.2" stretchy="false" form="prefix">[</mo><msub><mi>ω</mi><mi>ν</mi></msub><mrow><mo stretchy="true" form="prefix">(</mo><mi>α</mi><mo>,</mo><mi>δ</mi><mo>,</mo><msub><mi>σ</mi><mi>ν</mi></msub><mo stretchy="true" form="postfix">)</mo></mrow><mo>−</mo><mi>α</mi><mo minsize="1.2" maxsize="1.2" stretchy="false" form="postfix">]</mo><mi>.</mi></mrow><annotation encoding="application/x-tex">c^*:=\text{argzero}_{\delta \in [1, \infty)} \;\big[ \omega_\nu(\alpha, \delta, \sigma_{\nu}) - \alpha\big].</annotation></semantics></math></p>
 <p>The conditions under which the solutions are singletons and provide a
 uniformly more powerful inference are studied in length in <span class="citation">Boulaguiem et al. (2023)</span> and compared to
 existing methods.</p>
@@ -228,7 +223,7 @@ existing methods.</p>
 <div class="section level2">
 <h2 class="unnumbered" id="references">References<a class="anchor" aria-label="anchor" href="#references"></a>
 </h2>
-<div id="refs" class="references csl-bib-body hanging-indent">
+<div id="refs" class="references csl-bib-body hanging-indent" entry-spacing="0">
 <div id="ref-boulaguiem2023finite" class="csl-entry">
 Boulaguiem, Y., J. Quartier, M. Lapteva, Y. N. Kalia, M.-P.
 Victoria-Feser, S. Guerrier, and D.-L. Couturier. 2023. <span>“Finite
@@ -242,7 +237,8 @@ Equivalence.”</span> <em>Journal of Pharmaceutical Sciences</em> 30:
 </div>
 <div id="ref-Owen65" class="csl-entry">
 Owen, D. B. 1965. <span>“<span class="nocase">A special case of a
-bivariate non-central <span class="math inline">\(t\)</span>-distribution</span>.”</span>
+bivariate non-central
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mi>t</mi><annotation encoding="application/x-tex">t</annotation></semantics></math>-distribution</span>.”</span>
 <em>Biometrika</em> 52: 437–46.
 </div>
 <div id="ref-Phil90" class="csl-entry">
@@ -262,28 +258,26 @@ Edition</em>. Wiley.
 </div>
 </div>
 </div>
-  </main><aside class="col-md-3"><nav id="toc"><h2>On this page</h2>
+  </main><aside class="col-md-3"><nav id="toc" aria-label="Table of contents"><h2>On this page</h2>
     </nav></aside>
 </div>
 
 
 
     <footer><div class="pkgdown-footer-left">
-  <p></p>
-<p>Developed by Stéphane Guerrier, Younes Boulaguiem, Dominique-Laurent Couturier, Luca Insolia.</p>
+  <p>Developed by Stéphane Guerrier, Younes Boulaguiem, Dominique-Laurent Couturier, Luca Insolia, Jun Wu.</p>
 </div>
 
 <div class="pkgdown-footer-right">
-  <p></p>
-<p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.7.</p>
+  <p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.1.3.</p>
 </div>
 
     </footer>
 </div>
 
-  
 
-  
+
+
 
   </body>
 </html>

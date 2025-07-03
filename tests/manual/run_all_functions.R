@@ -40,11 +40,11 @@ print(" ")
 
 # compare function
 print("Compare to TOST:")
-compare_to_tost(x2)
+compare_to_tost(ctost(theta = theta_hat, sigma = sig_hat, nu = nu, delta = log(1.25), method = "alpha"))
 print(" ")
-compare_to_tost(x3)
+compare_to_tost(ctost(theta = theta_hat, sigma = sig_hat, nu = nu, delta = log(1.25), method = "delta"))
 print(" ")
-compare_to_tost(x4)
+compare_to_tost(ctost(theta = theta_hat, sigma = sig_hat, nu = nu, delta = log(1.25), method = "optimal", correction = "offline"))
 print(" ")
 
 # If the script went this far...

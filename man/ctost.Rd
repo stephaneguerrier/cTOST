@@ -67,7 +67,7 @@ data(skin)
 
 theta_hat = diff(apply(skin,2,mean))
 nu = nrow(skin) - 1
-sig_hat = sd(apply(skin,1,diff))/sqrt(nu)
+sig_hat = var(apply(skin,1,diff))/nu
 
 # alpha-TOST
 atost = ctost(theta = theta_hat, sigma = sig_hat, nu = nu,

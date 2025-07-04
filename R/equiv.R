@@ -3,36 +3,38 @@
 #' @description This function is used to compute finite sample corrected version of the standard (univariate or multivariate) TOST.
 #'
 #' @param theta                 A \code{numeric} value corresponding to the difference of means.
-#' @param sigma                 A \code{numeric} value corresponding to the standard error.
+#' @param sigma                 A \code{numeric} value corresponding to the standard error in univariate setting, the estimated covariance matrix in multivariate setting.
 #' @param nu                    A \code{numeric} value corresponding to the number of degrees of freedom.
-#' @param delta                 A \code{numeric} value corresponding to (bio)equivalence limit. We assume symmetry, i.e, the (bio)equivalence interval corresponds to (-delta,delta)
+#' @param delta                 A \code{numeric} value corresponding to (bio)equivalence limit. We assume symmetry, i.e, the (bio)equivalence interval corresponds to (-delta,delta).
 #' @param method                A \code{character} value corresponding to the considered finite sample adjustment method, see Details below for more information.
-#' @param alpha                 A \code{numeric} value specifying the significance level (default: alpha = 0.05).
-#' @param B                     TO DOCUMENT
-#' @param correction                  TO DOCUMENT
-#' @param seed                        TO DOCUMENT
+#' @param alpha                 A \code{numeric} value specifying the significance level (default: alpha = \code{0.05}).
+#' @param B                     A \code{numeric} value specifying the number of Monte Carlo replication (default: B = \code{10^4}).
+#' @param correction            A \code{character} value corresponding to the considered correction method, see Details below for more information (default: correction = \code{"offline"}).
+#' @param seed                  A \code{numeric} value specifying a seed for reproducibility (default: seed = \code{101010}).
 #' @param ...                   Additional parameters.
 #'
 #'
-#' @details
-#' In univariate settings, two methods are available: optimal (add ref), alpha-TOST (using method = 'alpha') and delta-TOST (using method = 'delta').
+#' @Details
+#' In univariate settings, three adjustment methods are available: optimal (using method = 'optimal'), alpha-TOST (using method = 'alpha') and delta-TOST (using method = 'delta').
+#' The optimal method is introduced in (add ref).
 #' The alpha-TOST and delta-TOST are introduced in Boulaguiem et al. (2024, <https://doi.org/10.1002/sim.9993>). The former is a corrective procedure of the significance level applied to the TOST while the latter
 #' adjusts the equivalence limits. In general, the alpha-TOST appears to outperform the delta-TOST.
 #'
-#' In multivariate setting, the only available method is the (multivariate) alpha-TOST (using method = 'alpha') introduced in Boulaguiem et al. (2024, bioarxiv).
+#' In multivariate setting, the only available method is the (multivariate) alpha-TOST (using method = 'alpha') introduced in Boulaguiem et al. (2024, <https://doi.org/10.48550/arXiv.2411.16429>).
 #'
+#' The correction method = "offline" refers to ....
 #'
 #' @return A \code{tost} object with the structure:
 #' \itemize{
 #'  \item decision:    A boolean variable indicating whether (bio)equivalence is accepted or not.
-#'  \item ci:          Confidence interval at the 1 - 2*alpha level.
+#'  \item CI:          Confidence interval at the 1 - 2*alpha level.
 #'  \item theta:       The difference of means used for the test.
 #'  \item sigma:       The standard error used for the test.
 #'  \item nu:          The number of degrees of freedom used for the test.
 #'  \item alpha:       The significance level used for the test.
 #'  \item delta:       The (bio)equivalence limits used for the test.
-#'  \item method:      The method used for the test (optimal-TOST, alpha-TOST and delta-TOST).
-#'  \item setting:     The setting used (univariate or multivariate)
+#'  \item method:      The method used for the test (optimal, alpha-TOST and delta-TOST).
+#'  \item setting:     The setting used (univariate or multivariate).
 #' }
 #' @export
 #' @examples
@@ -53,7 +55,7 @@
 #'               alpha = 0.05, delta = log(1.25), method = "delta")
 #' dtost
 #' compare_to_tost(dtost)
-ctost = function(theta, sigma, nu, delta, alpha = 0.05, method = "optimal", B = 10^4, seed = 101010, correction = "offline", ...){
+ctost = function(theta, sigma, nu, delta, alpha = 0.05, method, B = 10^4, seed = 101010, correction = "offline", ...){
 
   # Check inputs
   if (alpha < 0.0000001 || alpha > 0.5){

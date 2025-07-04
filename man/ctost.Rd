@@ -10,7 +10,7 @@ ctost(
   nu,
   delta,
   alpha = 0.05,
-  method = "optimal",
+  method,
   B = 10^4,
   seed = 101010,
   correction = "offline",
@@ -20,21 +20,21 @@ ctost(
 \arguments{
 \item{theta}{A \code{numeric} value corresponding to the difference of means.}
 
-\item{sigma}{A \code{numeric} value corresponding to the standard error.}
+\item{sigma}{A \code{numeric} value corresponding to the standard error in univariate setting, the estimated covariance matrix in multivariate setting.}
 
 \item{nu}{A \code{numeric} value corresponding to the number of degrees of freedom.}
 
-\item{delta}{A \code{numeric} value corresponding to (bio)equivalence limit. We assume symmetry, i.e, the (bio)equivalence interval corresponds to (-delta,delta)}
+\item{delta}{A \code{numeric} value corresponding to (bio)equivalence limit. We assume symmetry, i.e, the (bio)equivalence interval corresponds to (-delta,delta).}
 
-\item{alpha}{A \code{numeric} value specifying the significance level (default: alpha = 0.05).}
+\item{alpha}{A \code{numeric} value specifying the significance level (default: alpha = \code{0.05}).}
 
 \item{method}{A \code{character} value corresponding to the considered finite sample adjustment method, see Details below for more information.}
 
-\item{B}{TO DOCUMENT}
+\item{B}{A \code{numeric} value specifying the number of Monte Carlo replication (default: B = \code{10^4}).}
 
-\item{seed}{TO DOCUMENT}
+\item{seed}{A \code{numeric} value specifying a seed for reproducibility (default: seed = \code{101010}).}
 
-\item{correction}{TO DOCUMENT}
+\item{correction}{A \code{character} value corresponding to the considered correction method, see Details below for more information (default: correction = \code{"offline"}).}
 
 \item{...}{Additional parameters.}
 }
@@ -42,25 +42,18 @@ ctost(
 A \code{tost} object with the structure:
 \itemize{
  \item decision:    A boolean variable indicating whether (bio)equivalence is accepted or not.
- \item ci:          Confidence interval at the 1 - 2*alpha level.
+ \item CI:          Confidence interval at the 1 - 2*alpha level.
  \item theta:       The difference of means used for the test.
  \item sigma:       The standard error used for the test.
  \item nu:          The number of degrees of freedom used for the test.
  \item alpha:       The significance level used for the test.
  \item delta:       The (bio)equivalence limits used for the test.
- \item method:      The method used for the test (optimal-TOST, alpha-TOST and delta-TOST).
- \item setting:     The setting used (univariate or multivariate)
+ \item method:      The method used for the test (optimal, alpha-TOST and delta-TOST).
+ \item setting:     The setting used (univariate or multivariate).
 }
 }
 \description{
 This function is used to compute finite sample corrected version of the standard (univariate or multivariate) TOST.
-}
-\details{
-In univariate settings, two methods are available: optimal (add ref), alpha-TOST (using method = 'alpha') and delta-TOST (using method = 'delta').
-The alpha-TOST and delta-TOST are introduced in Boulaguiem et al. (2024, <https://doi.org/10.1002/sim.9993>). The former is a corrective procedure of the significance level applied to the TOST while the latter
-adjusts the equivalence limits. In general, the alpha-TOST appears to outperform the delta-TOST.
-
-In multivariate setting, the only available method is the (multivariate) alpha-TOST (using method = 'alpha') introduced in Boulaguiem et al. (2024, bioarxiv).
 }
 \examples{
 data(skin)

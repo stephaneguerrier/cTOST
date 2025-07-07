@@ -39,7 +39,7 @@ ctost(
 \item{...}{Additional parameters.}
 }
 \value{
-A \code{ctost} object with the structure:
+An object of class \code{tost} with the structure:
 \itemize{
  \item \code{decision}:    A boolean variable indicating whether (bio)equivalence is accepted or not.
  \item \code{ci}:          Confidence region at the \eqn{1 - 2\alpha} level.

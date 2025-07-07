@@ -18,7 +18,7 @@ atost(theta, sigma, nu, alpha, delta)
 \item{delta}{A \code{numeric} value or vector defining the (bio)equivalence margin(s). The procedure assumes symmetry, i.e., the (bio)equivalence region is \eqn{(-\delta, \delta)}.}
 }
 \value{
-A \code{atost} object with the structure:
+An object of class \code{tost} with the structure:
 \itemize{
  \item \code{decision}:    A boolean variable indicating whether (bio)equivalence is accepted or not.
  \item \code{ci}:          Confidence region at the \eqn{1 - 2\alpha} level.

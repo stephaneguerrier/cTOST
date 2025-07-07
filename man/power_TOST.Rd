@@ -4,18 +4,18 @@
 \alias{power_TOST}
 \title{Power function}
 \usage{
-power_TOST(alpha, theta, sigma_nu, nu, delta, ...)
+power_TOST(alpha, theta, sigma, nu, delta, ...)
 }
 \arguments{
-\item{alpha}{A \code{numeric} value specifying the significance level (default = \code{0.05}).}
+\item{alpha}{A \code{numeric} value specifying the significance level.}
 
 \item{theta}{A \code{numeric} value corresponding to the estimated parameter of interest (such as a difference of means).}
 
-\item{sigma_nu}{A \code{numeric} value corresponding to the estimated standard error.}
+\item{sigma}{A \code{numeric} value corresponding to the estimated standard error of estimated \code{theta}.}
 
-\item{nu}{A \code{numeric} value corresponding to the number of degrees of freedom.}
+\item{nu}{A \code{numeric} value specifying the degrees of freedom.}
 
-\item{delta}{A \code{numeric} value corresponding to (bio)equivalence limit. We assume symmetry, i.e, the (bio)equivalence interval corresponds to (-delta,delta)}
+\item{delta}{A \code{numeric} value or vector defining the (bio)equivalence margin(s). The procedure assumes symmetry, i.e., the (bio)equivalence region is \eqn{(-\delta, \delta)}.}
 
 \item{...}{Additional parameters.}
 }
@@ -24,5 +24,8 @@ The function returns a \code{numeric} value that corresponds to a probability.
 }
 \description{
 Power function
+}
+\author{
+Younes Boulaguiem, Stéphane Guerrier, Dominique-Laurent Couturier
 }
 \keyword{internal}

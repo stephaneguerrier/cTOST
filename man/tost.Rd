@@ -9,32 +9,32 @@ tost(theta, sigma, nu, delta, alpha = 0.05, ...)
 \arguments{
 \item{theta}{A \code{numeric} value or vector representing the estimated difference(s) (e.g., between a generic and reference product).}
 
-\item{sigma}{A \code{numeric} value (univariate) or \code{matrix} (multivariate) corresponding to the estimated variance of the estimate \code{theta}.}
+\item{sigma}{A \code{numeric} value (univariate) or \code{matrix} (multivariate) corresponding to the estimated variance of estimated \code{theta}.}
 
 \item{nu}{A \code{numeric} value specifying the degrees of freedom. In the multivariate case, it is assumed to be the same across all dimensions.}
 
 \item{delta}{A \code{numeric} value or vector defining the (bio)equivalence margin(s). The procedure assumes symmetry, i.e., the (bio)equivalence region is \eqn{(-\delta, \delta)}. In the multivariate case, it is assumed to be the same across all dimensions.}
 
-\item{alpha}{A \code{numeric} value specifying the significance level (default is 0.05).}
+\item{alpha}{A \code{numeric} value specifying the significance level (default: alpha = \code{0.05}).}
 
 \item{...}{Additional arguments.}
 }
 \value{
 A \code{tost} object with the following elements:
 \itemize{
-  \item \code{decision}:    A logical indicating whether (bio)equivalence is accepted.
+  \item \code{decision}:    A boolean variable indicating whether (bio)equivalence is accepted or not.
   \item \code{ci}:          Confidence region at the \eqn{1 - 2\alpha} level.
   \item \code{theta}:       The estimated difference(s) used in the test.
   \item \code{sigma}:       The estimated variance of \code{theta}, a \code{numeric} in univariate settings or \code{matrix} in multivariate settings.
-  \item \code{nu}:          Degrees of freedom.
-  \item \code{alpha}:       Significance level.
-  \item \code{delta}:       (Bio)equivalence margin(s).
+  \item \code{nu}:          The number of degrees of freedom used in the test.
+  \item \code{alpha}:       The significance level used in the test.
+  \item \code{delta}:       The (bio)equivalence limits used in the test.
   \item \code{method}:      A character string describing the method used ("TOST").
-  \item \code{setting}:     A character string indicating the setting ("univariate" or "multivariate").
+  \item \code{setting}:     The setting used (univariate or multivariate).
 }
 }
 \description{
-Performs the Two One-Sided Tests (TOST) procedure for (bio)equivalence assessment in both univariate and multivariate settings.
+This function performs the Two One-Sided Tests (TOST) procedure for (bio)equivalence assessment in both univariate and multivariate settings.
 }
 \examples{
 # Univariate case
@@ -53,4 +53,7 @@ theta_hat = colMeans(ticlopidine)
 Sigma_hat = cov(ticlopidine)/n
 tost(theta = theta_hat, sigma = Sigma_hat, nu = nu, delta = log(1.25))
 
+}
+\author{
+Younes Boulaguiem, Stéphane Guerrier, Dominique-Laurent Couturier
 }

@@ -4,21 +4,21 @@
 \alias{get_alpha_star}
 \title{Get alpha star}
 \usage{
-get_alpha_star(alpha, sigma_nu, nu, delta, ...)
+get_alpha_star(alpha = 0.05, sigma, nu, delta, ...)
 }
 \arguments{
-\item{alpha}{A \code{numeric} value specifying the significance level (default = \code{0.05}).}
+\item{alpha}{A \code{numeric} value specifying the significance level (default: alpha = \code{0.05}).}
 
-\item{sigma_nu}{A \code{numeric} value corresponding to the estimated standard error.}
+\item{sigma}{A \code{numeric} value corresponding to the estimated standard error of estimated \code{theta}.}
 
-\item{nu}{A \code{numeric} value corresponding to the number of degrees of freedom.}
+\item{nu}{A \code{numeric} value specifying the degrees of freedom.}
 
-\item{delta}{A \code{numeric} value corresponding to (bio)equivalence limit. We assume symmetry, i.e, the (bio)equivalence interval corresponds to (-delta,delta)}
+\item{delta}{A \code{numeric} value or vector defining the (bio)equivalence margin(s). The procedure assumes symmetry, i.e., the (bio)equivalence region is \eqn{(-\delta, \delta)}.}
 
 \item{...}{Additional parameters.}
 }
 \value{
-The function returns a \code{numeric} value that corresponds to the solution of the optimisation.
+The function returns a \code{numeric} value that corresponds to the solution of the optimization.
 }
 \description{
 Get alpha star

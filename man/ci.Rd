@@ -4,21 +4,21 @@
 \alias{ci}
 \title{Confidence Intervals}
 \usage{
-ci(alpha, theta, sigma_nu, nu, ...)
+ci(alpha, theta, sigma, nu, ...)
 }
 \arguments{
-\item{alpha}{A \code{numeric} value specifying the significance level (default = \code{0.05}).}
+\item{alpha}{A \code{numeric} value specifying the significance level.}
 
 \item{theta}{A \code{numeric} value corresponding to the estimated parameter of interest (such as a difference of means).}
 
-\item{sigma_nu}{A \code{numeric} value corresponding to the estimated standard error.}
+\item{sigma}{A \code{numeric} value corresponding to the estimated standard error of estimated \code{theta}.}
 
-\item{nu}{A \code{numeric} value corresponding to the number of degrees of freedom.}
+\item{nu}{A \code{numeric} value specifying the degrees of freedom.}
 
 \item{...}{Additional parameters.}
 }
 \value{
-The function returns a numerical \code{vector} with the lower and upper bound of the confidence intervals.
+The function returns a numerical \code{vector} with the lower and upper bound of the confidence interval.
 }
 \description{
 Confidence Intervals

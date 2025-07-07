@@ -7,31 +7,32 @@
 atost(theta, sigma, nu, alpha, delta)
 }
 \arguments{
-\item{theta}{A \code{numeric} value corresponding to the difference of means.}
+\item{theta}{A \code{numeric} value corresponding to the estimated parameter of interest (such as a difference of means).}
 
-\item{sigma}{A \code{numeric} value corresponding to the standard error.}
+\item{sigma}{A \code{numeric} value corresponding to the estimated standard error of estimated \code{theta}.}
 
-\item{nu}{A \code{numeric} value corresponding to the number of degrees of freedom.}
+\item{nu}{A \code{numeric} value specifying the degrees of freedom.}
 
 \item{alpha}{A \code{numeric} value specifying the significance level.}
 
-\item{delta}{A \code{numeric} value corresponding to (bio)equivalence limit. We assume symmetry, i.e, the (bio)equivalence interval corresponds to (-delta,delta)}
+\item{delta}{A \code{numeric} value or vector defining the (bio)equivalence margin(s). The procedure assumes symmetry, i.e., the (bio)equivalence region is \eqn{(-\delta, \delta)}.}
 }
 \value{
-A \code{tost} object with the structure:
+A \code{atost} object with the structure:
 \itemize{
- \item decision:    A boolean variable indicating whether (bio)equivalence is accepted or not.
- \item ci:          Confidence interval at the 1 - 2*alpha level.
- \item theta:       The difference of means used for the test.
- \item sigma:       The standard error used for the test.
- \item nu:          The number of degrees of freedom used for the test.
- \item alpha:       The significance level used for the test.
- \item delta:       The (bio)equivalence limits used for the test.
- \item method:      The method used for the test (here the "alpha-TOST").
+ \item \code{decision}:    A boolean variable indicating whether (bio)equivalence is accepted or not.
+ \item \code{ci}:          Confidence region at the \eqn{1 - 2\alpha} level.
+ \item \code{theta}:       The estimated difference(s) used in the test.
+ \item \code{sigma}:       The estimated standard error used in the test.
+ \item \code{nu}:          The number of degrees of freedom used in the test.
+ \item \code{alpha}:       The significance level used in the test.
+ \item \code{corrected_alpha}:       The significance level corrected by the adjustment.
+ \item \code{delta}:       The (bio)equivalence limits used in the test.
+ \item \code{method}:      The method used in the test (here the "alpha-TOST").
 }
 }
 \description{
-This functions is used to compute the alpha-TOST, a corrective procedure of the significance level applied to the Two One-Sided Test (TOST) for (bio)equivalence testing in the univariate framework.
+This function is used to compute the alpha-TOST, a corrective procedure of the significance level applied to the Two One-Sided Test (TOST) for (bio)equivalence testing in the univariate framework.
 }
 \examples{
 data(skin)

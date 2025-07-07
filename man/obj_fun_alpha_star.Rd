@@ -2,20 +2,20 @@
 % Please edit documentation in R/equiv.R
 \name{obj_fun_alpha_star}
 \alias{obj_fun_alpha_star}
-\title{Objective function to optimise}
+\title{Objective function to optimize}
 \usage{
-obj_fun_alpha_star(test, alpha, sigma_nu, nu, delta, ...)
+obj_fun_alpha_star(test, alpha = 0.05, sigma, nu, delta, ...)
 }
 \arguments{
-\item{test}{A \code{numeric} value specifying the significance level to optimise.}
+\item{test}{A \code{numeric} value specifying the significance level to optimize.}
 
-\item{alpha}{A \code{numeric} value specifying the significance level (default = \code{0.05}).}
+\item{alpha}{A \code{numeric} value specifying the significance level (default: alpha = \code{0.05}).}
 
-\item{sigma_nu}{A \code{numeric} value corresponding to the estimated standard error.}
+\item{sigma}{A \code{numeric} value corresponding to the estimated standard error of estimated \code{theta}.}
 
-\item{nu}{A \code{numeric} value corresponding to the number of degrees of freedom.}
+\item{nu}{A \code{numeric} value specifying the degrees of freedom.}
 
-\item{delta}{A \code{numeric} value corresponding to (bio)equivalence limit. We assume symmetry, i.e, the (bio)equivalence interval corresponds to (-delta,delta)}
+\item{delta}{A \code{numeric} value or vector defining the (bio)equivalence margin(s). The procedure assumes symmetry, i.e., the (bio)equivalence region is \eqn{(-\delta, \delta)}.}
 
 \item{...}{Additional parameters.}
 }
@@ -23,7 +23,7 @@ obj_fun_alpha_star(test, alpha, sigma_nu, nu, delta, ...)
 The function returns a \code{numeric} value for the objective function.
 }
 \description{
-Objective function to optimise
+Objective function to optimize
 }
 \author{
 Younes Boulaguiem, Stéphane Guerrier, Dominique-Laurent Couturier

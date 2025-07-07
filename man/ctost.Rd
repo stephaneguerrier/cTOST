@@ -18,13 +18,13 @@ ctost(
 )
 }
 \arguments{
-\item{theta}{A \code{numeric} value corresponding to the difference of means.}
+\item{theta}{A \code{numeric} value or vector representing the estimated difference(s) (e.g., between a generic and reference product).}
 
-\item{sigma}{A \code{numeric} value corresponding to the standard error in univariate setting, the estimated covariance matrix in multivariate setting.}
+\item{sigma}{A \code{numeric} value (univariate) or \code{matrix} (multivariate) corresponding to the estimated variance of estimated \code{theta}.}
 
-\item{nu}{A \code{numeric} value corresponding to the number of degrees of freedom.}
+\item{nu}{A \code{numeric} value specifying the degrees of freedom. In the multivariate case, it is assumed to be the same across all dimensions.}
 
-\item{delta}{A \code{numeric} value corresponding to (bio)equivalence limit. We assume symmetry, i.e, the (bio)equivalence interval corresponds to (-delta,delta).}
+\item{delta}{A \code{numeric} value or vector defining the (bio)equivalence margin(s). The procedure assumes symmetry, i.e., the (bio)equivalence region is \eqn{(-\delta, \delta)}. In the multivariate case, it is assumed to be the same across all dimensions.}
 
 \item{alpha}{A \code{numeric} value specifying the significance level (default: alpha = \code{0.05}).}
 
@@ -39,17 +39,19 @@ ctost(
 \item{...}{Additional parameters.}
 }
 \value{
-A \code{tost} object with the structure:
+A \code{ctost} object with the structure:
 \itemize{
- \item decision:    A boolean variable indicating whether (bio)equivalence is accepted or not.
- \item CI:          Confidence interval at the 1 - 2*alpha level.
- \item theta:       The difference of means used for the test.
- \item sigma:       The standard error used for the test.
- \item nu:          The number of degrees of freedom used for the test.
- \item alpha:       The significance level used for the test.
- \item delta:       The (bio)equivalence limits used for the test.
- \item method:      The method used for the test (optimal, alpha-TOST and delta-TOST).
- \item setting:     The setting used (univariate or multivariate).
+ \item \code{decision}:    A boolean variable indicating whether (bio)equivalence is accepted or not.
+ \item \code{ci}:          Confidence region at the \eqn{1 - 2\alpha} level.
+ \item \code{theta}:       The estimated difference(s) used in the test.
+ \item \code{sigma}:       The estimated variance of \code{theta}, a \code{numeric} in univariate settings or \code{matrix} in multivariate settings.
+ \item \code{nu}:          The number of degrees of freedom used in the test.
+ \item \code{alpha}:       The significance level used in the test.
+ \item \code{corrected_alpha}: The significance level corrected by the adjustment ("alpha-TOST" used).
+ \item \code{corrected_delta}: The (bio)equivalence limits corrected by the adjustment ("delta-TOST" used).
+ \item \code{delta}:       The (bio)equivalence limits used in the test.
+ \item \code{method}:      The method used in the test (optimal, alpha-TOST and delta-TOST).
+ \item \code{setting}:     The setting used (univariate or multivariate).
 }
 }
 \description{
@@ -73,4 +75,7 @@ dtost = ctost(theta = theta_hat, sigma = sig_hat, nu = nu,
               alpha = 0.05, delta = log(1.25), method = "delta")
 dtost
 compare_to_tost(dtost)
+}
+\author{
+Younes Boulaguiem, Stéphane Guerrier, Dominique-Laurent Couturier
 }

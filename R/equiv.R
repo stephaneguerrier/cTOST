@@ -1,18 +1,19 @@
 #' @title Finite Sample Adjusted (Bio)Equivalence Testing
 #'
 #' @description This function is used to compute finite sample corrected version of the standard (univariate or multivariate) TOST.
+
+#' @author Younes Boulaguiem, Stéphane Guerrier, Dominique-Laurent Couturier
 #'
-#' @param theta                 A \code{numeric} value corresponding to the difference of means.
-#' @param sigma                 A \code{numeric} value corresponding to the standard error in univariate setting, the estimated covariance matrix in multivariate setting.
-#' @param nu                    A \code{numeric} value corresponding to the number of degrees of freedom.
-#' @param delta                 A \code{numeric} value corresponding to (bio)equivalence limit. We assume symmetry, i.e, the (bio)equivalence interval corresponds to (-delta,delta).
+#' @param theta                 A \code{numeric} value or vector representing the estimated difference(s) (e.g., between a generic and reference product).
+#' @param sigma                 A \code{numeric} value (univariate) or \code{matrix} (multivariate) corresponding to the estimated variance of estimated \code{theta}.
+#' @param nu                    A \code{numeric} value specifying the degrees of freedom. In the multivariate case, it is assumed to be the same across all dimensions.
+#' @param delta                 A \code{numeric} value or vector defining the (bio)equivalence margin(s). The procedure assumes symmetry, i.e., the (bio)equivalence region is \eqn{(-\delta, \delta)}. In the multivariate case, it is assumed to be the same across all dimensions.
 #' @param method                A \code{character} value corresponding to the considered finite sample adjustment method, see Details below for more information.
 #' @param alpha                 A \code{numeric} value specifying the significance level (default: alpha = \code{0.05}).
 #' @param B                     A \code{numeric} value specifying the number of Monte Carlo replication (default: B = \code{10^4}).
 #' @param correction            A \code{character} value corresponding to the considered correction method, see Details below for more information (default: correction = \code{"offline"}).
 #' @param seed                  A \code{numeric} value specifying a seed for reproducibility (default: seed = \code{101010}).
 #' @param ...                   Additional parameters.
-#'
 #'
 #' @Details
 #' In univariate settings, three adjustment methods are available: optimal (using method = 'optimal'), alpha-TOST (using method = 'alpha') and delta-TOST (using method = 'delta').
@@ -24,17 +25,19 @@
 #'
 #' The correction method = "offline" refers to ....
 #'
-#' @return A \code{tost} object with the structure:
+#' @return A \code{ctost} object with the structure:
 #' \itemize{
-#'  \item decision:    A boolean variable indicating whether (bio)equivalence is accepted or not.
-#'  \item CI:          Confidence interval at the 1 - 2*alpha level.
-#'  \item theta:       The difference of means used for the test.
-#'  \item sigma:       The standard error used for the test.
-#'  \item nu:          The number of degrees of freedom used for the test.
-#'  \item alpha:       The significance level used for the test.
-#'  \item delta:       The (bio)equivalence limits used for the test.
-#'  \item method:      The method used for the test (optimal, alpha-TOST and delta-TOST).
-#'  \item setting:     The setting used (univariate or multivariate).
+#'  \item \code{decision}:    A boolean variable indicating whether (bio)equivalence is accepted or not.
+#'  \item \code{ci}:          Confidence region at the \eqn{1 - 2\alpha} level.
+#'  \item \code{theta}:       The estimated difference(s) used in the test.
+#'  \item \code{sigma}:       The estimated variance of \code{theta}, a \code{numeric} in univariate settings or \code{matrix} in multivariate settings.
+#'  \item \code{nu}:          The number of degrees of freedom used in the test.
+#'  \item \code{alpha}:       The significance level used in the test.
+#'  \item \code{corrected_alpha}: The significance level corrected by the adjustment ("alpha-TOST" used).
+#'  \item \code{corrected_delta}: The (bio)equivalence limits corrected by the adjustment ("delta-TOST" used).
+#'  \item \code{delta}:       The (bio)equivalence limits used in the test.
+#'  \item \code{method}:      The method used in the test (optimal, alpha-TOST and delta-TOST).
+#'  \item \code{setting}:     The setting used (univariate or multivariate).
 #' }
 #' @export
 #' @examples
@@ -159,19 +162,24 @@ ctost = function(theta, sigma, nu, delta, alpha = 0.05, method, B = 10^4, seed =
 
 
 #' @title Power function
-#' @param alpha                 A \code{numeric} value specifying the significance level (default = \code{0.05}).
+#'
+#' @author Younes Boulaguiem, Stéphane Guerrier, Dominique-Laurent Couturier
+#'
+#' @param alpha                 A \code{numeric} value specifying the significance level.
 #' @param theta                 A \code{numeric} value corresponding to the estimated parameter of interest (such as a difference of means).
-#' @param sigma_nu              A \code{numeric} value corresponding to the estimated standard error.
-#' @param nu                    A \code{numeric} value corresponding to the number of degrees of freedom.
-#' @param delta                 A \code{numeric} value corresponding to (bio)equivalence limit. We assume symmetry, i.e, the (bio)equivalence interval corresponds to (-delta,delta)
+#' @param sigma                 A \code{numeric} value corresponding to the estimated standard error of estimated \code{theta}.
+#' @param nu                    A \code{numeric} value specifying the degrees of freedom.
+#' @param delta                 A \code{numeric} value or vector defining the (bio)equivalence margin(s). The procedure assumes symmetry, i.e., the (bio)equivalence region is \eqn{(-\delta, \delta)}.
 #' @param ...                   Additional parameters.
+#'
 #' @keywords internal
+#'
 #' @return The function returns a \code{numeric} value that corresponds to a probability.
-power_TOST = function(alpha, theta, sigma_nu, nu, delta, ...){
+power_TOST = function(alpha, theta, sigma, nu, delta, ...){
   tval = qt(1 - alpha, df = nu)
-  mu1 = (theta + delta)/sigma_nu
-  mu2 = (theta - delta)/sigma_nu
-  R = (delta*sqrt(nu))/(tval*sigma_nu)
+  mu1 = (theta + delta)/sigma
+  mu2 = (theta - delta)/sigma
+  R = (delta*sqrt(nu))/(tval*sigma)
   p1 = OwensQ(nu, tval, mu1, 0, R)
   p2 = OwensQ(nu, -tval, mu2, 0, R)
   pw = p2-p1
@@ -180,46 +188,57 @@ power_TOST = function(alpha, theta, sigma_nu, nu, delta, ...){
 }
 
 #' @title The size
+#'
 #' @author Younes Boulaguiem, Stéphane Guerrier, Dominique-Laurent Couturier
-#' @param alpha                 A \code{numeric} value specifying the significance level (default = \code{0.05}).
-#' @param sigma_nu              A \code{numeric} value corresponding to the estimated standard error.
-#' @param nu                    A \code{numeric} value corresponding to the number of degrees of freedom.
-#' @param delta                 A \code{numeric} value corresponding to (bio)equivalence limit. We assume symmetry, i.e, the (bio)equivalence interval corresponds to (-delta,delta)
+#'
+#' @param alpha                 A \code{numeric} value specifying the significance level.
+#' @param sigma                 A \code{numeric} value corresponding to the estimated standard error of estimated \code{theta}.
+#' @param nu                    A \code{numeric} value specifying the degrees of freedom.
+#' @param delta                 A \code{numeric} value or vector defining the (bio)equivalence margin(s). The procedure assumes symmetry, i.e., the (bio)equivalence region is \eqn{(-\delta, \delta)}.
 #' @param ...                   Additional parameters.
 #' @keywords internal
+#'
 #' @return The function returns a \code{numeric} value that corresponds to a probability.
-size_TOST = function(alpha, sigma_nu, nu, delta, ...){
-  power_TOST(alpha = alpha, theta = delta, sigma_nu = sigma_nu,
+size_TOST = function(alpha, sigma, nu, delta, ...){
+  power_TOST(alpha = alpha, theta = delta, sigma = sigma,
              nu = nu, delta = delta)
 }
 
-#' @title Objective function to optimise
+#' @title Objective function to optimize
+#'
 #' @author Younes Boulaguiem, Stéphane Guerrier, Dominique-Laurent Couturier
-#' @param test                  A \code{numeric} value specifying the significance level to optimise.
-#' @param alpha                 A \code{numeric} value specifying the significance level (default = \code{0.05}).
-#' @param sigma_nu              A \code{numeric} value corresponding to the estimated standard error.
-#' @param nu                    A \code{numeric} value corresponding to the number of degrees of freedom.
-#' @param delta                 A \code{numeric} value corresponding to (bio)equivalence limit. We assume symmetry, i.e, the (bio)equivalence interval corresponds to (-delta,delta)
+#'
+#' @param test                  A \code{numeric} value specifying the significance level to optimize.
+#' @param alpha                 A \code{numeric} value specifying the significance level (default: alpha = \code{0.05}).
+#' @param sigma                 A \code{numeric} value corresponding to the estimated standard error of estimated \code{theta}.
+#' @param nu                    A \code{numeric} value specifying the degrees of freedom.
+#' @param delta                 A \code{numeric} value or vector defining the (bio)equivalence margin(s). The procedure assumes symmetry, i.e., the (bio)equivalence region is \eqn{(-\delta, \delta)}.
 #' @param ...                   Additional parameters.
+#'
 #' @keywords internal
+#'
 #' @return The function returns a \code{numeric} value for the objective function.
-obj_fun_alpha_star = function(test, alpha, sigma_nu, nu, delta, ...){
-  size = size_TOST(alpha = test, sigma_nu = sigma_nu, nu = nu, delta = delta)
+obj_fun_alpha_star = function(test, alpha = 0.05, sigma, nu, delta, ...){
+  size = size_TOST(alpha = test, sigma = sigma, nu = nu, delta = delta)
   (size - alpha)^2
 }
 
 #' @title Get alpha star
+#'
 #' @author Younes Boulaguiem, Stéphane Guerrier, Dominique-Laurent Couturier
-#' @param alpha                 A \code{numeric} value specifying the significance level (default = \code{0.05}).
-#' @param sigma_nu              A \code{numeric} value corresponding to the estimated standard error.
-#' @param nu                    A \code{numeric} value corresponding to the number of degrees of freedom.
-#' @param delta                 A \code{numeric} value corresponding to (bio)equivalence limit. We assume symmetry, i.e, the (bio)equivalence interval corresponds to (-delta,delta)
+#'
+#' @param alpha                 A \code{numeric} value specifying the significance level (default: alpha = \code{0.05}).
+#' @param sigma                 A \code{numeric} value corresponding to the estimated standard error of estimated \code{theta}.
+#' @param nu                    A \code{numeric} value specifying the degrees of freedom.
+#' @param delta                 A \code{numeric} value or vector defining the (bio)equivalence margin(s). The procedure assumes symmetry, i.e., the (bio)equivalence region is \eqn{(-\delta, \delta)}.
 #' @param ...                   Additional parameters.
+#'
 #' @keywords internal
-#' @return The function returns a \code{numeric} value that corresponds to the solution of the optimisation.
-get_alpha_star = function(alpha, sigma_nu, nu, delta, ...){
+#'
+#' @return The function returns a \code{numeric} value that corresponds to the solution of the optimization.
+get_alpha_star = function(alpha=0.05, sigma, nu, delta, ...){
   out = optimize(obj_fun_alpha_star, c(alpha, 0.5),
-                 alpha = alpha, sigma_nu = sigma_nu,
+                 alpha = alpha, sigma = sigma,
                  nu = nu, delta = delta)
 
   # size_out = size_TOST(alpha = out$minimum, sigma_nu = sigma_nu, nu = nu, delta = delta)
@@ -228,45 +247,51 @@ get_alpha_star = function(alpha, sigma_nu, nu, delta, ...){
 }
 
 #' @title Confidence Intervals
+#'
 #' @author Younes Boulaguiem, Stéphane Guerrier, Dominique-Laurent Couturier
-#' @param alpha                 A \code{numeric} value specifying the significance level (default = \code{0.05}).
+#'
+#' @param alpha                 A \code{numeric} value specifying the significance level.
 #' @param theta                 A \code{numeric} value corresponding to the estimated parameter of interest (such as a difference of means).
-#' @param sigma_nu              A \code{numeric} value corresponding to the estimated standard error.
-#' @param nu                    A \code{numeric} value corresponding to the number of degrees of freedom.
+#' @param sigma                 A \code{numeric} value corresponding to the estimated standard error of estimated \code{theta}.
+#' @param nu                    A \code{numeric} value specifying the degrees of freedom.
 #' @param ...                   Additional parameters.
+#'
 #' @keywords internal
-#' @return The function returns a numerical \code{vector} with the lower and upper bound of the confidence intervals.
-ci = function(alpha, theta, sigma_nu, nu, ...){
+#'
+#' @return The function returns a numerical \code{vector} with the lower and upper bound of the confidence interval.
+ci = function(alpha, theta, sigma, nu, ...){
   tval  = qt(p=alpha,df=nu)
-  lower = theta+tval*sigma_nu
-  upper = theta-tval*sigma_nu
+  lower = theta+tval*sigma
+  upper = theta-tval*sigma
   cbind(lower,upper)
 }
 
 
 #' @title Two One-Sided Tests (TOST) for (Bio)Equivalence Assessment
 #'
-#' @description
-#' Performs the Two One-Sided Tests (TOST) procedure for (bio)equivalence assessment in both univariate and multivariate settings.
+#' @author Younes Boulaguiem, Stéphane Guerrier, Dominique-Laurent Couturier
 #'
-#' @param theta      A \code{numeric} value or vector representing the estimated difference(s) (e.g., between a generic and reference product).
-#' @param sigma      A \code{numeric} value (univariate) or \code{matrix} (multivariate) corresponding to the estimated variance of the estimate \code{theta}.
-#' @param nu         A \code{numeric} value specifying the degrees of freedom. In the multivariate case, it is assumed to be the same across all dimensions.
-#' @param delta      A \code{numeric} value or vector defining the (bio)equivalence margin(s). The procedure assumes symmetry, i.e., the (bio)equivalence region is \eqn{(-\delta, \delta)}. In the multivariate case, it is assumed to be the same across all dimensions.
-#' @param alpha      A \code{numeric} value specifying the significance level (default is 0.05).
+#' @description
+#' This function performs the Two One-Sided Tests (TOST) procedure for (bio)equivalence assessment in both univariate and multivariate settings.
+#'
+#' @param theta                 A \code{numeric} value or vector representing the estimated difference(s) (e.g., between a generic and reference product).
+#' @param sigma                 A \code{numeric} value (univariate) or \code{matrix} (multivariate) corresponding to the estimated variance of estimated \code{theta}.
+#' @param nu                    A \code{numeric} value specifying the degrees of freedom. In the multivariate case, it is assumed to be the same across all dimensions.
+#' @param delta                 A \code{numeric} value or vector defining the (bio)equivalence margin(s). The procedure assumes symmetry, i.e., the (bio)equivalence region is \eqn{(-\delta, \delta)}. In the multivariate case, it is assumed to be the same across all dimensions.
+#' @param alpha                 A \code{numeric} value specifying the significance level (default: alpha = \code{0.05}).
 #' @param ...        Additional arguments.
 #'
 #' @return A \code{tost} object with the following elements:
 #' \itemize{
-#'   \item \code{decision}:    A logical indicating whether (bio)equivalence is accepted.
+#'   \item \code{decision}:    A boolean variable indicating whether (bio)equivalence is accepted or not.
 #'   \item \code{ci}:          Confidence region at the \eqn{1 - 2\alpha} level.
 #'   \item \code{theta}:       The estimated difference(s) used in the test.
 #'   \item \code{sigma}:       The estimated variance of \code{theta}, a \code{numeric} in univariate settings or \code{matrix} in multivariate settings.
-#'   \item \code{nu}:          Degrees of freedom.
-#'   \item \code{alpha}:       Significance level.
-#'   \item \code{delta}:       (Bio)equivalence margin(s).
+#'   \item \code{nu}:          The number of degrees of freedom used in the test.
+#'   \item \code{alpha}:       The significance level used in the test.
+#'   \item \code{delta}:       The (bio)equivalence limits used in the test.
 #'   \item \code{method}:      A character string describing the method used ("TOST").
-#'   \item \code{setting}:     A character string indicating the setting ("univariate" or "multivariate").
+#'   \item \code{setting}:     The setting used (univariate or multivariate).
 #' }
 #'
 #' @examples
@@ -340,26 +365,27 @@ tost = function(theta, sigma, nu, delta, alpha = 0.05,...){
 
 #' @title The alpha-TOST Corrective Procedure for (Bio)Equivalence Testing
 #'
-#' @description This functions is used to compute the alpha-TOST, a corrective procedure of the significance level applied to the Two One-Sided Test (TOST) for (bio)equivalence testing in the univariate framework.
-#'
-#' @param theta                 A \code{numeric} value corresponding to the difference of means.
-#' @param sigma                 A \code{numeric} value corresponding to the standard error.
-#' @param nu                    A \code{numeric} value corresponding to the number of degrees of freedom.
-#' @param alpha                 A \code{numeric} value specifying the significance level.
-#' @param delta                 A \code{numeric} value corresponding to (bio)equivalence limit. We assume symmetry, i.e, the (bio)equivalence interval corresponds to (-delta,delta)
-#'
 #' @author Younes Boulaguiem, Stéphane Guerrier, Dominique-Laurent Couturier
 #'
-#' @return A \code{tost} object with the structure:
+#' @description This function is used to compute the alpha-TOST, a corrective procedure of the significance level applied to the Two One-Sided Test (TOST) for (bio)equivalence testing in the univariate framework.
+
+#' @param theta                 A \code{numeric} value corresponding to the estimated parameter of interest (such as a difference of means).
+#' @param sigma                 A \code{numeric} value corresponding to the estimated standard error of estimated \code{theta}.
+#' @param nu                    A \code{numeric} value specifying the degrees of freedom.
+#' @param alpha                 A \code{numeric} value specifying the significance level.
+#' @param delta                 A \code{numeric} value or vector defining the (bio)equivalence margin(s). The procedure assumes symmetry, i.e., the (bio)equivalence region is \eqn{(-\delta, \delta)}.
+#'
+#' @return A \code{atost} object with the structure:
 #' \itemize{
-#'  \item decision:    A boolean variable indicating whether (bio)equivalence is accepted or not.
-#'  \item ci:          Confidence interval at the 1 - 2*alpha level.
-#'  \item theta:       The difference of means used for the test.
-#'  \item sigma:       The standard error used for the test.
-#'  \item nu:          The number of degrees of freedom used for the test.
-#'  \item alpha:       The significance level used for the test.
-#'  \item delta:       The (bio)equivalence limits used for the test.
-#'  \item method:      The method used for the test (here the "alpha-TOST").
+#'  \item \code{decision}:    A boolean variable indicating whether (bio)equivalence is accepted or not.
+#'  \item \code{ci}:          Confidence region at the \eqn{1 - 2\alpha} level.
+#'  \item \code{theta}:       The estimated difference(s) used in the test.
+#'  \item \code{sigma}:       The estimated standard error used in the test.
+#'  \item \code{nu}:          The number of degrees of freedom used in the test.
+#'  \item \code{alpha}:       The significance level used in the test.
+#'  \item \code{corrected_alpha}:       The significance level corrected by the adjustment.
+#'  \item \code{delta}:       The (bio)equivalence limits used in the test.
+#'  \item \code{method}:      The method used in the test (here the "alpha-TOST").
 #' }
 #' @keywords internal
 #'
@@ -386,26 +412,29 @@ atost = function(theta, sigma, nu, alpha, delta){
 
 #' @title The delta-TOST Corrective Procedure for (Bio)Equivalence Testing
 #'
-#' @description This functions is used to compute the delta-TOST, a corrective procedure of the (bio)equivalence bounds applied to the Two One-Sided Test (TOST) for (bio)equivalence testing in the univariate framework.
+#' @author Younes Boulaguiem, Stéphane Guerrier, Dominique-Laurent Couturier
 #'
-#' @param theta                 A \code{numeric} value corresponding to the difference of means.
-#' @param sigma                 A \code{numeric} value corresponding to the standard error.
-#' @param nu                    A \code{numeric} value corresponding to the number of degrees of freedom.
-#' @param alpha                 A \code{numeric} value specifying the significance level.
-#' @param delta                 A \code{numeric} value corresponding to (bio)equivalence limit. We assume symmetry, i.e, the (bio)equivalence interval corresponds to (-delta,delta)
+#' @description This function is used to compute the delta-TOST, a corrective procedure of the (bio)equivalence bounds applied to the Two One-Sided Test (TOST) for (bio)equivalence testing in the univariate framework.
+#'
+#' @param theta                 A \code{numeric} value corresponding to the estimated parameter of interest (such as a difference of means).
+#' @param sigma                 A \code{numeric} value corresponding to the estimated standard error of estimated \code{theta}.
+#' @param nu                    A \code{numeric} value specifying the degrees of freedom.
+#' @param alpha                 A \code{numeric} value specifying the significance level (default: alpha = \code{0.05}).
+#' @param delta                 A \code{numeric} value or vector defining the (bio)equivalence margin(s). The procedure assumes symmetry, i.e., the (bio)equivalence region is \eqn{(-\delta, \delta)}.
 #'
 #' @author Younes Boulaguiem, Stéphane Guerrier, Dominique-Laurent Couturier
 #'
-#' @return A \code{tost} object with the structure:
+#' @return A \code{dtost} object with the structure:
 #' \itemize{
-#'  \item decision:    A boolean variable indicating whether (bio)equivalence is accepted or not.
-#'  \item ci:          Confidence interval at the 1 - 2*alpha level.
-#'  \item theta:       The difference of means used for the test.
-#'  \item sigma:       The standard error used for the test.
-#'  \item nu:          The number of degrees of freedom used for the test.
-#'  \item alpha:       The significance level used for the test.
-#'  \item delta:       The (bio)equivalence limits used for the test.
-#'  \item method:      The method used for the test (here the "delta-TOST").
+#'  \item \code{decision}:    A boolean variable indicating whether (bio)equivalence is accepted or not.
+#'  \item \code{ci}:          Confidence region at the \eqn{1 - 2\alpha} level.
+#'  \item \code{theta}:       The estimated difference(s) used in the test.
+#'  \item \code{sigma}:       The estimated standard error used in the test.
+#'  \item \code{nu}:          The number of degrees of freedom used in the test.
+#'  \item \code{alpha}:       The significance level used in the test.
+#'  \item \code{delta}:       The (bio)equivalence limits used in the test.
+#'  \item \code{corrected_delta}: The (bio)equivalence limits corrected by the adjustment.
+#'  \item \code{method}:      The method used in the test (here the "delta-TOST").
 #' }
 #'
 #' @keywords internal

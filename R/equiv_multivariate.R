@@ -1,5 +1,25 @@
 require(mvtnorm)
 
+#' @title Power function of univariate or multivariate TOST using Monte Carlo integration
+#'
+#' @author Younes Boulaguiem, Luca Insolia, Stéphane Guerrier, Dominique-Laurent Couturier
+#'
+#' @param alpha                 A \code{numeric} value specifying the significance level.
+#' @param theta                 A \code{numeric} value or vector representing the estimated difference(s) (e.g., between a generic and reference product).
+#' @param Sigma                 A \code{numeric} value (univariate) or \code{matrix} (multivariate) corresponding to the estimated variance of estimated \code{theta}.
+#' @param nu                    A \code{numeric} value specifying the degrees of freedom. In the multivariate case, it is assumed to be the same across all dimensions.
+#' @param delta                 A \code{numeric} value or vector defining the (bio)equivalence margin(s). The procedure assumes symmetry, i.e., the (bio)equivalence region is \eqn{(-\delta, \delta)}.
+#' @param B                     A \code{numeric} value specifying the number of Monte Carlo replication (default: B = \code{10^5}).
+#' @param seed                  A \code{numeric} value specifying a seed for reproducibility (default: seed = \code{10^8}).
+#'
+#' @keywords internal
+#'
+#' The function returns a \code{list} value with the structure:
+#' \itemize{
+#'  \item \code{power_univ}:    A numerical variable that corresponds to a probability in univariate setting.
+#'  \item \code{power_mult}:    A numerical variable that corresponds to a probability in multivariate setting.
+#' }
+#'
 # compute TOST power
 power_TOST_MC_mv = function(alpha, theta, Sigma, nu, delta,
                             B = 10^5, seed = 10^8){

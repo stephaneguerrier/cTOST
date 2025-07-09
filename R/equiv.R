@@ -16,12 +16,12 @@
 #' @param ...                   Additional parameters.
 #'
 #' @Details
-#' In univariate settings, three adjustment methods are available: optimal (using method = 'optimal'), alpha-TOST (using method = 'alpha') and delta-TOST (using method = 'delta').
+#' In univariate settings, three adjustment methods are available: optimal (using \code{method} =  'optimal'), alpha-TOST (using \code{method} =  'alpha') and delta-TOST (using \code{method} =  'delta').
 #' The optimal method is introduced in (add ref).
 #' The alpha-TOST and delta-TOST are introduced in Boulaguiem et al. (2024, <https://doi.org/10.1002/sim.9993>). The former is a corrective procedure of the significance level applied to the TOST while the latter
 #' adjusts the equivalence limits. In general, the alpha-TOST appears to outperform the delta-TOST.
 #'
-#' In multivariate setting, the only available method is the (multivariate) alpha-TOST (using method = 'alpha') introduced in Boulaguiem et al. (2024, <https://doi.org/10.48550/arXiv.2411.16429>).
+#' In multivariate setting, the only available method is the (multivariate) alpha-TOST (using \code{method} = 'alpha') introduced in Boulaguiem et al. (2024, <https://doi.org/10.48550/arXiv.2411.16429>).
 #'
 #' The correction method = "offline" refers to ....
 #'

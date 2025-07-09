@@ -44,9 +44,25 @@ power_TOST_MC_mv = function(alpha, theta, Sigma, nu, delta,
   list(power_univ=apply(eval,2,mean),power_mult=mean(apply(eval,1,prod)))
 }
 
-
 # alphaTOST
-
+#' @title Objective function to optimize for multivariate TOST
+#'
+#' @author Younes Boulaguiem, Luca Insolia, Stéphane Guerrier, Dominique-Laurent Couturier
+#'
+#' @param test                  A \code{numeric} value specifying the significance level to optimize.
+#' @param alpha                 A \code{numeric} value specifying the significance level.
+#' @param Sigma                 A \code{numeric} value (univariate) or \code{matrix} (multivariate) corresponding to the estimated variance of estimated \code{theta}.
+#' @param nu                    A \code{numeric} value specifying the degrees of freedom. In the multivariate case, it is assumed to be the same across all dimensions.
+#' @param delta                 A \code{numeric} value or vector defining the (bio)equivalence margin(s). The procedure assumes symmetry, i.e., the (bio)equivalence region is \eqn{(-\delta, \delta)}.
+#' @param theta                 A \code{numeric} value representing the estimated difference(s) (e.g., between a generic and reference product) or a \code{character} value representing the use of equivalence margin(s) for \eqn{\theta} under \code{NULL} (e.g., \eqn{\theta} = \eqn{(-\delta, \delta)}).
+#' @param B                     A \code{numeric} value specifying the number of Monte Carlo replication (default: B = \code{10^5}).
+#' @param seed                  A \code{numeric} value specifying a seed for reproducibility representing the use of multivariate power or a \code{character} value representing the use of univariate power under \code{NULL}.
+#' @param ...                   Additional parameters.
+#'
+#' @keywords internal
+#'
+#' @return The function returns a \code{numeric} value for the objective function.
+#'
 obj_fun_alpha_TOST_MC_mv = function(test, alpha, Sigma, nu, delta, theta=NULL, B=10^5, seed=NULL, ...){
   if(is.null(theta)) theta = delta
   if(is.null(seed)){

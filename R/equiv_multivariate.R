@@ -145,8 +145,22 @@ get_alpha_TOST_MC_mv = function(alpha, Sigma, nu, delta, theta=NULL, B=10^5, tol
 }
 
 
-# xTOST (to get argsup)
-
+#' @title Power function for multivariate xTOST procedure
+#'
+#' @author Younes Boulaguiem, Luca Insolia, Stéphane Guerrier, Dominique-Laurent Couturier
+#'
+#' @description This function is used to approximate the power by a standardized multivariate normal vector lies within the (bio)equivalence margins.
+#'
+#' @param theta                 A \code{numeric} value or vector representing the estimated difference(s) (e.g., between a generic and reference product).
+#' @param delta                 A \code{numeric} value or vector defining the (bio)equivalence margin(s). The procedure assumes symmetry, i.e., the (bio)equivalence region is \eqn{(-\delta, \delta)}. In the multivariate case, it is assumed to be the same across all dimensions.
+#' @param Sigma                 A \code{numeric} value (univariate) or \code{matrix} (multivariate) corresponding to the estimated variance of estimated \code{theta}.
+#' @param alpha                 A \code{numeric} value specifying the significance level (default: alpha = \code{0.5}).
+#' @param seed                  A \code{numeric} value specifying a seed for reproducibility (default: seed = \code{10^5}).
+#'
+#' @keywords internal
+#'
+#' @return The function returns a \code{numeric} value that corresponds to a probability.
+#'
 power_xTOST_mv = function(theta, delta, Sigma, alpha=1/2, seed=10^5){
   #delta is what we optimise over
   set.seed(seed)
@@ -181,6 +195,7 @@ get_interval = function(delta, Sigma, cte, alpha, interval, B){
   }
   rint[which.min(res_b)]
 }
+
 
 find_sup_x = function(alpha,Sigma,delta,seed=10^5){
   # set.seed(seed)

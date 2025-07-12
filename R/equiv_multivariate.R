@@ -16,11 +16,10 @@ require(mvtnorm)
 #'
 #' The function returns a \code{list} value with the structure:
 #' \itemize{
-#'  \item \code{power_univ}:    A numerical variable that corresponds to a probability in univariate setting.
-#'  \item \code{power_mult}:    A numerical variable that corresponds to a probability in multivariate setting.
+#'  \item \code{power_univ}:    A numerical vector that corresponds to a probability in univariate setting.
+#'  \item \code{power_mult}:    A numerical vector that corresponds to a probability in multivariate setting.
 #' }
 #'
-# compute TOST power
 power_TOST_MC_mv = function(alpha, theta, Sigma, nu, delta,
                             B = 10^5, seed = 10^8){
   p=ncol(Sigma)
@@ -78,6 +77,28 @@ obj_fun_alpha_TOST_MC_mv = function(test, alpha, Sigma, nu, delta, theta=NULL, B
   res
 }
 
+#' @title Get alpha star for multivariate TOST or xTOST
+#'
+#' @author Younes Boulaguiem, Luca Insolia, Stéphane Guerrier, Dominique-Laurent Couturier
+#'
+#' @param alpha                 A \code{numeric} value specifying the significance level.
+#' @param Sigma                 A \code{numeric} value (univariate) or \code{matrix} (multivariate) corresponding to the estimated variance of estimated \code{theta}.
+#' @param nu                    A \code{numeric} value specifying the degrees of freedom. In the multivariate case, it is assumed to be the same across all dimensions.
+#' @param delta                 A \code{numeric} value or vector defining the (bio)equivalence margin(s). The procedure assumes symmetry, i.e., the (bio)equivalence region is \eqn{(-\delta, \delta)}.
+#' @param theta                 A \code{character} value specifying the value or vector representing the estimated difference(s) obtained by \code{argsup_meth} method under \code{NULL}.
+#' @param B                     A \code{numeric} value specifying the number of Monte Carlo replication (default: B = \code{10^5}).
+#' @param tol                   A \code{numeric} value specifying a tolerance level (default: tol = \code{.Machine$double.eps^0.5}).
+#' @param seed                  A \code{character} value representing the use of default seed under \code{NULL}.
+#' @param argsup_meth           A \code{character} value representing the method to use (default: argsup_meth = \code{"x"}), see Details below for more information.
+#' @param ...                   Additional parameters.
+#'
+#' @details
+#' In multivariate setting, two methods to compute supremum are available: Monte Carlo (using \code{argsup_meth} = "MC") or ... (using \code{argsup_meth} = "x").
+#' The former is introduced in Boulaguiem et al. (2024, <https://doi.org/10.48550/arXiv.2411.16429>) and the latter is introduced in ...
+#'
+#' @keywords internal
+#'
+#' @return The function returns a \code{numeric} value that corresponds to the solution of the optimization.
 get_alpha_TOST_MC_mv_core = function(alpha, Sigma, nu, delta, theta=NULL, B=10^5, tol = .Machine$double.eps^0.5, seed=NULL, argsup_meth="x", ...){
   if(is.null(seed)) seed=10^8
   # theta = find_sup_MC(alpha, Sigma, nu, delta, B=10^4,seed=seed)
@@ -99,6 +120,36 @@ get_alpha_TOST_MC_mv_core = function(alpha, Sigma, nu, delta, theta=NULL, B=10^5
   out
 }
 
+#' @title Get alpha star for multivariate TOST
+#'
+#' @author Younes Boulaguiem, Luca Insolia, Stéphane Guerrier, Dominique-Laurent Couturier
+#'
+#' @param alpha                 A \code{numeric} value specifying the significance level.
+#' @param Sigma                 A \code{numeric} value (univariate) or \code{matrix} (multivariate) corresponding to the estimated variance of estimated \code{theta}.
+#' @param nu                    A \code{numeric} value specifying the degrees of freedom. In the multivariate case, it is assumed to be the same across all dimensions.
+#' @param delta                 A \code{numeric} value or vector defining the (bio)equivalence margin(s). The procedure assumes symmetry, i.e., the (bio)equivalence region is \eqn{(-\delta, \delta)}.
+#' @param theta                 A \code{numeric} value specifying the initial value for the worst-case parameter configuration. If not provided, it's computed via find_sup_x().
+#' @param B                     A \code{numeric} value specifying the number of Monte Carlo replication (default: B = \code{10^5}).
+#' @param tol                   A \code{numeric} value specifying a tolerance level (default: tol = \code{.Machine$double.eps^0.5}).
+#' @param seed                  A \code{character} value representing the use of default seed under \code{NULL}.
+#' @param max_iter              A \code{numeric} value specifying a maximum number of iteration.
+#' @param tolpower              A \code{numeric} value specifying the power level to optimize, see Details below for more information.
+#' @param ...                   Additional parameters.
+#'
+#' @details Tolerance of power allowed between simulated power and nominal alpha. If not specified, it's automatically computed from the 1st and 99th percentiles of a binomial distribution.
+#'
+#' @keywords internal
+#'
+#' The function returns a \code{list} value with the structure:
+#' \itemize{
+#'  \item \code{min}:        A numerical vector that corresponds to the corrected significance level.
+#'  \item \code{theta_sup}:  A numerical vector that corresponds to the evaluated value of supremum.
+#'  \item \code{alphas}:     A numerical vector that corresponds to the significance level used in each iteration.
+#'  \item \code{theta_sups}: A numerical matrix that corresponds to the \code{theta} values evaluated.
+#'  \item \code{powers}:     A numerical vector that corresponds to the estimated power .
+#'  \item \code{iter}:       A numerical variable that corresponds to the number of iterations performed.
+#'  \item \code{err_power}:  A numerical variable that corresponds to the final absolute error between simulated power and nominal significance level \eqn{\alpha}.
+#' }
 get_alpha_TOST_MC_mv = function(alpha, Sigma, nu, delta, theta=NULL, B=10^5, tol = .Machine$double.eps^0.5, seed=NULL, max_iter=10, tolpower=NULL, ...){
   if(is.null(tolpower)) tolpower=max(abs(qbinom(c(0.01,0.99),B,alpha)/B-alpha))
   theta_sups = matrix(NA, (max_iter+1), ncol(Sigma))
@@ -181,10 +232,42 @@ power_xTOST_mv = function(theta, delta, Sigma, alpha=1/2, seed=10^5){
   }
 }
 
+#' @title Objective function to optimize for multivariate xTOST
+#'
+#' @author Younes Boulaguiem, Luca Insolia, Stéphane Guerrier, Dominique-Laurent Couturier
+#'
+#' @param test                  A \code{numeric} value specifying the significance level to optimize.
+#' @param Sigma                 A \code{numeric} value (univariate) or \code{matrix} (multivariate) corresponding to the estimated variance of estimated \code{theta}.
+#' @param cte                   A \code{numeric} value specifying ...(? the constraint?)
+#' @param delta                 A \code{numeric} value or vector defining the (bio)equivalence margin(s). The procedure assumes symmetry, i.e., the (bio)equivalence region is \eqn{(-\delta, \delta)}.
+#' @param alpha                 A \code{numeric} value specifying the significance level.
+#'
+#' @keywords internal
+#'
+#' @return The function returns a \code{numeric} value for the objective function.
+#'
 obj_fun_xTOST_constr_size_mv = function(test, Sigma, cte, delta, alpha){
   tmp_cdf = power_xTOST_mv(cte, test*delta, Sigma, alpha=1/2)
   10^16*(tmp_cdf - alpha)^2
 }
+
+#' @title Confidence interval search in multivariate xTOST
+#'
+#' @description This function performs a grid search over a specified interval to
+#' find the interval where the size is maximized.
+#'
+#' @author Younes Boulaguiem, Luca Insolia, Stéphane Guerrier, Dominique-Laurent Couturier
+#'
+#' @param delta                 A \code{numeric} value or vector defining the (bio)equivalence margin(s). The procedure assumes symmetry, i.e., the (bio)equivalence region is \eqn{(-\delta, \delta)}.
+#' @param Sigma                 A \code{numeric} value (univariate) or \code{matrix} (multivariate) corresponding to the estimated variance of estimated \code{theta}.
+#' @param cte                   A \code{numeric} value specifying ... (the constraint?).
+#' @param alpha                 A \code{numeric} value specifying the significance level.
+#' @param interval              A \code{numeric} vector specifying range of interest to search.
+#' @param B                     A \code{numeric} value specifying the number of point to search.
+#'
+#' @keywords internal
+#'
+#' @return The function returns a \code{numeric} vector minimized the objective function.
 
 get_interval = function(delta, Sigma, cte, alpha, interval, B){
   # runif(B, interval[1], interval[2])
@@ -197,6 +280,23 @@ get_interval = function(delta, Sigma, cte, alpha, interval, B){
 }
 
 
+#' @title Size in multivariate xTOST
+#'
+#' @description This function is used to get the solution that maximizes the supremum for a constrained xTOST procedure.
+#'
+#' @author Younes Boulaguiem, Luca Insolia, Stéphane Guerrier, Dominique-Laurent Couturier
+#'
+#' @param alpha                 A \code{numeric} value specifying the significance level.
+#' @param Sigma                 A \code{numeric} value (univariate) or \code{matrix} (multivariate) corresponding to the estimated variance of estimated \code{theta}.
+#' @param delta                 A \code{numeric} value or vector defining the (bio)equivalence margin(s). The procedure assumes symmetry, i.e., the (bio)equivalence region is \eqn{(-\delta, \delta)}.
+#' @param seed                  A \code{numeric} value specifying a seed for reproducibility (default: seed = \code{10^5}).
+#'
+#' @details
+#' The optimization method "Brent" is used for 2-dimensional or less problems only. The optimization method "Nelder-Mead" is used for higher dimensions.
+#'
+#' @keywords internal
+#'
+#' @return The function returns a \code{numeric} vector that maximized the objective function.
 find_sup_x = function(alpha,Sigma,delta,seed=10^5){
   # set.seed(seed)
   p=ncol(Sigma)
@@ -229,6 +329,25 @@ find_sup_x = function(alpha,Sigma,delta,seed=10^5){
 }
 
 
+#' @title Objective function in multivariate xTOST
+#'
+#' @description This function is used to get the maximum power for a constrained xTOST procedure.
+#'
+#' @author Younes Boulaguiem, Luca Insolia, Stéphane Guerrier, Dominique-Laurent Couturier
+#'
+#' @param theta                 A \code{numeric} value or vector representing the estimated difference(s) (e.g., between a generic and reference product).
+#' @param inds                  A \code{numeric} value or vector representing the interested \code{theta}.
+#' @param alpha                 A \code{numeric} value specifying the significance level.
+#' @param Sigma                 A \code{numeric} value (univariate) or \code{matrix} (multivariate) corresponding to the estimated variance of estimated \code{theta}.
+#' @param delta                 A \code{numeric} value or vector defining the (bio)equivalence margin(s). The procedure assumes symmetry, i.e., the (bio)equivalence region is \eqn{(-\delta, \delta)}.
+#' @param seed                  A \code{numeric} value specifying a seed for reproducibility (default: seed = \code{10^5}).
+#'
+#' @details
+#' The optimization method "Brent" is used for 2-dimensional or less problems only. The optimization method "Nelder-Mead" is used for higher dimensions.
+#'
+#' @keywords internal
+#'
+#' @return The function returns a \code{numeric} value that corresponds to a probability.
 argsup_x = function(theta,inds,alpha,Sigma,delta,seed=10^5){
   set.seed(seed)
   p=ncol(Sigma)

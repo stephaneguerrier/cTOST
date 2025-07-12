@@ -2,7 +2,7 @@
 % Please edit documentation in R/equiv.R
 \name{ci}
 \alias{ci}
-\title{Confidence Intervals}
+\title{Confidence Intervals in univariate TOST}
 \usage{
 ci(alpha, theta, sigma, nu, ...)
 }
@@ -21,7 +21,7 @@ ci(alpha, theta, sigma, nu, ...)
 The function returns a numerical \code{vector} with the lower and upper bound of the confidence interval.
 }
 \description{
-Confidence Intervals
+Confidence Intervals in univariate TOST
 }
 \author{
 Younes Boulaguiem, Stéphane Guerrier, Dominique-Laurent Couturier

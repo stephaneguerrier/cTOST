@@ -41,23 +41,23 @@
 #' }
 #' @export
 #' @examples
-#' data(skin)
-#'
-#' theta_hat = diff(apply(skin,2,mean))
-#' nu = nrow(skin) - 1
-#' sig_hat = var(apply(skin,1,diff))/nu
-#'
-#' # alpha-TOST
-#' atost = ctost(theta = theta_hat, sigma = sig_hat, nu = nu,
-#'               alpha = 0.05, delta = log(1.25), method = "alpha")
-#' atost
-#' compare_to_tost(atost)
-#'
-#' # delta-TOST
-#' dtost = ctost(theta = theta_hat, sigma = sig_hat, nu = nu,
-#'               alpha = 0.05, delta = log(1.25), method = "delta")
-#' dtost
-#' compare_to_tost(dtost)
+# data(skin)
+#
+# theta_hat = diff(apply(skin,2,mean))
+# nu = nrow(skin) - 1
+# sig_hat = var(apply(skin,1,diff))/nu
+#
+# # alpha-TOST
+# atost = ctost(theta = theta_hat, sigma = sig_hat, nu = nu,
+#               alpha = 0.05, delta = log(1.25), method = "alpha")
+# atost
+# compare_to_tost(atost)
+#
+# # delta-TOST
+# dtost = ctost(theta = theta_hat, sigma = sig_hat, nu = nu,
+#               alpha = 0.05, delta = log(1.25), method = "delta")
+# dtost
+# compare_to_tost(dtost)
 ctost = function(theta, sigma, nu, delta, alpha = 0.05, method, B = 10^4, seed = 101010, correction = "offline", ...){
 
   # Check inputs
@@ -161,7 +161,7 @@ ctost = function(theta, sigma, nu, delta, alpha = 0.05, method, B = 10^4, seed =
 }
 
 
-#' @title Power function
+#' @title Power function of univariate TOST
 #'
 #' @author Younes Boulaguiem, Stéphane Guerrier, Dominique-Laurent Couturier
 #'
@@ -187,7 +187,7 @@ power_TOST = function(alpha, theta, sigma, nu, delta, ...){
   pw
 }
 
-#' @title The size
+#' @title The size of univariate TOST
 #'
 #' @author Younes Boulaguiem, Stéphane Guerrier, Dominique-Laurent Couturier
 #'
@@ -204,7 +204,7 @@ size_TOST = function(alpha, sigma, nu, delta, ...){
              nu = nu, delta = delta)
 }
 
-#' @title Objective function to optimize
+#' @title Objective function to optimize of univariate TOST
 #'
 #' @author Younes Boulaguiem, Stéphane Guerrier, Dominique-Laurent Couturier
 #'
@@ -223,7 +223,7 @@ obj_fun_alpha_star = function(test, alpha = 0.05, sigma, nu, delta, ...){
   (size - alpha)^2
 }
 
-#' @title Get alpha star
+#' @title Get alpha star of univariate TOST
 #'
 #' @author Younes Boulaguiem, Stéphane Guerrier, Dominique-Laurent Couturier
 #'
@@ -246,7 +246,7 @@ get_alpha_star = function(alpha=0.05, sigma, nu, delta, ...){
   out$minimum
 }
 
-#' @title Confidence Intervals
+#' @title Confidence Intervals of univariate TOST
 #'
 #' @author Younes Boulaguiem, Stéphane Guerrier, Dominique-Laurent Couturier
 #'

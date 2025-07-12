@@ -57,25 +57,6 @@ An object of class \code{tost} with the structure:
 \description{
 This function is used to compute finite sample corrected version of the standard (univariate or multivariate) TOST.
 }
-\examples{
-data(skin)
-
-theta_hat = diff(apply(skin,2,mean))
-nu = nrow(skin) - 1
-sig_hat = var(apply(skin,1,diff))/nu
-
-# alpha-TOST
-atost = ctost(theta = theta_hat, sigma = sig_hat, nu = nu,
-              alpha = 0.05, delta = log(1.25), method = "alpha")
-atost
-compare_to_tost(atost)
-
-# delta-TOST
-dtost = ctost(theta = theta_hat, sigma = sig_hat, nu = nu,
-              alpha = 0.05, delta = log(1.25), method = "delta")
-dtost
-compare_to_tost(dtost)
-}
 \author{
 Younes Boulaguiem, Stéphane Guerrier, Dominique-Laurent Couturier
 }

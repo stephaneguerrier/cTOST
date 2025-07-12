@@ -6,7 +6,7 @@
 <!-- badges: start -->
 
 [![Licence](https://img.shields.io/badge/licence-AGPL--3.0-blue.svg)](https://opensource.org/licenses/AGPL-3.0)
-[![Last-changedate](https://img.shields.io/badge/last%20change-2025--07--02-green.svg)](https://github.com/yboulag/cTOST)
+[![Last-changedate](https://img.shields.io/badge/last%20change-2025--07--10-green.svg)](https://github.com/yboulag/cTOST)
 [![R-CMD-check](https://github.com/yboulag/cTOST/actions/workflows/R-CMD-check.yaml/badge.svg)](https://github.com/stephaneguerrier/cTOST/actions/workflows/R-CMD-check.yaml)
 [![CRAN RStudio mirror
 downloads](http://cranlogs.r-pkg.org/badges/cTOST)](https://www.r-pkg.org/pkg/cTOST)
@@ -75,7 +75,19 @@ stost
 
 <img src="README_files/figure-gfm//unnamed-chunk-6.svg" width="100%" />
 
-#### 3.1.2. $\alpha$-TOST
+#### 3.1.2. cTOST
+
+The cTOST can be used through the function `ctost` as follows:
+
+``` r
+opt_tost = ctost(theta = theta_hat, sigma = sig_hat, nu = nu, 
+              delta = log(1.25), method = "optimal")
+opt_tost
+```
+
+<img src="README_files/figure-gfm//unnamed-chunk-8.svg" width="100%" />
+
+#### 3.1.3. $\alpha$-TOST
 
 The $\alpha$-TOST can be used through the function `ctost` as follows:
 
@@ -85,7 +97,7 @@ atost = ctost(theta = theta_hat, sigma = sig_hat, nu = nu,
 atost
 ```
 
-<img src="README_files/figure-gfm//unnamed-chunk-8.svg" width="100%" />
+<img src="README_files/figure-gfm//unnamed-chunk-10.svg" width="100%" />
 
 It is possible to compare the results of the $\alpha$-TOST (or
 $\delta$-TOST, see below) with the standard TOST as follows:
@@ -94,9 +106,9 @@ $\delta$-TOST, see below) with the standard TOST as follows:
 compare_to_tost(atost)
 ```
 
-<img src="README_files/figure-gfm//unnamed-chunk-10.svg" width="100%" />
+<img src="README_files/figure-gfm//unnamed-chunk-12.svg" width="100%" />
 
-### 3.1.3. $\delta$-TOST
+### 3.1.4. $\delta$-TOST
 
 The $\delta$-TOST can be used through the function `ctost` as follows:
 
@@ -115,7 +127,7 @@ dtost
 #> Mean = 0.02270; Stand. dev. = 0.13428; df = 16
 ```
 
-<img src="README_files/figure-gfm//unnamed-chunk-12.svg" width="100%" />
+<img src="README_files/figure-gfm//unnamed-chunk-14.svg" width="100%" />
 
 ### 3.2. Multivariate settings
 
@@ -135,7 +147,7 @@ mtost = tost(theta = theta_hat, sigma = Sigma_hat, nu = nu, delta = log(1.25))
 mtost
 ```
 
-<img src="README_files/figure-gfm//unnamed-chunk-15.svg" width="100%" />
+<img src="README_files/figure-gfm//unnamed-chunk-17.svg" width="100%" />
 
 #### 3.2.2. Multivariate $\alpha$-TOST
 
@@ -144,7 +156,7 @@ matost = ctost(theta = theta_hat, sigma = Sigma_hat, nu = nu, delta = log(1.25))
 matost
 ```
 
-<img src="README_files/figure-gfm//unnamed-chunk-17.svg" width="100%" />
+<img src="README_files/figure-gfm//unnamed-chunk-19.svg" width="100%" />
 
 ## 4. How to cite
 

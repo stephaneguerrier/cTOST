@@ -50,6 +50,6 @@ Younes Boulaguiem, Luca Insolia, Stéphane Guerrier, Dominique-Laurent Couturier
 \keyword{to}
 \keyword{univariate}
 \keyword{value}
-\keyword{variable}
+\keyword{vector}
 \keyword{with}
 \keyword{}}

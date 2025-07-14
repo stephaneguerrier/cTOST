@@ -2,7 +2,7 @@
 % Please edit documentation in R/internal.R
 \name{xtost}
 \alias{xtost}
-\title{TO BE DOCUMENTED}
+\title{Finite Sample Adjusted (Bio)Equivalence Testing of the xTOST Corrective Procedure}
 \usage{
 xtost(
   theta_hat,
@@ -16,26 +16,44 @@ xtost(
 )
 }
 \arguments{
-\item{theta_hat}{The estimated mean.}
+\item{theta_hat}{A \code{numeric} value or vector representing the estimated difference(s) (e.g., between a generic and reference product).}
 
-\item{sig_hat}{The estimated standard deviation.}
+\item{nu}{A \code{numeric} value specifying the degrees of freedom. In the multivariate case, it is assumed to be the same across all dimensions.}
 
-\item{nu}{The degrees of freedom parameter.}
+\item{alpha}{A \code{numeric} value specifying the significance level.}
 
-\item{alpha}{The significance level for the test.}
+\item{delta}{A \code{numeric} value or vector defining the (bio)equivalence margin(s). The procedure assumes symmetry, i.e., the (bio)equivalence region is \eqn{(-\delta, \delta)}.}
 
-\item{delta}{The equivalence bound used for the TOST decision.}
+\item{correction}{A \code{character} value corresponding to the considered correction method, see Details below for more information (default: correction = \code{"no"}).}
 
-\item{correction}{TO BE DOCUMENTED}
+\item{B}{A \code{numeric} value specifying the number of Monte Carlo replication (default: B = \code{10^4}).}
 
-\item{B}{TO BE DOCUMENTED (numb of bootstrap for correction based on bootstrap)}
+\item{seed}{A \code{numeric} value specifying a seed for reproducibility (default: seed = \code{85}).}
 
-\item{seed}{TO BE DOCUMENTED (also for bootstrap)}
+\item{sigma_hat}{A \code{matrix} (multivariate) corresponding to the estimated variance of estimated \code{theta}.}
 }
 \value{
-TO BE DOCUMENTED
+An object of class \code{tost} with the structure:
+\itemize{
+ \item \code{decision}:    A boolean variable indicating whether (bio)equivalence is accepted or not.
+ \item \code{ci}:          Confidence region at the \eqn{1 - 2\alpha} level.
+ \item \code{theta_hat}:   The estimated difference(s) used in the test.
+ \item \code{sigma}:       The estimated variance of \code{theta}, a \code{numeric} in univariate settings or \code{matrix} in multivariate settings.
+ \item \code{nu}:          The number of degrees of freedom used in the test.
+ \item \code{alpha}:       The significance level used in the test.
+ \item \code{c0}:          The estimated critical value.
+ \item \code{correction}:  The correction used in the test.
+ \item \code{corrected_alpha}: The significance level corrected by the adjustment.
+ \item \code{delta}:       The (bio)equivalence limits used in the test.
+ \item \code{method}:      The method used in the test (default: method = "cTOST").
+}
 }
 \description{
-TO BE DOCUMENTED
+This function is used to compute finite sample corrected version of the multivariate xTOST.
 }
-\keyword{internal}
+\details{
+#' The correction method = "no" refers to ...., the "bootstrap" refers to ... and the "offline" refers to ...
+}
+\seealso{
+\code{\link{ctost}}
+}

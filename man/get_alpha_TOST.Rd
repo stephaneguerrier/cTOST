@@ -2,7 +2,7 @@
 % Please edit documentation in R/internal.R
 \name{get_alpha_TOST}
 \alias{get_alpha_TOST}
-\title{Get Corrected Level}
+\title{Get alpha star of the alpha-TOST Corrective Procedure}
 \usage{
 get_alpha_TOST(
   alpha,
@@ -17,15 +17,24 @@ get_alpha_TOST(
 \arguments{
 \item{alpha}{A \code{numeric} value specifying the significance level.}
 
-\item{sigma}{A \code{numeric} value corresponding to the standard error.}
+\item{sigma}{A \code{numeric} value corresponding to the estimated standard error of estimated \code{theta}.}
 
 \item{nu}{A \code{numeric} value corresponding to the number of degrees of freedom.}
 
-\item{delta}{A \code{numeric} value corresponding to (bio)equivalence limit. We assume symmetry, i.e, the (bio)equivalence interval corresponds to (-delta,delta)}
+\item{delta}{A \code{numeric} value corresponding to (bio)equivalence limit. We assume symmetry, i.e, the (bio)equivalence interval corresponds to (-delta,delta).}
 
-\item{tol}{A \code{numeric} value corresponding to the tolerance to be applied during the optimization (see `optim`)}
+\item{l}{A \code{numeric} value corresponding to the upper limit of the significance level to optimize.}
+
+\item{tol}{A \code{numeric} value specifying a tolerance level (default: tol = \code{.Machine$double.eps}).}
 
 \item{...}{Additional parameters.}
+}
+\value{
+A list with at least two components:
+\itemize{
+ \item \code{root}:       A \code{numeric} value corresponding to the location of the root.
+ \item \code{f.root}:     A \code{numeric} value corresponding to the function evaluated at \code{root}.
+}
 }
 \description{
 This function applies the alpha-TOST corrective procedure to obtain the corrected level.

@@ -21,35 +21,17 @@ power_TOST_MC_mv(alpha, theta, Sigma, nu, delta, B = 10^5, seed = 10^8)
 
 \item{seed}{A \code{numeric} value specifying a seed for reproducibility (default: seed = \code{10^8}).}
 }
+\value{
+The function returns a \code{list} value with the structure:
+\itemize{
+ \item \code{power_univ}:    A numerical vector that corresponds to a probability in univariate setting.
+ \item \code{power_mult}:    A numerical vector that corresponds to a probability in multivariate setting.
+}
+}
 \description{
 Power function of univariate or multivariate TOST using Monte Carlo integration
 }
 \author{
 Younes Boulaguiem, Luca Insolia, Stéphane Guerrier, Dominique-Laurent Couturier
 }
-\keyword{A}
-\keyword{The}
-\keyword{\code{list}}
-\keyword{\code{power_mult}:}
-\keyword{\code{power_univ}:}
-\keyword{\item}
-\keyword{\itemize{}
-\keyword{a}
-\keyword{corresponds}
-\keyword{function}
-\keyword{in}
 \keyword{internal}
-\keyword{multivariate}
-\keyword{numerical}
-\keyword{probability}
-\keyword{returns}
-\keyword{setting.}
-\keyword{structure:}
-\keyword{that}
-\keyword{the}
-\keyword{to}
-\keyword{univariate}
-\keyword{value}
-\keyword{vector}
-\keyword{with}
-\keyword{}}

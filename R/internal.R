@@ -1,16 +1,19 @@
 #' Get Corrected (Bio)Equivalence Bounds
 #'
-#' This function applies the  delta-TOST corrective procedure to obtain the corrected (bio)equivalence bounds
+#' This function applies the delta-TOST corrective procedure to obtain the corrected (bio)equivalence bounds
 #'
 #' @param alpha                 A \code{numeric} value specifying the significance level.
 #' @param sigma                 A \code{numeric} value corresponding to the standard error.
 #' @param nu                    A \code{numeric} value corresponding to the number of degrees of freedom.
-#' @param delta                 A \code{numeric} value corresponding to (bio)equivalence limit. We assume symmetry, i.e, the (bio)equivalence interval corresponds to (-delta,delta)
-#'
+#' @param delta                 A \code{numeric} value corresponding to (bio)equivalence limit. We assume symmetry, i.e, the (bio)equivalence interval corresponds to (-delta,delta).
+#' @param l                     A \code{numeric} value corresponding to the upper limit of (bio)equivalence margin to optimize (default: l = \code{100}).
+#' @param tol                   A \code{numeric} value specifying a tolerance level (default: tol = \code{.Machine$double.eps}).
 #'
 #' @keywords internal
+#'
 #' @importFrom stats uniroot
 #'
+#' @return The function returns a \code{numeric} vector that minimized the objective function.
 get_delta_TOST = function(alpha, sigma, nu, delta, l=100, tol = .Machine$double.eps, ...){
   obj_func_a1=obj_fun_delta_TOST(test=delta,alpha=alpha,sigma=sigma, nu=nu, delta=delta)
   obj_func_al=obj_fun_delta_TOST(test=l,alpha=alpha,sigma=sigma, nu=nu, delta=delta)
@@ -24,15 +27,17 @@ get_delta_TOST = function(alpha, sigma, nu, delta, l=100, tol = .Machine$double.
 
 #' Objective Function of the delta-TOST Corrective Procedure
 #'
-#' @param test The (bio)equivalence bound parameter to be optimized.
-#' @param alpha The nominal level for the test.
-#' @param sigma The considered standard error.
-#' @param nu The degrees of freedom parameter.
-#' @param delta The (bio)equivalence bound used for the TOST decision.
-#' @param theta    Parameter value (typically equivalence bounds)
+#' @param test  A \code{numeric} value specifying the significance level to optimize.
+#' @param alpha A \code{numeric} value specifying the significance level.
+#' @param sigma A \code{numeric} value corresponding to the estimated standard error of estimated \code{theta}.
+#' @param nu    A \code{numeric} value specifying the degrees of freedom.
+#' @param delta A \code{numeric} value or vector defining the (bio)equivalence margin(s). The procedure assumes symmetry, i.e., the (bio)equivalence region is \eqn{(-\delta, \delta)}.
+#' @param theta A \code{numeric} value representing the estimated difference(s) (e.g., between a generic and reference product) or a \code{character} value representing the use of equivalence margin(s) for \eqn{\theta} under \code{NULL} (e.g., \eqn{\theta} = \eqn{(-\delta, \delta)}).
 #' @param ...      Additional parameters.
 #'
 #' @keywords internal
+#'
+#' @return The function returns a \code{numeric} value for the objective function.
 #'
 obj_fun_delta_TOST = function(test, alpha, sigma, nu, delta, theta=NULL, ...){
   if(is.null(theta)) theta = delta
@@ -42,19 +47,26 @@ obj_fun_delta_TOST = function(test, alpha, sigma, nu, delta, theta=NULL, ...){
 }
 
 
-#' @title Get Corrected Level
+#' @title Get alpha star of the alpha-TOST Corrective Procedure
 #'
 #' @description This function applies the alpha-TOST corrective procedure to obtain the corrected level.
 #'
 #' @param alpha                 A \code{numeric} value specifying the significance level.
-#' @param sigma                 A \code{numeric} value corresponding to the standard error.
+#' @param sigma                 A \code{numeric} value corresponding to the estimated standard error of estimated \code{theta}.
 #' @param nu                    A \code{numeric} value corresponding to the number of degrees of freedom.
-#' @param delta                 A \code{numeric} value corresponding to (bio)equivalence limit. We assume symmetry, i.e, the (bio)equivalence interval corresponds to (-delta,delta)
-#' @param tol                   A \code{numeric} value corresponding to the tolerance to be applied during the optimization (see `optim`)
+#' @param delta                 A \code{numeric} value corresponding to (bio)equivalence limit. We assume symmetry, i.e, the (bio)equivalence interval corresponds to (-delta,delta).
+#' @param l                     A \code{numeric} value corresponding to the upper limit of the significance level to optimize.
+#' @param tol                   A \code{numeric} value specifying a tolerance level (default: tol = \code{.Machine$double.eps}).
 #' @param ...                   Additional parameters.
 #'
 #' @keywords internal
 #' @importFrom stats qt uniroot
+#'
+#' @return A list with at least two components:
+#' \itemize{
+#'  \item \code{root}:       A \code{numeric} value corresponding to the location of the root.
+#'  \item \code{f.root}:     A \code{numeric} value corresponding to the function evaluated at \code{root}.
+#' }
 get_alpha_TOST = function(alpha, sigma, nu, delta, l=0.5, tol = .Machine$double.eps, ...){
   obj_func_a1=obj_fun_alpha_TOST(test=alpha,alpha=alpha,sigma=sigma, nu=nu, delta=delta)
   obj_func_al=obj_fun_alpha_TOST(test=l,alpha=alpha,sigma=sigma,nu=nu,delta=delta)
@@ -68,18 +80,20 @@ get_alpha_TOST = function(alpha, sigma, nu, delta, l=0.5, tol = .Machine$double.
 }
 
 
-#' Objective Function of the delta-TOST Corrective Procedure
+#' @title Objective Function of the delta-TOST Corrective Procedure
 #'
-#' @param test     The (test) level to be evaluated.
-#' @param alpha    The nominal level for the test.
-#' @param sigma    The considered standard error.
-#' @param nu       The degrees of freedom parameter.
-#' @param delta    The (bio)equivalence bound used for the TOST decision.
-#' @param theta    Parameter value (typically equivalence bound)
-#' @param ...      Additional parameters.
+#' @param test  A \code{numeric} value specifying the significance level to optimize.
+#' @param alpha A \code{numeric} value specifying the significance level.
+#' @param sigma A \code{numeric} value corresponding to the estimated standard error of estimated \code{theta}.
+#' @param nu    A \code{numeric} value corresponding to the number of degrees of freedom.
+#' @param delta A \code{numeric} value or vector defining the (bio)equivalence margin(s). The procedure assumes symmetry, i.e., the (bio)equivalence region is \eqn{(-\delta, \delta)}.
+#' @param theta A \code{numeric} value representing the estimated difference(s) (e.g., between a generic and reference product) or a \code{character} value representing the use of equivalence margin(s) for \eqn{\theta} under \code{NULL} (e.g., \eqn{\theta} = \eqn{\delta}).
+#' @param ...   Additional parameters.
 #'
 #' @keywords internal
 #'
+#' @return The function returns a \code{numeric} value for the objective function.
+
 obj_fun_alpha_TOST = function(test, alpha, sigma, nu, delta, theta = NULL, ...){
   if(is.null(theta)) theta = delta
   size = power_TOST(alpha = test, theta = theta, sigma = sigma,
@@ -88,50 +102,70 @@ obj_fun_alpha_TOST = function(test, alpha, sigma, nu, delta, theta = NULL, ...){
 }
 
 
-#' TITLE
+#' @title Power function of the xTOST Corrective Procedure
 #'
-#' What this function does
+#' @description This function is used to calculate the power by xTOST.
 #'
-#' @param theta ...
-#' @param sig_hat ...
-#' @param delta ...
-#' @param ...      Additional parameters.
+#' @param theta   A \code{character} value specifying the value or vector representing the estimated difference(s).
+#' @param sig_hat A \code{numeric} value (univariate) or \code{matrix} (multivariate) corresponding to the estimated variance of estimated \code{theta}.
+#' @param delta   A \code{numeric} value or vector defining the (bio)equivalence margin(s). The procedure assumes symmetry, i.e., the (bio)equivalence region is \eqn{(-\delta, \delta)}.
+#' @param ...     Additional parameters.
 #'
 #' @keywords internal
 #' @importFrom stats pnorm
+#'
+#' @return The function returns a \code{numeric} value that corresponds to a probability.
 #'
 power_xTOST = function(theta, sig_hat, delta, ...){
   pnorm((theta + delta)/sig_hat) - pnorm((theta - delta)/sig_hat)
 }
 
-#' TITLE
+#' @title Size function of the xTOST Corrective Procedure
 #'
-#' What this function does
+#' @description
+#' This function is used to calculate the size in the xTOST corrective procedure.
 #'
-#' @param sig_hat ...
-#' @param delta ...
-#' @param delta_star ...
+#' @param sig_hat A \code{numeric} value (univariate) or \code{matrix} (multivariate) corresponding to the estimated variance of estimated \code{theta}.
+#' @param delta   A \code{numeric} value or vector defining the (bio)equivalence margin(s). The procedure assumes symmetry, i.e., the (bio)equivalence region is \eqn{(-\delta, \delta)}.
+#' @param delta_star A \code{numeric} value specifying the corrected (bio)equivalence margin(s).
 #' @param ... description
 #'
 #' @keywords internal
 #' @importFrom stats qnorm dnorm
 #'
+#' @return The function returns a \code{numeric} value that corresponds to a probability.
 size_xTOST = function(sig_hat, delta, delta_star, ...){
   power_xTOST(theta = delta, sig_hat = sig_hat, delta = delta_star)
 }
 
-#' TITLE
+#' @title Critical value search in the xTOST Corrective Procedure
 #'
-#' What this function does
+#' @description This function is used to calculate the critical value such that the size of the xTOST procedure
+#' matches the nominal significance level.
 #'
-#' @param delta ...
-#' @param sig_hat ...
-#' @param alpha ...
-#' @param B description
-#' @param tol description
+#' @param delta   A \code{numeric} value defining the (bio)equivalence margin(s). The procedure assumes symmetry, i.e., the (bio)equivalence is \eqn{(-\delta, \delta)}.
+#' @param sigma   A \code{numeric} value corresponding to the estimated variance of estimated \code{theta}.
+#' @param alpha   A \code{numeric} value specifying the significance level.
+#' @param B       A \code{numeric} value specifying the number of iterations using Newton-Raphson method (default: B = \code{1000}).
+#' @param tol     A \code{numeric} value specifying a tolerance level (default: tol = \code{10^(-8)}).
+#' @param l       A \code{numeric} value corresponding to the upper limit of the significance level to optimize.
+#' @param optim   A \code{character} value representing the method to use (default: optim = \code{"NR"}), see Details below for more information.
+#'
+#' @details
+#' There are two methods available for optimization: Newton-Raphson (using \code{optim} = "NR") and minimization without
+#' derivatives (using \code{optim} = "uniroot").
 #'
 #' @keywords internal
 #' @importFrom stats pnorm
+#'
+#' @return The function returns a \code{list} value with the structure:
+#' \itemize{
+#'  \item \code{c}:        A numerical variable that corresponds to the estimated critical value.
+#'  \item \code{size}:     A numerical variable that corresponds to the size when using the estimated critical value.
+#'  \item \code{coverged}: A boolean variable that corresponds to whether Newton-Raphson coverged (only returned if \code{optim = "NR"}).
+#'  \item \code{iter}:     A numerical variable that corresponds to the actual iterations used (only returned if \code{optim = "NR"}).
+#' }
+#'
 #'
 get_c_of_0 = function(delta, sigma, alpha, B = 1000, tol = 10^(-8), l=1, optim = "NR"){
   c0 = delta
@@ -181,21 +215,52 @@ get_c_of_0 = function(delta, sigma, alpha, B = 1000, tol = 10^(-8), l=1, optim =
 
   out
 }
-#' TO BE DOCUMENTED
-#'
-#' @param theta_hat The estimated mean.
-#' @param sig_hat The estimated standard deviation.
-#' @param nu The degrees of freedom parameter.
-#' @param alpha The significance level for the test.
-#' @param delta The equivalence bound used for the TOST decision.
-#' @param correction TO BE DOCUMENTED
-#' @param B TO BE DOCUMENTED (numb of bootstrap for correction based on bootstrap)
-#' @param seed TO BE DOCUMENTED (also for bootstrap)
 
-#' @return TO BE DOCUMENTED
+#' @title Finite Sample Adjusted (Bio)Equivalence Testing of the xTOST Corrective Procedure
 #'
-#' @keywords internal
+#' @description This function is used to compute finite sample corrected version of the multivariate xTOST.
 #'
+#' @param theta_hat  A \code{numeric} value or vector representing the estimated difference(s) (e.g., between a generic and reference product).
+#' @param sig_hat  A \code{matrix} (multivariate) corresponding to the estimated variance of estimated \code{theta}.
+#' @param nu         A \code{numeric} value specifying the degrees of freedom. In the multivariate case, it is assumed to be the same across all dimensions.
+#' @param alpha      A \code{numeric} value specifying the significance level.
+#' @param delta      A \code{numeric} value or vector defining the (bio)equivalence margin(s). The procedure assumes symmetry, i.e., the (bio)equivalence region is \eqn{(-\delta, \delta)}.
+#' @param correction A \code{character} value corresponding to the considered correction method, see Details below for more information (default: correction = \code{"no"}).
+#' @param B                     A \code{numeric} value specifying the number of Monte Carlo replication (default: B = \code{10^4}).
+#' @param seed                  A \code{numeric} value specifying a seed for reproducibility (default: seed = \code{85}).
+#'
+#' @details
+#' #' The correction method = "no" refers to ...., the "bootstrap" refers to ... and the "offline" refers to ...
+#'
+#' @return An object of class \code{tost} with the structure:
+#' \itemize{
+#'  \item \code{decision}:    A boolean variable indicating whether (bio)equivalence is accepted or not.
+#'  \item \code{ci}:          Confidence region at the \eqn{1 - 2\alpha} level.
+#'  \item \code{theta_hat}:   The estimated difference(s) used in the test.
+#'  \item \code{sigma}:       The estimated variance of \code{theta}, a \code{numeric} in univariate settings or \code{matrix} in multivariate settings.
+#'  \item \code{nu}:          The number of degrees of freedom used in the test.
+#'  \item \code{alpha}:       The significance level used in the test.
+#'  \item \code{c0}:          The estimated critical value.
+#'  \item \code{correction}:  The correction used in the test.
+#'  \item \code{corrected_alpha}: The significance level corrected by the adjustment.
+#'  \item \code{delta}:       The (bio)equivalence limits used in the test.
+#'  \item \code{method}:      The method used in the test (default: method = "cTOST").
+#' }
+#'
+#' @seealso \code{\link{ctost}}
+#' @export
+#' @example
+# data(skin)
+#
+# theta_hat = diff(apply(skin,2,mean))
+# nu = nrow(skin) - 1
+# sig_hat = var(apply(skin,1,diff))/nu
+#
+# # x-TOST
+# x_tost = xtost(theta_hat = theta_hat, sig_hat = sig_hat, nu = nu,
+#               alpha = 0.05, delta = log(1.25))
+# x_tost
+
 xtost = function(theta_hat, sig_hat, nu, alpha, delta, correction = "no", B = 10^4, seed = 85){
 
   if (!(correction %in% c("no", "bootstrap", "offline"))){

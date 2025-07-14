@@ -7,19 +7,22 @@
 obj_fun_delta_TOST(test, alpha, sigma, nu, delta, theta = NULL, ...)
 }
 \arguments{
-\item{test}{The (bio)equivalence bound parameter to be optimized.}
+\item{test}{A \code{numeric} value specifying the significance level to optimize.}
 
-\item{alpha}{The nominal level for the test.}
+\item{alpha}{A \code{numeric} value specifying the significance level.}
 
-\item{sigma}{The considered standard error.}
+\item{sigma}{A \code{numeric} value corresponding to the estimated standard error of estimated \code{theta}.}
 
-\item{nu}{The degrees of freedom parameter.}
+\item{nu}{A \code{numeric} value specifying the degrees of freedom.}
 
-\item{delta}{The (bio)equivalence bound used for the TOST decision.}
+\item{delta}{A \code{numeric} value or vector defining the (bio)equivalence margin(s). The procedure assumes symmetry, i.e., the (bio)equivalence region is \eqn{(-\delta, \delta)}.}
 
-\item{theta}{Parameter value (typically equivalence bounds)}
+\item{theta}{A \code{numeric} value representing the estimated difference(s) (e.g., between a generic and reference product) or a \code{character} value representing the use of equivalence margin(s) for \eqn{\theta} under \code{NULL} (e.g., \eqn{\theta} = \eqn{(-\delta, \delta)}).}
 
 \item{...}{Additional parameters.}
+}
+\value{
+The function returns a \code{numeric} value for the objective function.
 }
 \description{
 Objective Function of the delta-TOST Corrective Procedure

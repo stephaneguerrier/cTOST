@@ -2,7 +2,7 @@
 % Please edit documentation in R/equiv.R
 \name{power_TOST}
 \alias{power_TOST}
-\title{Power function in univariate TOST}
+\title{Power function of univariate TOST}
 \usage{
 power_TOST(alpha, theta, sigma, nu, delta, ...)
 }
@@ -23,7 +23,7 @@ power_TOST(alpha, theta, sigma, nu, delta, ...)
 The function returns a \code{numeric} value that corresponds to a probability.
 }
 \description{
-Power function in univariate TOST
+Power function of univariate TOST
 }
 \author{
 Younes Boulaguiem, Stéphane Guerrier, Dominique-Laurent Couturier

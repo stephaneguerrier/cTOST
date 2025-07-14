@@ -2,7 +2,7 @@
 % Please edit documentation in R/equiv.R
 \name{size_TOST}
 \alias{size_TOST}
-\title{The size in univariate TOST}
+\title{The size of univariate TOST}
 \usage{
 size_TOST(alpha, sigma, nu, delta, ...)
 }
@@ -21,7 +21,7 @@ size_TOST(alpha, sigma, nu, delta, ...)
 The function returns a \code{numeric} value that corresponds to a probability.
 }
 \description{
-The size in univariate TOST
+The size of univariate TOST
 }
 \author{
 Younes Boulaguiem, Stéphane Guerrier, Dominique-Laurent Couturier

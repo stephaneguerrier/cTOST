@@ -2,22 +2,40 @@
 % Please edit documentation in R/internal.R
 \name{get_c_of_0}
 \alias{get_c_of_0}
-\title{TITLE}
+\title{Critical value search in the xTOST Corrective Procedure}
 \usage{
 get_c_of_0(delta, sigma, alpha, B = 1000, tol = 10^(-8), l = 1, optim = "NR")
 }
 \arguments{
-\item{delta}{...}
+\item{delta}{A \code{numeric} value defining the (bio)equivalence margin(s). The procedure assumes symmetry, i.e., the (bio)equivalence is \eqn{(-\delta, \delta)}.}
 
-\item{alpha}{...}
+\item{sigma}{A \code{numeric} value corresponding to the estimated variance of estimated \code{theta}.}
 
-\item{B}{description}
+\item{alpha}{A \code{numeric} value specifying the significance level.}
 
-\item{tol}{description}
+\item{B}{A \code{numeric} value specifying the number of iterations using Newton-Raphson method (default: B = \code{1000}).}
 
-\item{sig_hat}{...}
+\item{tol}{A \code{numeric} value specifying a tolerance level (default: tol = \code{10^(-8)}).}
+
+\item{l}{A \code{numeric} value corresponding to the upper limit of the significance level to optimize.}
+
+\item{optim}{A \code{character} value representing the method to use (default: optim = \code{"NR"}), see Details below for more information.}
+}
+\value{
+The function returns a \code{list} value with the structure:
+\itemize{
+ \item \code{c}:        A numerical variable that corresponds to the estimated critical value.
+ \item \code{size}:     A numerical variable that corresponds to the size when using the estimated critical value.
+ \item \code{coverged}: A boolean variable that corresponds to whether Newton-Raphson coverged (only returned if \code{optim = "NR"}).
+ \item \code{iter}:     A numerical variable that corresponds to the actual iterations used (only returned if \code{optim = "NR"}).
+}
 }
 \description{
-What this function does
+This function is used to calculate the critical value such that the size of the xTOST procedure
+matches the nominal significance level.
+}
+\details{
+There are two methods available for optimization: Newton-Raphson (using \code{optim} = "NR") and minimization without
+derivatives (using \code{optim} = "uniroot").
 }
 \keyword{internal}

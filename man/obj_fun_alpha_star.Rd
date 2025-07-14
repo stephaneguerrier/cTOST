@@ -2,7 +2,7 @@
 % Please edit documentation in R/equiv.R
 \name{obj_fun_alpha_star}
 \alias{obj_fun_alpha_star}
-\title{Objective function to optimize in univariate TOST}
+\title{Objective function to optimize of univariate TOST}
 \usage{
 obj_fun_alpha_star(test, alpha = 0.05, sigma, nu, delta, ...)
 }
@@ -23,7 +23,7 @@ obj_fun_alpha_star(test, alpha = 0.05, sigma, nu, delta, ...)
 The function returns a \code{numeric} value for the objective function.
 }
 \description{
-Objective function to optimize in univariate TOST
+Objective function to optimize of univariate TOST
 }
 \author{
 Younes Boulaguiem, Stéphane Guerrier, Dominique-Laurent Couturier

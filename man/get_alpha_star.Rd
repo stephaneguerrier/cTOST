@@ -2,7 +2,7 @@
 % Please edit documentation in R/equiv.R
 \name{get_alpha_star}
 \alias{get_alpha_star}
-\title{Get alpha star in univariate TOST}
+\title{Get alpha star of univariate TOST}
 \usage{
 get_alpha_star(alpha = 0.05, sigma, nu, delta, ...)
 }
@@ -21,7 +21,7 @@ get_alpha_star(alpha = 0.05, sigma, nu, delta, ...)
 The function returns a \code{numeric} value that corresponds to the solution of the optimization.
 }
 \description{
-Get alpha star in univariate TOST
+Get alpha star of univariate TOST
 }
 \author{
 Younes Boulaguiem, Stéphane Guerrier, Dominique-Laurent Couturier

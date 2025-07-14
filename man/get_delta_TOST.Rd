@@ -21,9 +21,16 @@ get_delta_TOST(
 
 \item{nu}{A \code{numeric} value corresponding to the number of degrees of freedom.}
 
-\item{delta}{A \code{numeric} value corresponding to (bio)equivalence limit. We assume symmetry, i.e, the (bio)equivalence interval corresponds to (-delta,delta)}
+\item{delta}{A \code{numeric} value corresponding to (bio)equivalence limit. We assume symmetry, i.e, the (bio)equivalence interval corresponds to (-delta,delta).}
+
+\item{l}{A \code{numeric} value corresponding to the upper limit of (bio)equivalence margin to optimize (default: l = \code{100}).}
+
+\item{tol}{A \code{numeric} value specifying a tolerance level (default: tol = \code{.Machine$double.eps}).}
+}
+\value{
+The function returns a \code{numeric} vector that minimized the objective function.
 }
 \description{
-This function applies the  delta-TOST corrective procedure to obtain the corrected (bio)equivalence bounds
+This function applies the delta-TOST corrective procedure to obtain the corrected (bio)equivalence bounds
 }
 \keyword{internal}

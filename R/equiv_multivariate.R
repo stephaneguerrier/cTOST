@@ -14,7 +14,7 @@ require(mvtnorm)
 #'
 #' @keywords internal
 #'
-#' The function returns a \code{list} value with the structure:
+#' @return The function returns a \code{list} value with the structure:
 #' \itemize{
 #'  \item \code{power_univ}:    A numerical vector that corresponds to a probability in univariate setting.
 #'  \item \code{power_mult}:    A numerical vector that corresponds to a probability in multivariate setting.
@@ -267,7 +267,7 @@ obj_fun_xTOST_constr_size_mv = function(test, Sigma, cte, delta, alpha){
 #'
 #' @keywords internal
 #'
-#' @return The function returns a \code{numeric} vector minimized the objective function.
+#' @return The function returns a \code{numeric} vector that minimized the objective function.
 
 get_interval = function(delta, Sigma, cte, alpha, interval, B){
   # runif(B, interval[1], interval[2])

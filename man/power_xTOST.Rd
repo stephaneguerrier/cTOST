@@ -2,20 +2,23 @@
 % Please edit documentation in R/internal.R
 \name{power_xTOST}
 \alias{power_xTOST}
-\title{TITLE}
+\title{Power function of the xTOST Corrective Procedure}
 \usage{
 power_xTOST(theta, sig_hat, delta, ...)
 }
 \arguments{
-\item{theta}{...}
+\item{theta}{A \code{character} value specifying the value or vector representing the estimated difference(s).}
 
-\item{sig_hat}{...}
+\item{sig_hat}{A \code{numeric} value (univariate) or \code{matrix} (multivariate) corresponding to the estimated variance of estimated \code{theta}.}
 
-\item{delta}{...}
+\item{delta}{A \code{numeric} value or vector defining the (bio)equivalence margin(s). The procedure assumes symmetry, i.e., the (bio)equivalence region is \eqn{(-\delta, \delta)}.}
 
 \item{...}{Additional parameters.}
 }
+\value{
+The function returns a \code{numeric} value that corresponds to a probability.
+}
 \description{
-What this function does
+This function is used to calculate the power by xTOST.
 }
 \keyword{internal}

@@ -2,20 +2,23 @@
 % Please edit documentation in R/internal.R
 \name{size_xTOST}
 \alias{size_xTOST}
-\title{TITLE}
+\title{Size function of the xTOST Corrective Procedure}
 \usage{
 size_xTOST(sig_hat, delta, delta_star, ...)
 }
 \arguments{
-\item{sig_hat}{...}
+\item{sig_hat}{A \code{numeric} value (univariate) or \code{matrix} (multivariate) corresponding to the estimated variance of estimated \code{theta}.}
 
-\item{delta}{...}
+\item{delta}{A \code{numeric} value or vector defining the (bio)equivalence margin(s). The procedure assumes symmetry, i.e., the (bio)equivalence region is \eqn{(-\delta, \delta)}.}
 
-\item{delta_star}{...}
+\item{delta_star}{A \code{numeric} value specifying the corrected (bio)equivalence margin(s).}
 
 \item{...}{description}
 }
+\value{
+The function returns a \code{numeric} value that corresponds to a probability.
+}
 \description{
-What this function does
+This function is used to calculate the size in the xTOST corrective procedure.
 }
 \keyword{internal}

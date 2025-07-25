@@ -1,3 +1,305 @@
+#' @title Power Function of Univariate TOST
+#'
+#' @description
+#' Computes the power function for the univariate Two One-Sided Tests (TOST) procedure.
+#'
+#' @param alpha A \code{numeric} value specifying the significance level.
+#' @param theta A \code{numeric} value representing the parameter of interest (e.g., a difference of means).
+#' @param sigma A \code{numeric} value representing the estimated standard error of \code{theta}.
+#' @param nu A \code{numeric} value specifying the degrees of freedom.
+#' @param delta A \code{numeric} value defining the (bio)equivalence margin. The procedure assumes symmetry, i.e., the (bio)equivalence region is \eqn{(-\delta, \delta)}.
+#' @param ... Additional parameters.
+#'
+#' @keywords internal
+#'
+#' @return A \code{numeric} value corresponding to the probability (power) of the TOST procedure.
+power_TOST = function(alpha, theta, sigma, nu, delta, ...){
+  tval = qt(1 - alpha, df = nu)
+  mu1 = (theta + delta)/sigma
+  mu2 = (theta - delta)/sigma
+  R = (delta*sqrt(nu))/(tval*sigma)
+  p1 = OwensQ(nu, tval, mu1, 0, R)
+  p2 = OwensQ(nu, -tval, mu2, 0, R)
+  pw = p2-p1
+  pw[pw < 0] = 0
+  pw
+}
+
+#' @title Size of Univariate TOST
+#'
+#' @description
+#' Computes the size (type I error rate) of the univariate Two One-Sided Tests (TOST) procedure.
+#'
+#' @param alpha A \code{numeric} value specifying the significance level.
+#' @param sigma A \code{numeric} value representing the estimated standard error of \code{theta}.
+#' @param nu A \code{numeric} value specifying the degrees of freedom.
+#' @param delta A \code{numeric} value defining the (bio)equivalence margin. The procedure assumes symmetry, i.e., the (bio)equivalence region is \eqn{(-\delta, \delta)}.
+#' @param ... Additional parameters.
+#'
+#' @keywords internal
+#'
+#' @return A \code{numeric} value corresponding to the probability (size) of the TOST procedure.
+size_TOST = function(alpha, sigma, nu, delta, ...){
+  power_TOST(alpha = alpha, theta = delta, sigma = sigma,
+             nu = nu, delta = delta)
+}
+
+#' @title Objective Function for Optimization in Univariate TOST
+#'
+#' @description
+#' Computes the objective function used to optimize the significance level in the univariate Two One-Sided Tests (TOST) procedure.
+#'
+#' @param test A \code{numeric} value specifying the significance level to be optimized.
+#' @param alpha A \code{numeric} value specifying the target significance level (default: \code{alpha = 0.05}).
+#' @param sigma A \code{numeric} value representing the estimated standard error of \code{theta}.
+#' @param nu A \code{numeric} value specifying the degrees of freedom.
+#' @param delta A \code{numeric} value defining the (bio)equivalence margin. The procedure assumes symmetry, i.e., the (bio)equivalence region is \eqn{(-\delta, \delta)}.
+#' @param ... Additional parameters.
+#'
+#' @keywords internal
+#'
+#' @return A \code{numeric} value representing the objective function to be minimized.
+obj_fun_alpha_star = function(test, alpha = 0.05, sigma, nu, delta, ...){
+  size = size_TOST(alpha = test, sigma = sigma, nu = nu, delta = delta)
+  (size - alpha)^2
+}
+
+#' @title Compute Adjusted Significance Level (Alpha Star) for Univariate TOST
+#'
+#' @description
+#' Calculates the adjusted significance level (\eqn{\alpha^*}) for the univariate Two One-Sided Tests (TOST) procedure.
+#'
+#' @param alpha A \code{numeric} value specifying the target significance level (default: \code{alpha = 0.05}).
+#' @param sigma A \code{numeric} value representing the estimated standard error of \code{theta}.
+#' @param nu A \code{numeric} value specifying the degrees of freedom.
+#' @param delta A \code{numeric} value defining the (bio)equivalence margin. The procedure assumes symmetry, i.e., the (bio)equivalence region is \eqn{(-\delta, \delta)}.
+#' @param ... Additional parameters.
+#'
+#' @keywords internal
+#'
+#' @return A \code{numeric} value corresponding to the optimized (adjusted) significance level.
+get_alpha_star = function(alpha=0.05, sigma, nu, delta, ...){
+  out = optimize(obj_fun_alpha_star, c(alpha, 0.5),
+                 alpha = alpha, sigma = sigma,
+                 nu = nu, delta = delta)
+
+  # size_out = size_TOST(alpha = out$minimum, sigma_nu = sigma_nu, nu = nu, delta = delta)
+  out$minimum
+}
+
+#' @title Confidence Interval for Univariate TOST
+#'
+#' @description
+#' Computes the confidence interval for the univariate Two One-Sided Tests (TOST) procedure.
+#'
+#' @param alpha A \code{numeric} value specifying the significance level.
+#' @param theta A \code{numeric} value representing the estimated parameter of interest (e.g., a difference of means).
+#' @param sigma A \code{numeric} value representing the estimated standard error of \code{theta}.
+#' @param nu A \code{numeric} value specifying the degrees of freedom.
+#' @param ... Additional parameters.
+#'
+#' @keywords internal
+#'
+#' @return A numeric \code{vector} containing the lower and upper bounds of the confidence interval.
+ci = function(alpha, theta, sigma, nu, ...){
+  tval  = qt(p=alpha,df=nu)
+  lower = theta+tval*sigma
+  upper = theta-tval*sigma
+  cbind(lower,upper)
+}
+
+
+#' @title Two One-Sided Tests (TOST) for (Bio)Equivalence Assessment
+#'
+#' @description
+#' Performs the Two One-Sided Tests (TOST) procedure for (bio)equivalence assessment in both univariate and multivariate settings.
+#'
+#' @param theta A \code{numeric} value or vector representing the estimated difference(s) (e.g., between a generic and reference product).
+#' @param sigma A \code{numeric} value (univariate) or \code{matrix} (multivariate) corresponding to the estimated variance of \code{theta}.
+#' @param nu A \code{numeric} value specifying the degrees of freedom. In the multivariate case, it is assumed to be the same across all dimensions.
+#' @param delta A \code{numeric} value or vector defining the (bio)equivalence margin(s). The procedure assumes symmetry, i.e., the (bio)equivalence region is \eqn{(-\delta, \delta)}. In the multivariate case, it is assumed to be the same across all dimensions.
+#' @param alpha A \code{numeric} value specifying the significance level (default: \code{alpha = 0.05}).
+#' @param ... Additional arguments.
+#'
+#' @return A \code{tost} object with the following elements:
+#' \itemize{
+#'   \item \code{decision}: Logical; indicates whether (bio)equivalence is accepted.
+#'   \item \code{ci}: Confidence region at the \eqn{1 - 2\alpha} level.
+#'   \item \code{theta}: The estimated difference(s) used in the test.
+#'   \item \code{sigma}: The estimated variance of \code{theta}; a \code{numeric} value (univariate) or \code{matrix} (multivariate).
+#'   \item \code{nu}: The degrees of freedom used in the test.
+#'   \item \code{alpha}: The significance level used in the test.
+#'   \item \code{delta}: The (bio)equivalence limits used in the test.
+#'   \item \code{method}: A character string describing the method used ("TOST").
+#'   \item \code{setting}: The setting used ("univariate" or "multivariate").
+#' }
+#'
+#' @keywords internal
+#'
+#' @examples
+#' # Univariate case
+#' data(skin)
+#' theta_hat = diff(colMeans(skin))
+#' nu = nrow(skin) - 1
+#' sig_hat = sd(apply(skin, 1, diff)) / sqrt(nu)
+#' tost(theta = theta_hat, sigma = sig_hat, nu = nu,
+#'      alpha = 0.05, delta = log(1.25))
+#'
+#' # Multivariate case
+#' data(ticlopidine)
+#' n = nrow(ticlopidine)
+#' nu = n - 1
+#' theta_hat = colMeans(ticlopidine)
+#' Sigma_hat = cov(ticlopidine) / n
+#' tost(theta = theta_hat, sigma = Sigma_hat, nu = nu, delta = log(1.25))
+tost = function(theta, sigma, nu, delta, alpha = 0.05,...){
+
+  n_theta = length(theta)
+
+  if (n_theta == 1){
+    # Univariate setting
+    # Variance -> standard dev
+    sigma = sqrt(sigma)
+
+    setting = "univariate"
+    if (length(sigma) > 1 || length(delta) > 1){
+      stop("sigma and delta must be scalars in univariate settings.")
+    }
+
+  }else{
+    # Multivariate setting
+    setting = "multivariate"
+
+    if (!is.matrix(sigma) || ncol(sigma) != nrow(sigma)){
+      stop("sigma must be a square matrix.")
+    }
+
+    if (length(delta) > 1){
+      stop("delta is assumed to be a scalar, implying that we consider the alternative theta in (-delta, delta) in each dimension.")
+    }
+  }
+
+  if (setting == "univariate"){
+    decision = abs(theta) < (delta - qt(1 - alpha, df = nu) * sigma)
+    ci = theta + c(-1, 1) * qt(1 - alpha, df = nu) * sigma
+    out = list(decision = as.vector(decision), ci = ci, theta = theta,
+               sigma = sigma^2, nu = nu, alpha = alpha,
+               delta = delta, method = "TOST", setting = setting)
+    class(out) = "tost"
+    return(out)
+  }else{
+    delta_vec = rep(delta, ncol(sigma))
+    t_alpha = qt(1 - alpha, df=nu)
+    lower = theta - t_alpha * sqrt(diag(sigma))
+    upper = theta + t_alpha * sqrt(diag(sigma))
+    decision = (lower > -delta_vec) & (upper < delta_vec)
+
+    out = list(decision = decision, ci = cbind(lower, upper), theta = theta,
+               sigma = sigma, nu = nu, alpha = alpha,
+               delta = delta, method = "TOST", setting = setting)
+    class(out) = "mtost"
+    return(out)
+  }
+}
+
+
+#' @title The alpha-TOST Corrective Procedure for (Bio)Equivalence Testing
+#'
+#' @description
+#' Computes the alpha-TOST, a corrective procedure for the significance level applied to the Two One-Sided Test (TOST) for (bio)equivalence testing in the univariate framework.
+#'
+#' @param theta A \code{numeric} value corresponding to the estimated parameter of interest (such as a difference of means).
+#' @param sigma A \code{numeric} value corresponding to the estimated standard error of \code{theta}.
+#' @param nu A \code{numeric} value specifying the degrees of freedom.
+#' @param alpha A \code{numeric} value specifying the significance level.
+#' @param delta A \code{numeric} value defining the (bio)equivalence margin. The procedure assumes symmetry, i.e., the (bio)equivalence region is \eqn{(-\delta, \delta)}.
+#'
+#' @return An object of class \code{tost} with the following elements:
+#' \itemize{
+#'   \item \code{decision}: Logical; indicates whether (bio)equivalence is accepted.
+#'   \item \code{ci}: Confidence region at the \eqn{1 - 2\alpha} level.
+#'   \item \code{theta}: The estimated difference(s) used in the test.
+#'   \item \code{sigma}: The estimated standard error used in the test.
+#'   \item \code{nu}: The degrees of freedom used in the test.
+#'   \item \code{alpha}: The significance level used in the test.
+#'   \item \code{corrected_alpha}: The significance level after adjustment.
+#'   \item \code{delta}: The (bio)equivalence limits used in the test.
+#'   \item \code{method}: The method used in the test ("alpha-TOST").
+#' }
+#'
+#' @keywords internal
+#'
+#' @examples
+#' data(skin)
+#'
+#' theta_hat = diff(apply(skin, 2, mean))
+#' nu = nrow(skin) - 1
+#' sig_hat = sd(apply(skin, 1, diff)) / sqrt(nu)
+#' res_atost = cTOST:::atost(theta = theta_hat, sigma = sig_hat, nu = nu,
+#'               alpha = 0.05, delta = log(1.25))
+#' compare_to_tost(res_atost)
+atost = function(theta, sigma, nu, alpha, delta){
+  corrected_alpha = alphahat.fun(sigma = sigma, nu = nu, alpha = alpha, delta = delta)
+  decision = abs(theta) < (delta - qt(1 - corrected_alpha, df = nu) * sigma)
+  ci = theta + c(-1, 1) * qt(1 - corrected_alpha, df = nu) * sigma
+  out = list(decision = decision, ci = ci, theta = theta,
+             sigma = sigma, nu = nu, alpha = alpha,
+             corrected_alpha = corrected_alpha,
+             delta = delta, method = "alpha-TOST")
+  class(out) = "tost"
+  out
+}
+
+#' @title The delta-TOST Corrective Procedure for (Bio)Equivalence Testing
+#'
+#' @description
+#' Computes the delta-TOST, a corrective procedure that adjusts the (bio)equivalence bounds applied to the Two One-Sided Test (TOST) for (bio)equivalence testing in the univariate framework.
+#'
+#' @param theta A \code{numeric} value corresponding to the estimated parameter of interest (such as a difference of means).
+#' @param sigma A \code{numeric} value corresponding to the estimated standard error of \code{theta}.
+#' @param nu A \code{numeric} value specifying the degrees of freedom.
+#' @param alpha A \code{numeric} value specifying the significance level (default: \code{alpha = 0.05}).
+#' @param delta A \code{numeric} value defining the (bio)equivalence margin. The procedure assumes symmetry, i.e., the (bio)equivalence region is \eqn{(-\delta, \delta)}.
+#'
+#' @return An object of class \code{tost} with the following elements:
+#' \itemize{
+#'   \item \code{decision}: Logical; indicates whether (bio)equivalence is accepted.
+#'   \item \code{ci}: Confidence region at the \eqn{1 - 2\alpha} level.
+#'   \item \code{theta}: The estimated difference(s) used in the test.
+#'   \item \code{sigma}: The estimated standard error used in the test.
+#'   \item \code{nu}: The degrees of freedom used in the test.
+#'   \item \code{alpha}: The significance level used in the test.
+#'   \item \code{delta}: The (bio)equivalence limits used in the test.
+#'   \item \code{corrected_delta}: The (bio)equivalence limits after adjustment.
+#'   \item \code{method}: The method used in the test ("delta-TOST").
+#' }
+#'
+#' @keywords internal
+#'
+#' @examples
+#' data(skin)
+#'
+#' theta_hat = diff(apply(skin, 2, mean))
+#' nu = nrow(skin) - 1
+#' sig_hat = sd(apply(skin, 1, diff)) / sqrt(nu)
+#' res_dtost = cTOST:::dtost(theta = theta_hat, sigma = sig_hat, nu = nu,
+#'               alpha = 0.05, delta = log(1.25))
+#' compare_to_tost(res_dtost)
+dtost = function(theta, sigma, nu, alpha, delta){
+  corrected_delta = deltahat.fun(sigma = sigma, alpha = alpha, delta = delta, nu = nu)
+  decision = abs(theta) < (corrected_delta - qt(1 - alpha, df = nu) * sigma)
+  ci = theta + c(-1, 1) * qt(1 - alpha, df = nu) * sigma
+  out = list(decision = decision, ci = ci, theta = theta,
+             sigma = sigma, nu = nu, alpha = alpha,
+             corrected_delta = corrected_delta,
+             delta = delta, method = "delta-TOST")
+  class(out) = "tost"
+  out
+}
+
+
+
+
 #' Get Corrected (Bio)Equivalence Bounds
 #'
 #' This function applies the delta-TOST corrective procedure to obtain the corrected (bio)equivalence bounds
@@ -249,23 +551,18 @@ get_c_of_0 = function(delta, sigma, alpha, B = 1000, tol = 10^(-8), l=1, optim =
 #'
 #' @seealso \code{\link{ctost}}
 #' @export
-#' @example
-# data(skin)
-#
-# theta_hat = diff(apply(skin,2,mean))
-# nu = nrow(skin) - 1
-# sig_hat = var(apply(skin,1,diff))/nu
-#
-# # x-TOST
-# x_tost = xtost(theta_hat = theta_hat, sig_hat = sig_hat, nu = nu,
-#               alpha = 0.05, delta = log(1.25))
-# x_tost
-
+#' @examples
+#' data(skin)
+#'
+#' theta_hat = diff(apply(skin,2,mean))
+#' nu = nrow(skin) - 1
+#' sig_hat = var(apply(skin,1,diff))/nu
+#'
+#' # x-TOST
+#' x_tost = xtost(theta_hat = theta_hat, sig_hat = sig_hat, nu = nu,
+#'               alpha = 0.05, delta = log(1.25))
+#' x_tost
 xtost = function(theta_hat, sig_hat, nu, alpha, delta, correction = "no", B = 10^4, seed = 85){
-
-  if (!(correction %in% c("no", "bootstrap", "offline"))){
-    stop("Finite sample correction method not implemented.")
-  }
 
   if (correction == "bootstrap"){
     res = rep(NA, B)
@@ -293,7 +590,7 @@ xtost = function(theta_hat, sig_hat, nu, alpha, delta, correction = "no", B = 10
     correct_alpha
   }
 
-  if (correction == "no"){
+  if (correction == "none"){
     correct_alpha = alpha # i.e. no correction
   }
 

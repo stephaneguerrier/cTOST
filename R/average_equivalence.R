@@ -91,6 +91,13 @@ ctost = function(theta, sigma, nu, delta, alpha = 0.05, method, B = 10^4, seed =
     stop("The cTOST ('optimal') method is not implemented for multivariate settings.")
   }
 
+  if (is.null(correction)){
+    if (method == "optimal"){
+      correction = "offline"
+    }else{
+      correction = "none"
+    }
+  }
   if (!(correction %in% c("none", "bootstrap", "offline"))) {
     stop("Available correction methods are 'none', 'bootstrap', and 'offline'.")
   }

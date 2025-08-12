@@ -478,12 +478,12 @@ get_c_of_0 = function(delta, sigma, alpha, B = 1000, tol = 10^(-8), l=1, optim =
                          alpha=alpha0, sigma=sigma, delta=c0,tol=.Machine$double.eps)
     size_uniroot = size_xTOST(sig_hat=sigma,delta=c0,delta_star=c_uniroot_$root)
     out = list(c = c_uniroot_$root, size = size_uniroot)
-  }else if(optim=="NR"){
+  }else if(optim == "NR"){
     # Sequence of c's
     m=30
     cte_vect = rep(NA, m)
 
-    # Initial approximaiton
+    # Initial approximation
     c_init = c0 - sigma*qnorm(1 - alpha0)
     if (c_init < 0){
       c_init = c0/2

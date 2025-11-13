@@ -25,7 +25,7 @@ get_alpha_TOST(
 
 \item{l}{A \code{numeric} value corresponding to the upper limit of the significance level to optimize.}
 
-\item{tol}{A \code{numeric} value specifying a tolerance level (default: tol = \code{.Machine$double.eps}).}
+\item{tol}{A \code{numeric} value specifying a tolerance level (default: \code{tol = .Machine$double.eps}).}
 
 \item{...}{Additional parameters.}
 }

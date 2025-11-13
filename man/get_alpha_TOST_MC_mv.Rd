@@ -35,11 +35,23 @@ get_alpha_TOST_MC_mv(
 
 \item{seed}{A \code{character} value representing the use of default seed under \code{NULL}.}
 
-\item{max_iter}{A \code{numeric} value specifying a maximum number of iteration.}
+\item{max_iter}{A \code{numeric} value specifying a maximum number of iteration to compute the supremum at which the size is assessed (default: \code{max_iter = 10}).}
 
 \item{tolpower}{A \code{numeric} value specifying the power level to optimize, see Details below for more information.}
 
 \item{...}{Additional parameters.}
+}
+\value{
+The function returns a \code{list} value with the structure:
+\itemize{
+ \item \code{min}:        A numerical vector that corresponds to the corrected significance level.
+ \item \code{theta_sup}:  A numerical vector that corresponds to the evaluated value of supremum.
+ \item \code{alphas}:     A numerical vector that corresponds to the significance level used in each iteration.
+ \item \code{theta_sups}: A numerical matrix that corresponds to the \code{theta} values evaluated.
+ \item \code{powers}:     A numerical vector that corresponds to the estimated power .
+ \item \code{iter}:       A numerical variable that corresponds to the number of iterations performed.
+ \item \code{err_power}:  A numerical variable that corresponds to the final absolute error between simulated power and nominal significance level \eqn{\alpha}.
+}
 }
 \description{
 Get alpha star for multivariate TOST
@@ -50,59 +62,4 @@ Tolerance of power allowed between simulated power and nominal alpha. If not spe
 \author{
 Younes Boulaguiem, Luca Insolia, Stéphane Guerrier, Dominique-Laurent Couturier
 }
-\keyword{.}
-\keyword{A}
-\keyword{The}
-\keyword{\code{alphas}:}
-\keyword{\code{err_power}:}
-\keyword{\code{iter}:}
-\keyword{\code{list}}
-\keyword{\code{min}:}
-\keyword{\code{powers}:}
-\keyword{\code{theta_sups}:}
-\keyword{\code{theta_sup}:}
-\keyword{\code{theta}}
-\keyword{\eqn{\alpha}.}
-\keyword{\item}
-\keyword{\itemize{}
-\keyword{a}
-\keyword{absolute}
-\keyword{and}
-\keyword{between}
-\keyword{corrected}
-\keyword{corresponds}
-\keyword{each}
-\keyword{error}
-\keyword{estimated}
-\keyword{evaluated}
-\keyword{evaluated.}
-\keyword{final}
-\keyword{function}
-\keyword{in}
 \keyword{internal}
-\keyword{iteration.}
-\keyword{iterations}
-\keyword{level}
-\keyword{level.}
-\keyword{matrix}
-\keyword{nominal}
-\keyword{number}
-\keyword{numerical}
-\keyword{of}
-\keyword{performed.}
-\keyword{power}
-\keyword{returns}
-\keyword{significance}
-\keyword{simulated}
-\keyword{structure:}
-\keyword{supremum.}
-\keyword{that}
-\keyword{the}
-\keyword{to}
-\keyword{used}
-\keyword{value}
-\keyword{values}
-\keyword{variable}
-\keyword{vector}
-\keyword{with}
-\keyword{}}

@@ -25,7 +25,7 @@ get_delta_TOST(
 
 \item{l}{A \code{numeric} value corresponding to the upper limit of (bio)equivalence margin to optimize (default: l = \code{100}).}
 
-\item{tol}{A \code{numeric} value specifying a tolerance level (default: tol = \code{.Machine$double.eps}).}
+\item{tol}{A \code{numeric} value specifying a tolerance level (default: \code{tol = .Machine$double.eps}).}
 }
 \value{
 The function returns a \code{numeric} vector that minimized the objective function.

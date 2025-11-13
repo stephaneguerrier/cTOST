@@ -28,14 +28,21 @@ print.tost = function(x, ticks = 30, rn = 5, ...){
     std_fit_interval = round(ticks*(x$ci - rg[1])/rg_delta) + 1
     std_fit_interval_center = round(ticks*(sum(x$ci)/2 - rg[1])/rg_delta) + 1
   }else{
-    lower_be = x$ci[1] > -x$delta
-    upper_be = x$ci[2] < x$delta
-    rg = range(c(x$ci, x$delta, -x$delta))
+    if (!(x$method %in% c("qTOST", "alpha-qTOST"))) {
+      shift_ci = 0
+    } else {
+      shift_ci = x$pi_x
+    }
+    lower_be = x$ci[1] - shift_ci > -x$delta
+    upper_be = x$ci[2] - shift_ci < x$delta
+    rg = range(c(x$ci - shift_ci, x$delta, -x$delta))
     rg_delta = rg[2] - rg[1]
     std_be_interval = round(ticks*(c(-x$delta, x$delta) - rg[1])/rg_delta) + 1
     std_zero = round(-ticks*rg[1]/rg_delta) + 1
-    std_fit_interval = round(ticks*(x$ci - rg[1])/rg_delta) + 1
-    std_fit_interval_center = round(ticks*(sum(x$ci)/2 - rg[1])/rg_delta) + 1
+    std_fit_interval = round(ticks*(x$ci - shift_ci - rg[1])/rg_delta) + 1
+    std_fit_interval_center = round(ticks*(sum(x$ci - shift_ci)/2 - rg[1])/rg_delta) + 1
+    std_fit_interval = round(ticks*(x$ci - shift_ci - rg[1])/rg_delta) + 1
+    std_fit_interval_center = round(ticks*(sum(x$ci - shift_ci)/2 - rg[1])/rg_delta) + 1
   }
 
   if (x$method == "delta-TOST"){
@@ -130,10 +137,18 @@ print.tost = function(x, ticks = 30, rn = 5, ...){
   cat("alpha = ")
   cat(x$alpha)
   cat("; ")
-  cat("Equiv. lim. = +/- ")
-  cat(format(round(x$delta, rn), nsmall = rn))
+  if (x$method %in% c("qTOST", "alpha-qTOST")) {
+    cat("pi_x = ")
+    cat(format(round(shift_ci, 2), nsmall = 2))
+    cat("; ")
+    cat("Equiv. lim. = +/- ")
+    cat(format(round(x$delta, 2), nsmall = 2))
+  } else {
+    cat("Equiv. lim. = +/- ")
+    cat(format(round(x$delta, rn), nsmall = rn))
+  }
   cat("\n")
-  if (x$method == "alpha-TOST"){
+  if (x$method == "alpha-TOST" || x$method == "alpha-qTOST"){
     cat("Corrected alpha = ")
     cat(format(round(x$corrected_alpha, rn), nsmall = rn))
     cat("\n")
@@ -147,7 +162,7 @@ print.tost = function(x, ticks = 30, rn = 5, ...){
 
   if (x$method == "cTOST"){
     cat("Estimated c(0) = ")
-    cat(format(round(x$c0, rn), nsmall = rn))
+    cat(format(round(x$corrected_c, rn), nsmall = rn))
     cat("\n")
 
     cat("Finite sample correction: ")
@@ -155,19 +170,32 @@ print.tost = function(x, ticks = 30, rn = 5, ...){
     cat("\n")
     if (x$correction %in% c("bootstrap", "offline")){
       cat("Corrected alpha = ")
-      cat(format(round(x$correct_alpha, rn), nsmall = rn))
+      cat(format(round(x$corrected_alpha, rn), nsmall = rn))
       cat("\n")
     }
   }
-  cat("Mean = ")
-  cat(format(round(x$theta, rn), nsmall = rn))
-  cat("; ")
-  cat("Stand. dev. = ")
-  cat(format(round(sqrt(x$sigma), rn), nsmall = rn))
-  cat("; ")
-  cat("df = ")
-  cat(x$nu)
-  cat("\n")
+  if (x$method %in% c("qTOST", "alpha-qTOST")) {
+    cat("Estimates: ")
+    cat("pi_y = ")
+    cat(format(round(x$pi_y_hat, rn), nsmall = rn))
+    cat("; ")
+    cat("Mean = ")
+    cat(format(round(x$theta, rn), nsmall = rn))
+    cat("; ")
+    cat("Stand. dev. = ")
+    cat(format(round(x$sigma, rn), nsmall = rn))
+    cat("\n")
+  } else {
+    cat("Mean = ")
+    cat(format(round(x$theta, rn), nsmall = rn))
+    cat("; ")
+    cat("Stand. dev. = ")
+    cat(format(round(sqrt(x$sigma), rn), nsmall = rn))
+    cat("; ")
+    cat("df = ")
+    cat(x$nu)
+    cat("\n")
+  }
 }
 
 
@@ -192,7 +220,12 @@ print.mtost = function(x, ticks = 30, rn = 5, ...){
     cli_text(col_red("{symbol$cross} Can't accept (bio)equivalence"))
   }
 
-  rg = range(c(x$ci, x$delta, -x$delta))
+  if (!(x$method %in% c("qTOST", "alpha-qTOST"))) {
+    shift_ci = rep(0, p)
+  } else {
+    shift_ci = x$pi_x
+  }
+  rg = range(c(x$ci - shift_ci, x$delta, -x$delta))
   rg_delta = rg[2] - rg[1]
   std_be_interval = round(ticks*(c(-x$delta, x$delta) - rg[1])/rg_delta) + 1
   std_zero = round(-ticks*rg[1]/rg_delta) + 1
@@ -200,13 +233,17 @@ print.mtost = function(x, ticks = 30, rn = 5, ...){
   lower_be = upper_be = std_fit_interval_center = rep(NA, p)
   std_fit_interval = matrix(NA, p, 2)
   for (i in 1:p){
-    lower_be[i] = x$ci[i,1] > -x$delta
-    upper_be[i] = x$ci[i,2] < x$delta
-    std_fit_interval[i,] = round(ticks*(x$ci[i,] - rg[1])/rg_delta) + 1
-    std_fit_interval_center[i] = round(ticks*(sum(x$ci[i,])/2 - rg[1])/rg_delta) + 1
+    lower_be[i] = x$ci[i,1] - shift_ci[i] > -x$delta
+    upper_be[i] = x$ci[i,2] - shift_ci[i] < x$delta
+    std_fit_interval[i,] = round(ticks*(x$ci[i,] - shift_ci[i] - rg[1])/rg_delta) + 1
+    std_fit_interval_center[i] = round(ticks*(sum(x$ci[i,] - shift_ci[i])/2 - rg[1])/rg_delta) + 1
   }
 
-  names_var = colnames(x$sigma)
+  if (x$method %in% c("qTOST", "alpha-qTOST")) {
+    names_var = paste0("pi_x = ", x$pi_x)
+  } else {
+    names_var = colnames(x$sigma)
+  }
   names_len = nchar(names_var)
 
 
@@ -238,7 +275,6 @@ print.mtost = function(x, ticks = 30, rn = 5, ...){
   }
 
   cat("\n")
-
   for (h in 1:p){
     if (max(names_len) > names_len[h]){
       cat(names_var[h])
@@ -335,10 +371,21 @@ print.mtost = function(x, ticks = 30, rn = 5, ...){
   cat("alpha = ")
   cat(x$alpha)
   cat("; ")
-  cat("Equiv. lim. = +/- ")
-  cat(format(round(x$delta, rn), nsmall = rn))
+  if (x$method %in% c("qTOST", "alpha-qTOST")) {
+    cat("pi_x = (")
+    cat(format(round(shift_ci[1], 2), nsmall = 2))
+    cat(", ")
+    cat(format(round(shift_ci[2], 2), nsmall = 2))
+    cat(")")
+    cat("; ")
+    cat("Equiv. lim. = +/- ")
+    cat(format(round(x$delta, 2), nsmall = 2))
+  } else {
+    cat("Equiv. lim. = +/- ")
+    cat(format(round(x$delta, rn), nsmall = rn))
+  }
   cat("\n")
-  if (x$method == "alpha-TOST"){
+  if (x$method == "alpha-TOST" || x$method == "alpha-qTOST"){
     cat("Corrected alpha = ")
     cat(format(round(x$corrected_alpha, rn), nsmall = rn))
     cat("\n")
@@ -358,7 +405,7 @@ print.mtost = function(x, ticks = 30, rn = 5, ...){
 #'
 #' @export
 compare_to_tost = function(x, ticks = 30, rn = 5){
-  result_tost = tost(theta = x$theta, sigma = x$sigma, nu = x$nu,
+  result_tost = tost(theta = x$theta, sigma = sqrt(x$sigma), nu = x$nu,
                      alpha = x$alpha, delta = x$delta)
 
   if (!(x$method %in% c("alpha-TOST", "delta-TOST", "cTOST"))){
@@ -725,7 +772,7 @@ compare_to_tost = function(x, ticks = 30, rn = 5){
     if (x$method == "alpha-TOST"){
       cat("alpha-TOST:      ")
     }else{
-      cat("x-TOST:          ")
+      cat("cTOST:           ")
     }
 
     cat(format(round(x$ci[1], rn), nsmall = rn))

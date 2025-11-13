@@ -10,7 +10,7 @@ ctost(
   nu,
   delta,
   alpha = 0.05,
-  method,
+  method = "optimal",
   B = 10^4,
   seed = 101010,
   correction = NULL,

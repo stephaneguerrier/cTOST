@@ -53,7 +53,7 @@
 #'               alpha = 0.05, delta = log(1.25), method = "delta")
 #' dtost
 #' compare_to_tost(dtost)
-ctost = function(theta, sigma, nu, delta, alpha = 0.05, method, B = 10^4, seed = 101010, correction = NULL, ...){
+ctost = function(theta, sigma, nu, delta, alpha = 0.05, method = "optimal", B = 10^4, seed = 101010, correction = NULL, ...){
 
   # Check inputs
   if (alpha < 0.0000001 || alpha > 0.5){
@@ -87,10 +87,6 @@ ctost = function(theta, sigma, nu, delta, alpha = 0.05, method, B = 10^4, seed =
     stop("The delta-TOST method is not implemented for multivariate settings.")
   }
 
-  if (method == "optimal" && setting == "multivariate") {
-    stop("The cTOST ('optimal') method is not implemented for multivariate settings.")
-  }
-
   if (is.null(correction)){
     if (method == "optimal"){
       correction = "offline"
@@ -99,18 +95,19 @@ ctost = function(theta, sigma, nu, delta, alpha = 0.05, method, B = 10^4, seed =
     }
   }
   if (!(correction %in% c("none", "bootstrap", "offline"))) {
-    stop("Available correction methods are 'none', 'bootstrap', and 'offline'.")
+    stop("Available correction methods for the cTOST ('optimal') are 'none', 'bootstrap', and 'offline'.")
   }
 
   if (setting == "univariate"){
-    # alpha-TOST
     # Transform variance into standard deviation
     sigma = sqrt(sigma)
     if (method == "optimal"){
-      return(xtost(theta_hat = theta, sig_hat = sigma, nu = nu, alpha = alpha, delta = delta, correction = correction,
-            B = B, seed = seed))
+      out = xtost(theta_hat = theta, sig_hat = sigma, nu = nu, alpha = alpha, delta = delta, correction = correction,
+            B = B, seed = seed)
+      return(out)
     }
 
+    # alpha-TOST
     if (method == "alpha"){
       corrected_alpha = get_alpha_TOST(alpha = alpha, sigma = sigma, nu = nu, delta = delta)$root
       decision = abs(theta) < (delta - qt(1 - corrected_alpha, df = nu) * sigma)
@@ -140,7 +137,8 @@ ctost = function(theta, sigma, nu, delta, alpha = 0.05, method, B = 10^4, seed =
 
     # Unadjusted TOST
     if (method == "unadjusted"){
-      return(tost(theta = theta, sigma = sigma, nu = nu, delta = delta, alpha = alpha))
+      out = tost(theta = theta, sigma = sigma, nu = nu, delta = delta, alpha = alpha)
+      return(out)
     }
 
   }else{
@@ -148,12 +146,10 @@ ctost = function(theta, sigma, nu, delta, alpha = 0.05, method, B = 10^4, seed =
     if (method == "delta"){
       stop("Multivariate delta-TOST is not implemented.")
     }
+
     if (method == "alpha"){
-
-
       corrected_alpha = get_alpha_TOST_MC_mv(alpha = alpha, Sigma = sigma,
                                            nu = nu, delta = delta, B = B)
-
       delta_vec = rep(delta, ncol(sigma))
       t_alpha = qt(1 - corrected_alpha$min, df=nu)
       lower = theta - t_alpha * sqrt(diag(sigma))
@@ -166,7 +162,38 @@ ctost = function(theta, sigma, nu, delta, alpha = 0.05, method, B = 10^4, seed =
                  delta = delta, method = "alpha-TOST", setting = setting)
       class(out) = "mtost"
       return(out)
+    }
 
+    if (method == "optimal"){
+      delta_vec = rep(delta, n_theta)
+      # TBA: corrected alpha through bootstrap in mvt settings
+      # correction = "none"
+      if (correction!="none"){
+        warning("Available correction method for the multivariate cTOST ('optimal') is only 'none' currently ('bootstrap' coming soon).")
+        corrected_alpha = alpha
+      } else if (correction == "none") {
+        corrected_alpha = alpha
+      }
+      c_of_0 = get_ctost_mvt(alpha, sigma, delta_vec)$c_of_0 #, theta=NULL, tol = .Machine$double.eps^0.5, seed=NULL, max_iter=10, tolpower=NULL, ...)
+      decision = abs(theta) < c_of_0
+      ctost_ci_half_length = delta_vec - c_of_0
+      lower = theta - ctost_ci_half_length
+      upper = theta + ctost_ci_half_length
+
+      out = list(decision = decision, ci = cbind(lower, upper), theta = theta,
+                 sigma = sigma, nu = nu, alpha = alpha,
+                 c0 = round(c_of_0, 3),
+                 correction = correction,
+                 corrected_alpha = corrected_alpha,
+                 delta = delta, method = "cTOST", setting = setting)
+      class(out) = "mtost"
+      return(out)
+
+    }
+    # Unadjusted TOST
+    if (method == "unadjusted"){
+      out = tost(theta = theta, sigma = sigma, nu = nu, delta = delta, alpha = alpha)
+      return(out)
     }
   }
 }

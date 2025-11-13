@@ -158,8 +158,6 @@ tost = function(theta, sigma, nu, delta, alpha = 0.05,...){
 
   if (n_theta == 1){
     # Univariate setting
-    # Variance -> standard dev
-    sigma = sqrt(sigma)
 
     setting = "univariate"
     if (length(sigma) > 1 || length(delta) > 1){
@@ -309,7 +307,7 @@ dtost = function(theta, sigma, nu, alpha, delta){
 #' @param nu                    A \code{numeric} value corresponding to the number of degrees of freedom.
 #' @param delta                 A \code{numeric} value corresponding to (bio)equivalence limit. We assume symmetry, i.e, the (bio)equivalence interval corresponds to (-delta,delta).
 #' @param l                     A \code{numeric} value corresponding to the upper limit of (bio)equivalence margin to optimize (default: l = \code{100}).
-#' @param tol                   A \code{numeric} value specifying a tolerance level (default: tol = \code{.Machine$double.eps}).
+#' @param tol                   A \code{numeric} value specifying a tolerance level (default: \code{tol = .Machine$double.eps}).
 #'
 #' @keywords internal
 #'
@@ -358,7 +356,7 @@ obj_fun_delta_TOST = function(test, alpha, sigma, nu, delta, theta=NULL, ...){
 #' @param nu                    A \code{numeric} value corresponding to the number of degrees of freedom.
 #' @param delta                 A \code{numeric} value corresponding to (bio)equivalence limit. We assume symmetry, i.e, the (bio)equivalence interval corresponds to (-delta,delta).
 #' @param l                     A \code{numeric} value corresponding to the upper limit of the significance level to optimize.
-#' @param tol                   A \code{numeric} value specifying a tolerance level (default: tol = \code{.Machine$double.eps}).
+#' @param tol                   A \code{numeric} value specifying a tolerance level (default: \code{tol = .Machine$double.eps}).
 #' @param ...                   Additional parameters.
 #'
 #' @keywords internal
@@ -577,17 +575,32 @@ xtost = function(theta_hat, sig_hat, nu, alpha, delta, correction = "no", B = 10
 
   if (correction == "offline"){
 
+    # index_alpha = which.min(abs(ctost_offline_adj$alphas - alpha))
+    # index_sigma = which.min(abs(ctost_offline_adj$sigmas - sig_hat))
+    # index_nu = which.min(abs(ctost_offline_adj$nus - nu))
+    # correct_alpha = 2*alpha - ctost_offline_adj$tier[index_nu, index_sigma, index_alpha]
+    # correct_alpha = max(correct_alpha, 1e-6) # CHECK-ME: to avoid close to zero or negatives
+    # #  if (plot){
+    # #    correct_alpha_all = 2*alpha - ctost_offline_adj$tier[,,index_alpha]
+    # #    library(pheatmap)
+    # #    pheatmap(correct_alpha_all, cluster_rows = FALSE, cluster_cols = FALSE)
+    # #  }
+    # correct_alpha
+
+    mult = c0/log(1.25)
+    sig_hat_sc = sig_hat / mult # rescale to match the table
     index_alpha = which.min(abs(ctost_offline_adj$alphas - alpha))
-    index_sigma = which.min(abs(ctost_offline_adj$sigmas - sig_hat))
+    index_sigma = which.min(abs(ctost_offline_adj$sigmas - sig_hat_sc))
     index_nu = which.min(abs(ctost_offline_adj$nus - nu))
     correct_alpha = 2*alpha - ctost_offline_adj$tier[index_nu, index_sigma, index_alpha]
-    correct_alpha = max(correct_alpha, 1e-6) # CHECK-ME: to avoid close to zero or negatives
-    #  if (plot){
-    #    correct_alpha_all = 2*alpha - ctost_offline_adj$tier[,,index_alpha]
-    #    library(pheatmap)
-    #    pheatmap(correct_alpha_all, cluster_rows = FALSE, cluster_cols = FALSE)
-    #  }
+    correct_alpha = max(correct_alpha, 1e-6) # CHECK-ME/FIXME: to avoid close to zero or negatives
+    # if (plot){
+    #   correct_alpha_all = 2*alpha - ctost_offline_adj$tier[,,index_alpha]
+    #   library(pheatmap)
+    #   pheatmap(correct_alpha_all, cluster_rows = FALSE, cluster_cols = FALSE)
+    # }
     correct_alpha
+
   }
 
   if (correction == "none"){
@@ -600,10 +613,10 @@ xtost = function(theta_hat, sig_hat, nu, alpha, delta, correction = "no", B = 10
   ci = theta_hat + c(-1, 1) * ci_half_length
   out = list(decision = decision, ci = ci, theta_hat = theta_hat,
              sigma = sig_hat^2, nu = nu, alpha = alpha,
-             c0 = c_0_hat$c,
+             corrected_c = c_0_hat$c,
              correction = correction,
-             correct_alpha = correct_alpha,
-             delta = delta, method = "cTOST")
+             corrected_alpha = correct_alpha,
+             delta = delta, method = "cTOST", setting = "univariate")
   class(out) = "tost"
   out
 }

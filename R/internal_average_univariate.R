@@ -521,7 +521,7 @@ get_c_of_0 = function(delta, sigma, alpha, B = 1000, tol = 10^(-8), l=1, optim =
 #' @description This function is used to compute finite sample corrected version of the multivariate xTOST.
 #'
 #' @param theta_hat  A \code{numeric} value or vector representing the estimated difference(s) (e.g., between a generic and reference product).
-#' @param sig_hat  A \code{matrix} (multivariate) corresponding to the estimated variance of estimated \code{theta}.
+#' @param sig_hat  A \code{matrix} (multivariate) corresponding to the estimated standard deviation of estimated \code{theta}.
 #' @param nu         A \code{numeric} value specifying the degrees of freedom. In the multivariate case, it is assumed to be the same across all dimensions.
 #' @param alpha      A \code{numeric} value specifying the significance level.
 #' @param delta      A \code{numeric} value or vector defining the (bio)equivalence margin(s). The procedure assumes symmetry, i.e., the (bio)equivalence region is \eqn{(-\delta, \delta)}.
@@ -565,7 +565,7 @@ xtost = function(theta_hat, sig_hat, nu, alpha, delta, correction = "no", B = 10
   if (correction == "bootstrap"){
     res = rep(NA, B)
     for (i in 1:B){
-      dat = simulate_data(mu = delta, sigma = sig_hat^2,
+      dat = simulate_data(mu = delta, sigma = sig_hat,
                           nu = nu, seed = seed + i)
       c_0_hat = get_c_of_0(delta = delta, sigma = dat$sig_hat, alpha = alpha)
       res[i] = abs(dat$theta_hat) < c_0_hat$c

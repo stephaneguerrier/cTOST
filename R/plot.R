@@ -163,6 +163,7 @@ plot.tost = function(..., plot_params = list(), legend_params = list()) {
     line.c0 = 0.1
   )
   p$var_names[p$var_names=="alpha-TOST"] = expression(paste(alpha, "-TOST"))
+  p$var_names[p$var_names=="delta-TOST"] = expression(paste(delta, "-TOST"))
   p$var_names[p$var_names=="alpha-qTOST"] = expression(paste(alpha, "-qTOST"))
   p = utils::modifyList(p, plot_params)
   # Calculate plot coordinates and limits

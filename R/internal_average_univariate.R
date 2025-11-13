@@ -587,7 +587,7 @@ xtost = function(theta_hat, sig_hat, nu, alpha, delta, correction = "no", B = 10
     # #  }
     # correct_alpha
 
-    mult = c0/log(1.25)
+    mult = delta/log(1.25)
     sig_hat_sc = sig_hat / mult # rescale to match the table
     index_alpha = which.min(abs(ctost_offline_adj$alphas - alpha))
     index_sigma = which.min(abs(ctost_offline_adj$sigmas - sig_hat_sc))

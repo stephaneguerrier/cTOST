@@ -6,7 +6,7 @@
 <!-- badges: start -->
 
 [![Licence](https://img.shields.io/badge/licence-AGPL--3.0-blue.svg)](https://opensource.org/licenses/AGPL-3.0)
-[![Last-changedate](https://img.shields.io/badge/last%20change-2025--07--10-green.svg)](https://github.com/yboulag/cTOST)
+[![Last-changedate](https://img.shields.io/badge/last%20change-2025--11--13-green.svg)](https://github.com/yboulag/cTOST)
 [![R-CMD-check](https://github.com/yboulag/cTOST/actions/workflows/R-CMD-check.yaml/badge.svg)](https://github.com/stephaneguerrier/cTOST/actions/workflows/R-CMD-check.yaml)
 [![CRAN RStudio mirror
 downloads](http://cranlogs.r-pkg.org/badges/cTOST)](https://www.r-pkg.org/pkg/cTOST)

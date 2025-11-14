@@ -5,20 +5,21 @@
 <meta charset="utf-8">
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-<title>Finite Sample Correction of the Two One-Sided Tests • cTOST</title>
-<!-- favicons --><link rel="icon" type="image/png" sizes="96x96" href="favicon-96x96.png">
-<link rel="icon" type="”image/svg+xml”" href="favicon.svg">
-<link rel="apple-touch-icon" sizes="180x180" href="apple-touch-icon.png">
-<link rel="icon" sizes="any" href="favicon.ico">
-<link rel="manifest" href="site.webmanifest">
+<title>cTOST: Finite Sample Correction of the Two One-Sided Tests • cTOST</title>
+<!-- favicons --><link rel="icon" type="image/png" sizes="16x16" href="favicon-16x16.png">
+<link rel="icon" type="image/png" sizes="32x32" href="favicon-32x32.png">
+<link rel="apple-touch-icon" type="image/png" sizes="180x180" href="apple-touch-icon.png">
+<link rel="apple-touch-icon" type="image/png" sizes="120x120" href="apple-touch-icon-120x120.png">
+<link rel="apple-touch-icon" type="image/png" sizes="76x76" href="apple-touch-icon-76x76.png">
+<link rel="apple-touch-icon" type="image/png" sizes="60x60" href="apple-touch-icon-60x60.png">
 <script src="deps/jquery-3.6.0/jquery-3.6.0.min.js"></script><meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 <link href="deps/bootstrap-5.3.1/bootstrap.min.css" rel="stylesheet">
 <script src="deps/bootstrap-5.3.1/bootstrap.bundle.min.js"></script><link href="deps/font-awesome-6.5.2/css/all.min.css" rel="stylesheet">
 <link href="deps/font-awesome-6.5.2/css/v4-shims.min.css" rel="stylesheet">
-<script src="deps/headroom-0.11.0/headroom.min.js"></script><script src="deps/headroom-0.11.0/jQuery.headroom.min.js"></script><script src="deps/bootstrap-toc-1.0.1/bootstrap-toc.min.js"></script><script src="deps/clipboard.js-2.0.11/clipboard.min.js"></script><script src="deps/search-1.0.0/autocomplete.jquery.min.js"></script><script src="deps/search-1.0.0/fuse.min.js"></script><script src="deps/search-1.0.0/mark.min.js"></script><!-- pkgdown --><script src="pkgdown.js"></script><meta property="og:title" content="Finite Sample Correction of the Two One-Sided Tests">
-<meta name="description" content="Provides tools for bioequivalence assessment in univariate and multivariate settings. It implements the adjustement procedures proposed Boulaguiem et al. (2024, &lt;https://doi.org/10.1002/sim.9993&gt;), Boulaguiem et al. (2025, &lt;https://arxiv.org/abs/2411.16429&gt;) and Insolia et al. (2025).">
-<meta property="og:description" content="Provides tools for bioequivalence assessment in univariate and multivariate settings. It implements the adjustement procedures proposed Boulaguiem et al. (2024, &lt;https://doi.org/10.1002/sim.9993&gt;), Boulaguiem et al. (2025, &lt;https://arxiv.org/abs/2411.16429&gt;) and Insolia et al. (2025).">
-<meta property="og:image" content="/logo.png">
+<script src="deps/headroom-0.11.0/headroom.min.js"></script><script src="deps/headroom-0.11.0/jQuery.headroom.min.js"></script><script src="deps/bootstrap-toc-1.0.1/bootstrap-toc.min.js"></script><script src="deps/clipboard.js-2.0.11/clipboard.min.js"></script><script src="deps/search-1.0.0/autocomplete.jquery.min.js"></script><script src="deps/search-1.0.0/fuse.min.js"></script><script src="deps/search-1.0.0/mark.min.js"></script><!-- pkgdown --><script src="pkgdown.js"></script><meta property="og:title" content="cTOST: Finite Sample Correction of the Two One-Sided Tests">
+<meta name="description" content="Tools for bioequivalence assessment in univariate and multivariate settings">
+<meta property="og:description" content="Tools for bioequivalence assessment in univariate and multivariate settings">
+<meta property="og:image" content="https://stephaneguerrier.github.io/cTOST/logo.png">
 </head>
 <body>
     <a href="#main" class="visually-hidden-focusable">Skip to contents</a>
@@ -41,8 +42,8 @@
 <li class="nav-item dropdown">
   <button class="nav-link dropdown-toggle" type="button" id="dropdown-articles" data-bs-toggle="dropdown" aria-expanded="false" aria-haspopup="true">Articles</button>
   <ul class="dropdown-menu" aria-labelledby="dropdown-articles">
-<li><a class="dropdown-item" href="articles/get_started.html">`cTOST` Vignette</a></li>
-    <li><a class="dropdown-item" href="articles/reproducibility.html">Results Reproducibility</a></li>
+<li><a class="dropdown-item" href="articles/get_started.html">Getting Started</a></li>
+    <li><a class="dropdown-item" href="articles/reproducibility.html">Reproducibility</a></li>
   </ul>
 </li>
       </ul>
@@ -59,12 +60,7 @@
 </nav><div class="container template-home">
 <div class="row">
   <main id="main" class="col-md-9"><div class="section level1">
-<div class="page-header">
-<img src="logo.png" class="logo" alt=""><h1 id="ctost-overview-">
-<code>cTOST</code> Overview <a href="https://yboulag.github.io/cTOST/" class="external-link"><img src="reference/figures/hex-cTOST.png" alt="" align="right" height="138" width="125"></a>
-<a class="anchor" aria-label="anchor" href="#ctost-overview-"></a>
-</h1>
-</div>
+
 <!-- badges: start -->
 
 <div class="section level2">
@@ -108,25 +104,35 @@
 <span><span class="va">stost</span></span></code></pre></div>
 <p><img src="README_files/figure-gfm//unnamed-chunk-6.svg" width="100%"></p>
 <div class="section level4">
-<h4 id="id_312-alpha-tost">3.1.2. <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mi>α</mi><annotation encoding="application/x-tex">\alpha</annotation></semantics></math>-TOST<a class="anchor" aria-label="anchor" href="#id_312-alpha-tost"></a>
+<h4 id="id_312-ctost">3.1.2. cTOST<a class="anchor" aria-label="anchor" href="#id_312-ctost"></a>
+</h4>
+<p>The cTOST can be used through the function <code>ctost</code> as follows:</p>
+<div class="sourceCode" id="cb5"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="va">opt_tost</span> <span class="op">=</span> <span class="fu"><a href="reference/ctost.html">ctost</a></span><span class="op">(</span>theta <span class="op">=</span> <span class="va">theta_hat</span>, sigma <span class="op">=</span> <span class="va">sig_hat</span>, nu <span class="op">=</span> <span class="va">nu</span>, </span>
+<span>              delta <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/Log.html" class="external-link">log</a></span><span class="op">(</span><span class="fl">1.25</span><span class="op">)</span>, method <span class="op">=</span> <span class="st">"optimal"</span><span class="op">)</span></span>
+<span><span class="va">opt_tost</span></span></code></pre></div>
+<p><img src="README_files/figure-gfm//unnamed-chunk-8.svg" width="100%"></p>
+</div>
+<div class="section level4">
+<h4 id="id_313-alpha-tost">3.1.3. <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mi>α</mi><annotation encoding="application/x-tex">\alpha</annotation></semantics></math>-TOST<a class="anchor" aria-label="anchor" href="#id_313-alpha-tost"></a>
 </h4>
 <p>The <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mi>α</mi><annotation encoding="application/x-tex">\alpha</annotation></semantics></math>-TOST can be used through the function <code>ctost</code> as follows:</p>
-<div class="sourceCode" id="cb5"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb6"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">atost</span> <span class="op">=</span> <span class="fu"><a href="reference/ctost.html">ctost</a></span><span class="op">(</span>theta <span class="op">=</span> <span class="va">theta_hat</span>, sigma <span class="op">=</span> <span class="va">sig_hat</span>, nu <span class="op">=</span> <span class="va">nu</span>, </span>
 <span>              delta <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/Log.html" class="external-link">log</a></span><span class="op">(</span><span class="fl">1.25</span><span class="op">)</span>, method <span class="op">=</span> <span class="st">"alpha"</span><span class="op">)</span></span>
 <span><span class="va">atost</span></span></code></pre></div>
-<p><img src="README_files/figure-gfm//unnamed-chunk-8.svg" width="100%"></p>
-<p>It is possible to compare the results of the <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mi>α</mi><annotation encoding="application/x-tex">\alpha</annotation></semantics></math>-TOST (or <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mi>δ</mi><annotation encoding="application/x-tex">\delta</annotation></semantics></math>-TOST, see below) with the standard TOST as follows:</p>
-<div class="sourceCode" id="cb6"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="fu"><a href="reference/compare_to_tost.html">compare_to_tost</a></span><span class="op">(</span><span class="va">atost</span><span class="op">)</span></span></code></pre></div>
 <p><img src="README_files/figure-gfm//unnamed-chunk-10.svg" width="100%"></p>
+<p>It is possible to compare the results of the <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mi>α</mi><annotation encoding="application/x-tex">\alpha</annotation></semantics></math>-TOST (or <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mi>δ</mi><annotation encoding="application/x-tex">\delta</annotation></semantics></math>-TOST, see below) with the standard TOST as follows:</p>
+<div class="sourceCode" id="cb7"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="fu"><a href="reference/compare_to_tost.html">compare_to_tost</a></span><span class="op">(</span><span class="va">atost</span><span class="op">)</span></span></code></pre></div>
+<p><img src="README_files/figure-gfm//unnamed-chunk-12.svg" width="100%"></p>
 </div>
 </div>
 <div class="section level3">
-<h3 id="id_313-delta-tost">3.1.3. <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mi>δ</mi><annotation encoding="application/x-tex">\delta</annotation></semantics></math>-TOST<a class="anchor" aria-label="anchor" href="#id_313-delta-tost"></a>
+<h3 id="id_314-delta-tost">3.1.4. <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mi>δ</mi><annotation encoding="application/x-tex">\delta</annotation></semantics></math>-TOST<a class="anchor" aria-label="anchor" href="#id_314-delta-tost"></a>
 </h3>
 <p>The <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mi>δ</mi><annotation encoding="application/x-tex">\delta</annotation></semantics></math>-TOST can be used through the function <code>ctost</code> as follows:</p>
-<div class="sourceCode" id="cb7"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb8"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">dtost</span> <span class="op">=</span> <span class="fu"><a href="reference/ctost.html">ctost</a></span><span class="op">(</span>theta <span class="op">=</span> <span class="va">theta_hat</span>, sigma <span class="op">=</span> <span class="va">sig_hat</span>, nu <span class="op">=</span> <span class="va">nu</span>, </span>
 <span>              delta <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/Log.html" class="external-link">log</a></span><span class="op">(</span><span class="fl">1.25</span><span class="op">)</span>, method <span class="op">=</span> <span class="st">"delta"</span><span class="op">)</span></span>
 <span><span class="va">dtost</span></span>
@@ -139,12 +145,12 @@
 <span><span class="co">#&gt; alpha = 0.05; Equiv. lim. = +/- 0.22314</span></span>
 <span><span class="co">#&gt; Corrected Equiv. lim. = +/- 0.25470</span></span>
 <span><span class="co">#&gt; Mean = 0.02270; Stand. dev. = 0.13428; df = 16</span></span></code></pre></div>
-<p><img src="README_files/figure-gfm//unnamed-chunk-12.svg" width="100%"></p>
+<p><img src="README_files/figure-gfm//unnamed-chunk-14.svg" width="100%"></p>
 </div>
 <div class="section level3">
 <h3 id="id_32-multivariate-settings">3.2. Multivariate settings<a class="anchor" aria-label="anchor" href="#id_32-multivariate-settings"></a>
 </h3>
-<div class="sourceCode" id="cb8"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb9"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/utils/data.html" class="external-link">data</a></span><span class="op">(</span><span class="va">ticlopidine</span><span class="op">)</span></span>
 <span><span class="va">n</span> <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/nrow.html" class="external-link">nrow</a></span><span class="op">(</span><span class="va">ticlopidine</span><span class="op">)</span></span>
 <span><span class="va">p</span> <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/nrow.html" class="external-link">ncol</a></span><span class="op">(</span><span class="va">ticlopidine</span><span class="op">)</span></span>
@@ -154,31 +160,31 @@
 <div class="section level4">
 <h4 id="id_321-multivariate-tost">3.2.1. Multivariate TOST<a class="anchor" aria-label="anchor" href="#id_321-multivariate-tost"></a>
 </h4>
-<div class="sourceCode" id="cb9"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb10"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">mtost</span> <span class="op">=</span> <span class="fu"><a href="reference/tost.html">tost</a></span><span class="op">(</span>theta <span class="op">=</span> <span class="va">theta_hat</span>, sigma <span class="op">=</span> <span class="va">Sigma_hat</span>, nu <span class="op">=</span> <span class="va">nu</span>, delta <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/Log.html" class="external-link">log</a></span><span class="op">(</span><span class="fl">1.25</span><span class="op">)</span><span class="op">)</span></span>
 <span><span class="va">mtost</span></span></code></pre></div>
-<p><img src="README_files/figure-gfm//unnamed-chunk-15.svg" width="100%"></p>
+<p><img src="README_files/figure-gfm//unnamed-chunk-17.svg" width="100%"></p>
 </div>
 <div class="section level4">
 <h4 id="id_322-multivariate-alpha-tost">3.2.2. Multivariate <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mi>α</mi><annotation encoding="application/x-tex">\alpha</annotation></semantics></math>-TOST<a class="anchor" aria-label="anchor" href="#id_322-multivariate-alpha-tost"></a>
 </h4>
-<div class="sourceCode" id="cb10"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb11"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">matost</span> <span class="op">=</span> <span class="fu"><a href="reference/ctost.html">ctost</a></span><span class="op">(</span>theta <span class="op">=</span> <span class="va">theta_hat</span>, sigma <span class="op">=</span> <span class="va">Sigma_hat</span>, nu <span class="op">=</span> <span class="va">nu</span>, delta <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/Log.html" class="external-link">log</a></span><span class="op">(</span><span class="fl">1.25</span><span class="op">)</span><span class="op">)</span></span>
 <span><span class="va">matost</span></span></code></pre></div>
-<p><img src="README_files/figure-gfm//unnamed-chunk-17.svg" width="100%"></p>
+<p><img src="README_files/figure-gfm//unnamed-chunk-19.svg" width="100%"></p>
 </div>
 </div>
 </div>
 <div class="section level2">
 <h2 id="id_4-how-to-cite">4. How to cite<a class="anchor" aria-label="anchor" href="#id_4-how-to-cite"></a>
 </h2>
-<div class="sourceCode" id="cb11"><pre class="sourceCode R"><code class="sourceCode r"><span id="cb11-1"><a href="#cb11-1" tabindex="-1"></a><span class="sc">@</span>Manual{boulaguiem2024ctost,</span>
-<span id="cb11-2"><a href="#cb11-2" tabindex="-1"></a>  title <span class="ot">=</span> {cTOST<span class="sc">:</span> Finite Sample Correction of The TOST <span class="cf">in</span> The Univariate Framework},</span>
-<span id="cb11-3"><a href="#cb11-3" tabindex="-1"></a>  author <span class="ot">=</span> {Boulaguiem, Y. and Insolia, L. and Couturier, D.<span class="sc">-</span>L. and Guerrier, S.},</span>
-<span id="cb11-4"><a href="#cb11-4" tabindex="-1"></a>  year <span class="ot">=</span> {<span class="dv">2024</span>},</span>
-<span id="cb11-5"><a href="#cb11-5" tabindex="-1"></a>  note <span class="ot">=</span> {R package version <span class="dv">1</span>.<span class="fl">1.0</span>},</span>
-<span id="cb11-6"><a href="#cb11-6" tabindex="-1"></a>  url <span class="ot">=</span> {https<span class="sc">:</span><span class="er">//</span>github.com<span class="sc">/</span>stephaneguerrier},</span>
-<span id="cb11-7"><a href="#cb11-7" tabindex="-1"></a>}</span></code></pre></div>
+<div class="sourceCode" id="cb12"><pre class="sourceCode R"><code class="sourceCode r"><span id="cb12-1"><a href="#cb12-1" tabindex="-1"></a><span class="sc">@</span>Manual{boulaguiem2024ctost,</span>
+<span id="cb12-2"><a href="#cb12-2" tabindex="-1"></a>  title <span class="ot">=</span> {cTOST<span class="sc">:</span> Finite Sample Correction of The TOST <span class="cf">in</span> The Univariate Framework},</span>
+<span id="cb12-3"><a href="#cb12-3" tabindex="-1"></a>  author <span class="ot">=</span> {Boulaguiem, Y. and Insolia, L. and Couturier, D.<span class="sc">-</span>L. and Guerrier, S.},</span>
+<span id="cb12-4"><a href="#cb12-4" tabindex="-1"></a>  year <span class="ot">=</span> {<span class="dv">2024</span>},</span>
+<span id="cb12-5"><a href="#cb12-5" tabindex="-1"></a>  note <span class="ot">=</span> {R package version <span class="dv">1</span>.<span class="fl">1.0</span>},</span>
+<span id="cb12-6"><a href="#cb12-6" tabindex="-1"></a>  url <span class="ot">=</span> {https<span class="sc">:</span><span class="er">//</span>github.com<span class="sc">/</span>stephaneguerrier},</span>
+<span id="cb12-7"><a href="#cb12-7" tabindex="-1"></a>}</span></code></pre></div>
 </div>
 <div class="section level2">
 <h2 id="id_5-license">5. License<a class="anchor" aria-label="anchor" href="#id_5-license"></a>
@@ -198,6 +204,7 @@
 <li><a href="https://cloud.r-project.org/package=cTOST" class="external-link">View on CRAN</a></li>
 <li><a href="https://github.com/stephaneguerrier/cTOST/" class="external-link">Browse source code</a></li>
 <li><a href="https://github.com/stephaneguerrier/cTOST/issues" class="external-link">Report a bug</a></li>
+<li><a href="https://github.com/stephaneguerrier/cTOST" class="external-link">Browse source code</a></li>
 </ul>
 </div>
 
@@ -219,11 +226,15 @@
 <div class="developers">
 <h2 data-toc-skip>Developers</h2>
 <ul class="list-unstyled">
-<li>Stéphane Guerrier <br><small class="roles"> Author, maintainer, copyright holder </small>   </li>
-<li>Younes Boulaguiem <br><small class="roles"> Author, copyright holder </small>   </li>
-<li>Dominique-Laurent Couturier <br><small class="roles"> Author, copyright holder </small>   </li>
-<li>Luca Insolia <br><small class="roles"> Author, copyright holder </small>   </li>
-<li>Jun Wu <br><small class="roles"> Author </small>   </li>
+<li>
+<a href="https://github.com/stephaneguerrier" class="external-link">Stéphane Guerrier</a> <br><small class="roles"> Author, maintainer, copyright holder </small>  </li>
+<li>
+<a href="https://github.com/yboulaguiem" class="external-link">Younes Boulaguiem</a> <br><small class="roles"> Author, copyright holder </small>  </li>
+<li>
+<a href="https://github.com/dlc48" class="external-link">Dominique-Laurent Couturier</a> <br><small class="roles"> Author, copyright holder </small>  </li>
+<li>
+<a href="https://github.com/luca-insolia" class="external-link">Luca Insolia</a> <br><small class="roles"> Author, copyright holder </small>  </li>
+<li>Jun Wu <br><small class="roles"> Author </small>  </li>
 <li><a href="authors.html">More about authors...</a></li>
 </ul>
 </div>
@@ -232,7 +243,7 @@
 <h2 data-toc-skip>Dev status</h2>
 <ul class="list-unstyled">
 <li><a href="https://opensource.org/licenses/AGPL-3.0" class="external-link"><img src="https://img.shields.io/badge/licence-AGPL--3.0-blue.svg" alt="Licence"></a></li>
-<li><a href="https://github.com/yboulag/cTOST" class="external-link"><img src="https://img.shields.io/badge/last%20change-2025--07--02-green.svg" alt="Last-changedate"></a></li>
+<li><a href="https://github.com/yboulag/cTOST" class="external-link"><img src="https://img.shields.io/badge/last%20change-2025--11--13-green.svg" alt="Last-changedate"></a></li>
 <li><a href="https://github.com/stephaneguerrier/cTOST/actions/workflows/R-CMD-check.yaml" class="external-link"><img src="https://github.com/yboulag/cTOST/actions/workflows/R-CMD-check.yaml/badge.svg" alt="R-CMD-check"></a></li>
 <li><a href="https://www.r-pkg.org/pkg/cTOST" class="external-link"><img src="http://cranlogs.r-pkg.org/badges/cTOST" alt="CRAN RStudio mirror downloads"></a></li>
 <li><a href="https://www.r-pkg.org/pkg/cTOST" class="external-link"><img src="https://cranlogs.r-pkg.org/badges/grand-total/cTOST" alt="CRAN RStudio mirror downloads"></a></li>
@@ -244,11 +255,11 @@
 
 
     <footer><div class="pkgdown-footer-left">
-  <p>Developed by Stéphane Guerrier, Younes Boulaguiem, Dominique-Laurent Couturier, Luca Insolia, Jun Wu.</p>
+  <p>Developed by <a href="https://github.com/stephaneguerrier" class="external-link">Stéphane Guerrier</a>, <a href="https://github.com/yboulaguiem" class="external-link">Younes Boulaguiem</a>, <a href="https://github.com/dlc48" class="external-link">Dominique-Laurent Couturier</a>, <a href="https://github.com/luca-insolia" class="external-link">Luca Insolia</a>, Jun Wu.</p>
 </div>
 
 <div class="pkgdown-footer-right">
-  <p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.1.3.</p>
+  <p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.1.1.</p>
 </div>
 
     </footer>

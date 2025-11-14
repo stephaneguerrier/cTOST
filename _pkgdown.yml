@@ -1,4 +1,115 @@
-url: ~
+url: https://stephaneguerrier.github.io/cTOST/
+
 template:
   bootstrap: 5
 
+logo:
+  src: man/figures/hex-cTOST.png
+  alt: "cTOST logo"
+
+home:
+  title: "cTOST: Finite Sample Correction of the Two One-Sided Tests"
+  description: "Tools for bioequivalence assessment in univariate and multivariate settings"
+  strip_header: true
+  links:
+  - text: Browse source code
+    href: https://github.com/stephaneguerrier/cTOST
+
+navbar:
+  structure:
+    left:  [intro, reference, articles, news]
+    right: [search, github]
+  components:
+    articles:
+      text: Articles
+      menu:
+      - text: Getting Started
+        href: articles/get_started.html
+      - text: Reproducibility
+        href: articles/reproducibility.html
+
+reference:
+- title: "Main TOST Functions"
+  desc: "Core functions for Two One-Sided Tests"
+  contents:
+  - tost
+  - ctost
+  - atost
+  - dtost
+
+- title: "Quantile Equivalence Tests"
+  desc: "Tests for quantile-based bioequivalence"
+  contents:
+  - qtost
+
+- title: "Extended TOST Methods"
+  desc: "Extended approaches for equivalence testing"
+  contents:
+  - xtost
+
+- title: "Multivariate Methods"
+  desc: "Equivalence tests for multivariate data"
+  contents:
+  - starts_with("mtost")
+  - starts_with("m_qtost")
+
+- title: "Power and Sample Size"
+  desc: "Functions for study planning and power analysis"
+  contents:
+  - power_TOST
+  - power_xTOST
+  - power_qTOST_MC
+  - power_xTOST_mv
+  - power_TOST_MC_mv
+  - size_TOST
+  - size_xTOST
+
+- title: "Alpha Calibration"
+  desc: "Functions for significance level adjustment"
+  contents:
+  - get_alpha_star
+  - get_alpha_TOST
+  - get_alpha_qTOST_MC
+  - get_alpha_TOST_MC_mv
+
+- title: "Comparison Functions"
+  desc: "Compare different TOST approaches"
+  contents:
+  - compare_to_tost
+  - compare_to_qtost
+
+- title: "Visualization and Output"
+  desc: "Plot and print methods"
+  contents:
+  - plot.tost
+  - print.tost
+  - print.qtost
+  - print.mtost
+  - print.m_qtost
+  - ci
+
+- title: "Datasets"
+  desc: "Example datasets included in the package"
+  contents:
+  - skin
+  - ticlopidine
+
+- title: "Simulation Tools"
+  desc: "Functions for data simulation"
+  contents:
+  - simulate_data
+
+authors:
+  Stéphane Guerrier:
+    href: https://github.com/stephaneguerrier
+  Younes Boulaguiem:
+    href: https://github.com/yboulaguiem
+  Dominique-Laurent Couturier:
+    href: https://github.com/dlc48
+  Luca Insolia:
+    href: https://github.com/luca-insolia
+
+footer:
+  structure:
+    left: developed_by
+    right: built_with

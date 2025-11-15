@@ -5,13 +5,13 @@
 source("R/dp_proportion_test.R")
 
 # Simulation parameters
-n <- 1000
+n <- 500
 p_true_grid <- seq(0.4, 0.52, length.out = 13)
 p0 <- 0.4  # Reference proportion
 delta <- 0.1
-epsilon <- 1
+epsilon <- 0.1
 alpha <- 0.05
-n_sim <- 500
+n_sim <- 100
 
 # Storage for results
 results <- matrix(NA, nrow = n_sim, ncol = length(p_true_grid))
@@ -56,7 +56,7 @@ for (j in 1:length(p_true_grid)) {
     lower <- p0 - delta
     upper <- p0 + delta
 
-    # Run DP-TOST with unique seed
+    # Run DP-TOST with unique seed (internal function)
     test_result <- prop_test_dp_one_sample(
       p_hat = p_hat,
       n = n,
@@ -67,6 +67,23 @@ for (j in 1:length(p_true_grid)) {
       B = 10^3,
       seed = 1337 + j * 1000 + i
     )
+
+    # Test wrapper function with same inputs
+    test_result_wrapper <- prop_test_equiv_dp(
+      p_hat = p_hat,
+      n = n,
+      lower = lower,
+      upper = upper,
+      epsilon = epsilon,
+      alpha = alpha,
+      B = 10^3,
+      seed = 1337 + j * 1000 + i
+    )
+
+    # Verify both give same decision
+    if (test_result$decision != test_result_wrapper$decision) {
+      stop("Mismatch between internal and wrapper function!")
+    }
 
     # Store decision
     results[i, j] <- test_result$decision

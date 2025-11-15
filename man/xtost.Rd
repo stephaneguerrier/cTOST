@@ -18,7 +18,7 @@ xtost(
 \arguments{
 \item{theta_hat}{A \code{numeric} value or vector representing the estimated difference(s) (e.g., between a generic and reference product).}
 
-\item{sig_hat}{A \code{matrix} (multivariate) corresponding to the estimated variance of estimated \code{theta}.}
+\item{sig_hat}{A \code{matrix} (multivariate) corresponding to the estimated standard deviation of estimated \code{theta}.}
 
 \item{nu}{A \code{numeric} value specifying the degrees of freedom. In the multivariate case, it is assumed to be the same across all dimensions.}
 

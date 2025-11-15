@@ -9,7 +9,7 @@ simulate_data(mu, sigma, nu, seed = 18)
 \arguments{
 \item{mu}{Numeric value indicating the true mean of the data.}
 
-\item{sigma}{Numeric value indicating the variance of the data.}
+\item{sigma}{Numeric value indicating the standard deviation of the data.}
 
 \item{nu}{Numeric value indicating the degrees of freedom parameter of the considered setting.}
 

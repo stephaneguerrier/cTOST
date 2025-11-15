@@ -591,9 +591,9 @@ print.dp_tost_prop <- function(x, ticks = 30, rn = 5, ...) {
   cat("alpha = ")
   cat(x$alpha)
   cat("; Equiv. bounds = [")
-  cat(format(round(x$lower, rn), nsmall = rn))
+  cat(format(round(x$lower, rn)))
   cat(", ")
-  cat(format(round(x$upper, rn), nsmall = rn))
+  cat(format(round(x$upper, rn)))
   cat("]\n")
 
   # Privacy parameters

@@ -5,7 +5,7 @@ Purpose: Evaluate Type I error rates at boundary cases
 
 Design Parameters:
 - alpha = 0.05 (significance level)
-- epsilon = 0.1, 0.5, 1, 2, 5, 10 (privacy budget, 6 values)
+- epsilon = 0.1, 0.25, 0.5, 1 (privacy budget, 4 values)
 - n1 = n2 = 200, 300, 400, 500, 600, 700, 800, 900, 1000 (sample sizes, 9 values)
 - p1 = 0.5, 0.65, 0.8 (first sample proportion, 3 values)
 - Equivalence bounds: lower = -0.1, upper = 0.1
@@ -14,9 +14,13 @@ Scenarios (Type I error at boundary):
 1. p2 = p1 + 0.1 (true difference p1 - p2 = -0.1, at lower bound)
 2. p2 = p1 - 0.1 (true difference p1 - p2 = +0.1, at upper bound)
 
-Total Settings: 6 × 9 × 3 × 2 = 324
+Total Settings: 4 × 9 × 3 × 2 = 216
 Monte Carlo Iterations: 10,000 per setting
-SLURM Jobs: 30 batches per setting = 9,720 jobs total
-Iterations per Job: ~334
+SLURM Jobs: 3 batches per setting = 648 jobs total
+Iterations per Job: 3334
 
-Total Simulations: 324 × 10,000 = 3,240,000
+Total Simulations: 216 × 10,000 = 2,160,000
+
+Seed Generation (Updated):
+All seeds are now unique across all parameter combinations to ensure
+independent simulations. Seeds encode: epsilon_id, n_id, p1_id, scenario, job_id, iteration.

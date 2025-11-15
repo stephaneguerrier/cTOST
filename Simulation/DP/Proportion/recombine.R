@@ -1,6 +1,6 @@
 # Define path
-folder <- "ctost/dp/proportion"
-path <- "ctost/dp/proportion/data_temp"
+folder <- "ctost/proportion"
+path <- "ctost/proportion/data_temp"
 
 # List files
 all_files <- list.files(path = path, pattern = "\\.rda$")

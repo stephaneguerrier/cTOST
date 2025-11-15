@@ -1,5 +1,5 @@
 #!/bin/sh
-for epsilon_val in 0.1 0.5 1 2 5 10
+for epsilon_val in 0.1 0.25 0.5 1
   do
   for n_val in 200 300 400 500 600 700 800 900 1000
     do
@@ -11,7 +11,7 @@ for epsilon_val in 0.1 0.5 1 2 5 10
         eval "export n_val=$n_val"
         eval "export p1_val=$p1_val"
         eval "export scenario_val=$scenario_val"
-        sbatch --array=1-30 ctost/proportion/simu.sh
+        sbatch --array=1-3 ctost/proportion/simu.sh
       done
     done
   done

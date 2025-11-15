@@ -3,7 +3,7 @@
 #SBATCH --ntasks-per-node=1
 #SBATCH --cpus-per-task=1
 #SBATCH --time=02:00:00
-#SBATCH --partition=public-cpu,public-bigmem,public-longrun-cpu,shared-cpu,shared-bigmem
+#SBATCH --partition=public-cpu,public-bigmem,shared-cpu,shared-bigmem
 #SBATCH --mail-user=stephane.guerrier@unige.ch
 #SBATCH --mail-type=ALL
 #SBATCH --output ctost/proportion/outfile/outfile_%a.out

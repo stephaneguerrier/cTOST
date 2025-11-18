@@ -7,6 +7,8 @@
 #'
 #' @return A list containing the estimated mean and estimated standard deviation of the simulated data.
 #'
+#' @keywords internal
+#'
 #' @examples
 #' simulate_data(mu = 10, sigma = 2, nu = 10)
 #'

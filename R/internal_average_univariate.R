@@ -548,7 +548,7 @@ get_c_of_0 = function(delta, sigma, alpha, B = 1000, tol = 10^(-8), l=1, optim =
 #' }
 #'
 #' @seealso \code{\link{ctost}}
-#' @export
+#' @keywords internal
 #' @examples
 #' data(skin)
 #'

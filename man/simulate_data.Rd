@@ -25,3 +25,4 @@ Simulate data from the canonical form of the univariate average equivalence prob
 simulate_data(mu = 10, sigma = 2, nu = 10)
 
 }
+\keyword{internal}

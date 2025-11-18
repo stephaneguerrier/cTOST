@@ -127,14 +127,14 @@ plot.tost = function(..., plot_params = list(), legend_params = list()) {
     } else {
       var_names_def = sapply(x, "[[", "method")
     }
-    # mar_adj_def = if (K>1 && M>1) c(0, 3, 3, 1) else c(0, 3, 0, 1)
     all_cis = do.call(rbind, lapply(x, "[[", "ci")) - x[[1]]$pi_x
   } else {
     var_names_def = if (K>1) names(x[[1]]$decision) else sapply(x, "[[", "method")
-    # mar_adj_def = if (K>1 && M>1) c(0, 6, 3, 1) else c(0, 6, 0, 1)
+    if (any(var_names_def=="delta-TOST")){
+      x[[which(var_names_def=="delta-TOST")]]$ci = x[[which(var_names_def=="delta-TOST")]]$corrected_ci
+    }
     all_cis = do.call(rbind, lapply(x, "[[", "ci"))
   }
-  # l_spac = max(sapply(var_names_def, strwidth, units = "user", cex = par("cex"))) * 50
   l_spac = max(strwidth(var_names_def, "inches")) / par("cin")[1] + 1.5
   p = list(
     main = "",

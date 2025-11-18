@@ -69,3 +69,4 @@ x_tost
 \seealso{
 \code{\link{ctost}}
 }
+\keyword{internal}

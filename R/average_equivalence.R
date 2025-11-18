@@ -126,9 +126,11 @@ ctost = function(theta, sigma, nu, delta, alpha = 0.05, method = "optimal", B = 
       corrected_delta = get_delta_TOST(sigma = sigma, alpha = alpha, delta = delta, nu = nu)$root
       decision = abs(theta) < (corrected_delta - qt(1 - alpha, df = nu) * sigma)
       ci = theta + c(-1, 1) * qt(1 - alpha, df = nu) * sigma
+      corrected_ci = c(ci[1] + (corrected_delta-delta), ci[2] - (corrected_delta-delta))
       out = list(decision = decision, ci = ci, theta = theta,
                  sigma = sigma^2, nu = nu, alpha = alpha,
                  corrected_delta = corrected_delta,
+                 corrected_ci = corrected_ci,
                  delta = delta, method = "delta-TOST",
                  setting = setting)
       class(out) = "tost"

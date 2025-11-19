@@ -35,7 +35,7 @@
 #'   the difference (p1 - p2). Typical value: delta.
 #' @param epsilon Privacy budget. Can be a single value (used for all samples) or
 #'   a vector of length 2 (epsilon[1] for first group, epsilon[2] for second group).
-#'   Larger values provide less privacy but more statistical power. Default is 1.
+#'   Larger values provide less privacy but more statistical power.
 #' @param alpha Significance level for the test. The confidence interval will have
 #'   level (1 - 2*alpha). Default is 0.05.
 #' @param B Number of Monte Carlo replications for reconstructing the sampling
@@ -130,7 +130,7 @@
 #'
 #' @export
 prop_test_equiv_dp <- function(p_hat, n, p_hat2 = NULL, n2 = NULL,
-                               lower, upper, epsilon = 1, alpha = 0.05,
+                               lower, upper, epsilon, alpha = 0.05,
                                B = 10^4, max_resample = 100, seed = 1337, ...) {
 
   # Determine test type

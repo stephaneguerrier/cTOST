@@ -19,7 +19,9 @@ Depends:
     knitr,
     R (>= 4.0)
 Imports:
-    rmarkdown
+    rmarkdown,
+    Rcpp
+LinkingTo: Rcpp
 Suggests:
     asciicast
 License: AGPL-3

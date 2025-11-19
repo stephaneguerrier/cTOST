@@ -2,6 +2,10 @@
 .Rhistory
 .RData
 .Ruserdata
+.DS_Store
+*.tar.gz
 docs
 local
 Simulation
+CLAUDE.md
+tests

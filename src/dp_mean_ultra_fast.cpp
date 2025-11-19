@@ -172,7 +172,6 @@ inline void nelder_mead_2d(double& x0, double& x1,
 //' Ultra-fast C++ DP-TOST using Nelder-Mead (100x target)
 //'
 //' Maximum performance implementation with minimal overhead
-//' @export
 // [[Rcpp::export]]
 List tost_dp_one_sample_ultra_fast(double a, double b, int n, double epsilon,
                                     double mean_private_obs, double sd_private_obs,

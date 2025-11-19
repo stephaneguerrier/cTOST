@@ -4,7 +4,6 @@
 #' Ultra-fast C++ DP-TOST using Nelder-Mead (100x target)
 #'
 #' Maximum performance implementation with minimal overhead
-#' @export
 tost_dp_one_sample_ultra_fast <- function(a, b, n, epsilon, mean_private_obs, sd_private_obs, lower, upper, B, alpha, seed) {
     .Call(`_cTOST_tost_dp_one_sample_ultra_fast`, a, b, n, epsilon, mean_private_obs, sd_private_obs, lower, upper, B, alpha, seed)
 }

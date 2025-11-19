@@ -309,9 +309,6 @@ tost_dp_one_sample <- function(a, b, n, epsilon, mean_private_obs, sd_private_ob
 #' @examples
 #' \dontrun{
 #' # One-sample test: Is mean equivalent to range [1.5, 3.5]?
-#' library(Rcpp)
-#' sourceCpp("src/dp_mean_ultra_fast.cpp")
-#'
 #' set.seed(123)
 #' n <- 100
 #' a <- 0
@@ -532,4 +529,151 @@ tost_equiv_dp <- function(mean_private_obs, sd_private_obs, a, b, n,
 
   class(out) <- "dp_tost_mean"
   return(out)
+}
+
+#' Print method for DP-TOST mean test
+#'
+#' @param x An object of class \code{dp_tost_mean}
+#' @param ticks Number of characters for visual representation
+#' @param rn Number of decimal places for rounding
+#' @param ... Additional arguments (not used)
+#'
+#' @return Invisibly returns the input object
+#' @export
+#' @importFrom cli cli_text col_green col_red symbol
+print.dp_tost_mean <- function(x, ticks = 30, rn = 5, ...) {
+
+  # Decision message
+  if (x$decision) {
+    cli_text(col_green("{symbol$tick} Accept equivalence"))
+  } else {
+    cli_text(col_red("{symbol$cross} Can't accept equivalence"))
+  }
+
+  # Compute visual representation
+  lower_be <- x$conf.int[1] > x$lower
+  upper_be <- x$conf.int[2] < x$upper
+
+  rg <- range(c(x$conf.int, x$lower, x$upper))
+  rg_delta <- rg[2] - rg[1]
+  std_be_interval <- round(ticks * (c(x$lower, x$upper) - rg[1]) / rg_delta) + 1
+  std_zero <- round(-ticks * rg[1] / rg_delta) + 1
+  std_fit_interval <- round(ticks * (x$conf.int - rg[1]) / rg_delta) + 1
+  std_fit_interval_center <- round(ticks * (sum(x$conf.int) / 2 - rg[1]) / rg_delta) + 1
+
+  # Print equivalence region
+  cat("Equiv. Region:  ")
+  for (i in 1:(ticks + 1)) {
+    if (i >= std_be_interval[1] && i <= std_be_interval[2]) {
+      if (i == std_be_interval[1]) {
+        cat("|-")
+      } else if (i == std_be_interval[2]) {
+        cat("-|")
+      } else if (i == std_zero) {
+        cat("-0-")
+      } else {
+        cat("-")
+      }
+    } else {
+      cat(" ")
+    }
+  }
+  cat("\n")
+
+  # Print estimated interval
+  cat("Estim. Inter.:  ")
+  for (i in 1:(ticks + 1)) {
+    if (i >= std_fit_interval[1] && i <= std_fit_interval[2]) {
+      if (i == std_fit_interval[1]) {
+        if (i > std_be_interval[1] && i < std_be_interval[2]) {
+          cat(col_green("(-"))
+        } else if (lower_be) {
+          cat(col_green("(-"))
+        } else {
+          cat(col_red("(-"))
+        }
+      } else if (i == std_fit_interval[2]) {
+        if (i > std_be_interval[1] && i < std_be_interval[2]) {
+          cat(col_green("-)"))
+        } else if (upper_be) {
+          cat(col_green("-)"))
+        } else {
+          cat(col_red("-)"))
+        }
+      } else if (i == std_fit_interval_center) {
+        if (i >= std_be_interval[1] && i <= std_be_interval[2]) {
+          cat(col_green("-x-"))
+        } else {
+          cat(col_red("-x-"))
+        }
+      } else {
+        if (i >= std_be_interval[1] && i <= std_be_interval[2]) {
+          cat(col_green("-"))
+        } else {
+          cat(col_red("-"))
+        }
+      }
+    } else {
+      cat(" ")
+    }
+  }
+  cat("\n")
+
+  # Print confidence interval
+  cat("CI = (")
+  cat(format(round(x$conf.int[1], rn), nsmall = rn))
+  cat(" ; ")
+  cat(format(round(x$conf.int[2], rn), nsmall = rn))
+  cat(")\n\n")
+
+  # Print method and parameters
+  if (x$test_type == "one-sample") {
+    cat("Method: DP-TOST (mean)\n")
+  } else {
+    cat("Method: DP-TOST (two-sample mean)\n")
+  }
+
+  cat("alpha = ")
+  cat(x$alpha)
+  cat("; Equiv. bounds = [")
+  cat(format(round(x$lower, rn)))
+  cat(", ")
+  cat(format(round(x$upper, rn)))
+  cat("]\n")
+
+  # Print DP parameters
+  cat("epsilon = ")
+  if (length(x$epsilon) == 1) {
+    cat(x$epsilon)
+  } else {
+    cat("(")
+    cat(x$epsilon[1])
+    cat(", ")
+    cat(x$epsilon[2])
+    cat(")")
+  }
+  cat("; B = ")
+  cat(x$B)
+  cat("\n")
+
+  # Print truncation bounds
+  if (x$test_type == "one-sample") {
+    cat("Truncation: (a, b) = (")
+    cat(x$bounds[1])
+    cat(", ")
+    cat(x$bounds[2])
+    cat(")\n")
+  } else {
+    cat("Truncation: (a1, a2) = (")
+    cat(x$bounds$group1[1])
+    cat(", ")
+    cat(x$bounds$group2[1])
+    cat("); (b1, b2) = (")
+    cat(x$bounds$group1[2])
+    cat(", ")
+    cat(x$bounds$group2[2])
+    cat(")\n")
+  }
+
+  invisible(x)
 }

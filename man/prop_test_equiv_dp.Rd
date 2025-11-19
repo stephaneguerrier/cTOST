@@ -11,7 +11,7 @@ prop_test_equiv_dp(
   n2 = NULL,
   lower,
   upper,
-  epsilon = 1,
+  epsilon,
   alpha = 0.05,
   B = 10^4,
   max_resample = 100,
@@ -41,7 +41,7 @@ the difference (p1 - p2). Typical value: delta.}
 
 \item{epsilon}{Privacy budget. Can be a single value (used for all samples) or
 a vector of length 2 (epsilon[1] for first group, epsilon[2] for second group).
-Larger values provide less privacy but more statistical power. Default is 1.}
+Larger values provide less privacy but more statistical power.}
 
 \item{alpha}{Significance level for the test. The confidence interval will have
 level (1 - 2*alpha). Default is 0.05.}
@@ -156,8 +156,5 @@ result <- prop_test_equiv_dp(
 result
 }
 
-}
-\references{
-Pareek, K., Shang, H. L., & Guerrier, S. (2025). Differentially Private
-Quantile-based TOST for Equivalence Testing. Manuscript in preparation.
+
 }

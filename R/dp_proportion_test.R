@@ -124,9 +124,6 @@
 #' result
 #' }
 #'
-#' @references
-#' Pareek, K., Shang, H. L., & Guerrier, S. (2025). Differentially Private
-#' Quantile-based TOST for Equivalence Testing. Manuscript in preparation.
 #'
 #' @export
 prop_test_equiv_dp <- function(p_hat, n, p_hat2 = NULL, n2 = NULL,

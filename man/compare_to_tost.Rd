@@ -14,8 +14,20 @@ compare_to_tost(x, ticks = 30, rn = 5)
 \item{rn}{integer indicating the number of decimals places to be used (see function `round`) for the printed results.}
 }
 \value{
-Pints a comparison between the TOST results (i.e., output of `tost`) and either the alpha-TOST or the delta-TOST results.
+Prints a comparison between the TOST results (i.e., output of `tost`) and either the alpha-TOST or the delta-TOST results.
 }
 \description{
 This function renders a comparison of the alpha-TOST or the delta-TOST outputs obtained with the function `ctost` to the TOST output obtained with `tost`.
+}
+\examples{
+data(skin)
+theta_hat = diff(apply(skin, 2, mean))
+nu = nrow(skin) - 1
+sig_hat = var(apply(skin, 1, diff)) / nu
+
+# alpha-TOST
+atost = ctost(theta = theta_hat, sigma = sig_hat, nu = nu,
+              alpha = 0.05, delta = log(1.25), method = "alpha")
+compare_to_tost(atost)
+
 }

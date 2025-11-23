@@ -414,7 +414,26 @@ print.m_qtost = function(x, ticks = 60, rn = 5,...){
 #' @param x A \code{qtost} object, which is the output of one of the function: `qtost`.
 #' @param ticks an integer indicating the number of segments that will be printed to represent the confidence intervals.
 #' @param rn integer indicating the number of decimals places to be used (see function `round`) for the printed results.
-#' @return Pints a comparison between the qTOST results (i.e., output of `qtost`) and the alpha-qTOST results.
+#' @return Prints a comparison between the qTOST results (i.e., output of `qtost`) and the alpha-qTOST results.
+#'
+#' @examples
+#' # Using summary statistics from FDA label
+#' x_bar_orig = 35.6
+#' x_sd_orig = 16.7
+#' n_x = 106
+#' y_bar_orig = 41.6
+#' y_sd_orig = 24.3
+#' n_y = 14
+#' x_bar = log(x_bar_orig^2 / sqrt(x_bar_orig^2 + x_sd_orig^2))
+#' x_sd = sqrt(log(1 + (x_sd_orig^2 / x_bar_orig^2)))
+#' y_bar = log(y_bar_orig^2 / sqrt(y_bar_orig^2 + y_sd_orig^2))
+#' y_sd = sqrt(log(1 + (y_sd_orig^2 / y_bar_orig^2)))
+#' x = list(mean=x_bar, sd=x_sd, n=n_x)
+#' y = list(mean=y_bar, sd=y_sd, n=n_y)
+#'
+#' # alpha-qTOST
+#' aqtost <- qtost(x, y, pi_x = 0.8, delta = 0.15, method = "alpha")
+#' compare_to_qtost(aqtost)
 #'
 #' @importFrom cli cli_text col_green col_red
 #'

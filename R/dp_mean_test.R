@@ -291,7 +291,7 @@ tost_dp_one_sample <- function(a, b, n, epsilon, mean_private_obs, sd_private_ob
 #' @param method Implementation to use: "cpp" (default, ultra-fast) or "r" (pure R).
 #'   The C++ implementation is 15-250x faster depending on problem size.
 #'
-#' @return A list of class "dp_tost_mean" containing:
+#' @return A list of class "tost_dp" containing:
 #'   \item{decision}{Logical. TRUE if equivalence is established, FALSE otherwise.}
 #'   \item{conf.int}{Confidence interval for the parameter of interest (mean for
 #'     one-sample, difference for two-sample).}
@@ -527,13 +527,13 @@ tost_equiv_dp <- function(mean_private_obs, sd_private_obs, a, b, n,
     )
   }
 
-  class(out) <- "dp_tost_mean"
+  class(out) <- "tost_dp"
   return(out)
 }
 
 #' Print method for DP-TOST mean test
 #'
-#' @param x An object of class \code{dp_tost_mean}
+#' @param x An object of class \code{tost_dp}
 #' @param ticks Number of characters for visual representation
 #' @param rn Number of decimal places for rounding
 #' @param ... Additional arguments (not used)
@@ -541,7 +541,7 @@ tost_equiv_dp <- function(mean_private_obs, sd_private_obs, a, b, n,
 #' @return Invisibly returns the input object
 #' @export
 #' @importFrom cli cli_text col_green col_red symbol
-print.dp_tost_mean <- function(x, ticks = 30, rn = 5, ...) {
+print.tost_dp <- function(x, ticks = 30, rn = 5, ...) {
 
   # Decision message
   if (x$decision) {

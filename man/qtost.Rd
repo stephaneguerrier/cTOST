@@ -41,6 +41,10 @@ qtost(
 
 \item{max_iter}{A \code{numeric} value specifying a maximum number of iteration to compute the supremum at which the size is assessed (default: \code{max_iter = 10}).}
 
+\item{tolpower}{A \code{numeric} value specifying the tolerance for power convergence when computing corrected alpha (default: \code{tolpower = 1e-3}).}
+
+\item{MC_sup}{A \code{logical} value indicating whether to use Monte Carlo simulation to find the supremum when computing corrected alpha (default: \code{MC_sup = TRUE}).}
+
 \item{...}{Additional arguments (not currently used).}
 }
 \value{

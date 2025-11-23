@@ -46,7 +46,7 @@
 #' @param seed Random seed for reproducibility. Default is 1337.
 #' @param ... Additional arguments (currently unused).
 #'
-#' @return A list of class "dp_tost_prop" containing:
+#' @return A list of class "prop_test_dp" containing:
 #'   \item{decision}{Logical. TRUE if equivalence is established, FALSE otherwise.}
 #'   \item{conf.int}{Confidence interval for the parameter of interest (proportion
 #'     for one-sample, difference for two-sample).}
@@ -214,7 +214,7 @@ prop_test_equiv_dp <- function(p_hat, n, p_hat2 = NULL, n2 = NULL,
     )
   }
 
-  class(out) <- "dp_tost_prop"
+  class(out) <- "prop_test_dp"
   return(out)
 }
 
@@ -485,7 +485,7 @@ prop_test_dp_two_sample <- function(p1_hat, p2_hat, n1, n2, lower, upper,
 
 #' Print Results of DP-TOST for Proportions
 #'
-#' @param x A \code{dp_tost_prop} object returned by \code{prop_test_equiv_dp}
+#' @param x A \code{prop_test_dp} object returned by \code{prop_test_equiv_dp}
 #' @param ticks Number of ticks to print the confidence interval in the console. Default is 30.
 #' @param rn Number of digits to consider when printing the results. Default is 5.
 #' @param ... Further arguments to be passed to or from methods.
@@ -493,7 +493,7 @@ prop_test_dp_two_sample <- function(p1_hat, p2_hat, n1, n2, lower, upper,
 #' @importFrom cli cli_text col_green col_red symbol
 #'
 #' @export
-print.dp_tost_prop <- function(x, ticks = 30, rn = 5, ...) {
+print.prop_test_dp <- function(x, ticks = 30, rn = 5, ...) {
 
   # Decision message
   if (x$decision) {

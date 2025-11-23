@@ -78,7 +78,7 @@ Default is 10000.}
 The C++ implementation is 15-250x faster depending on problem size.}
 }
 \value{
-A list of class "dp_tost_mean" containing:
+A list of class "tost_dp" containing:
   \item{decision}{Logical. TRUE if equivalence is established, FALSE otherwise.}
   \item{conf.int}{Confidence interval for the parameter of interest (mean for
     one-sample, difference for two-sample).}

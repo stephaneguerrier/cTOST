@@ -399,7 +399,18 @@ print.mtost = function(x, ticks = 30, rn = 5, ...){
 #' @param x A \code{tost} object, which is the output of one of the function: `ctost`.
 #' @param ticks an integer indicating the number of segments that will be printed to represent the confidence intervals.
 #' @param rn integer indicating the number of decimals places to be used (see function `round`) for the printed results.
-#' @return Pints a comparison between the TOST results (i.e., output of `tost`) and either the alpha-TOST or the delta-TOST results.
+#' @return Prints a comparison between the TOST results (i.e., output of `tost`) and either the alpha-TOST or the delta-TOST results.
+#'
+#' @examples
+#' data(skin)
+#' theta_hat = diff(apply(skin, 2, mean))
+#' nu = nrow(skin) - 1
+#' sig_hat = var(apply(skin, 1, diff)) / nu
+#'
+#' # alpha-TOST
+#' atost = ctost(theta = theta_hat, sigma = sig_hat, nu = nu,
+#'               alpha = 0.05, delta = log(1.25), method = "alpha")
+#' compare_to_tost(atost)
 #'
 #' @importFrom cli cli_text col_green col_red
 #'

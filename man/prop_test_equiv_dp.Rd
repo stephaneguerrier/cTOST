@@ -58,7 +58,7 @@ moment matching equation. Default is 100.}
 \item{...}{Additional arguments (currently unused).}
 }
 \value{
-A list of class "dp_tost_prop" containing:
+A list of class "prop_test_dp" containing:
   \item{decision}{Logical. TRUE if equivalence is established, FALSE otherwise.}
   \item{conf.int}{Confidence interval for the parameter of interest (proportion
     for one-sample, difference for two-sample).}

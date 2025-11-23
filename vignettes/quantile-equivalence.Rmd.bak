@@ -1,0 +1,464 @@
+---
+title: "Quantile Equivalence Testing"
+bibliography: references.bib
+output:
+  rmarkdown::html_vignette:
+    fig_caption: yes
+    toc: true
+vignette: >
+  %\VignetteIndexEntry{Quantile Equivalence Testing}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+---
+
+```{r setup, include = FALSE}
+knitr::opts_chunk$set(
+  collapse = TRUE,
+  comment = "#>",
+  fig.width = 7,
+  fig.height = 5
+)
+library(cTOST)
+```
+
+# Introduction
+
+While average equivalence testing focuses on mean differences, **quantile equivalence testing** assesses whether specific quantiles (percentiles) of two distributions are equivalent. This is particularly relevant when:
+
+- **Tail behavior** is more important than averages (e.g., safety margins)
+- **Regulatory guidelines** specify quantile-based criteria
+- **Risk assessment** focuses on extreme values
+- **Skewed distributions** make means less representative
+
+The `qtost()` function implements quantile-based equivalence testing following the methodology of @wu2025quantile.
+
+## Key Applications
+
+1. **Pharmacokinetics**: Testing equivalence of trough concentrations (lower quantiles) or peak exposures (upper quantiles)
+2. **Safety studies**: Ensuring adverse events don't exceed acceptable thresholds
+3. **Environmental monitoring**: Testing pollution levels at critical percentiles
+4. **Quality control**: Ensuring product specifications at various quantiles
+
+# The Quantile Equivalence Problem
+
+## Statistical Framework
+
+Given two populations $X$ (reference) and $Y$ (test), we want to test whether quantile $\pi_y$ of $Y$ is equivalent to quantile $\pi_x$ of $X$.
+
+### Hypotheses
+
+$$H_0: |\pi_y - \pi_x| \geq \delta \quad \text{vs.} \quad H_1: |\pi_y - \pi_x| < \delta$$
+
+where $\delta$ is the equivalence margin.
+
+**Assumptions:**
+
+- Both populations are **normally distributed**
+- Can work with either **raw data** or **summary statistics** (mean, SD, sample size)
+
+## Available Methods
+
+The `qtost()` function supports:
+
+1. **Unadjusted qTOST** (`method = "unadjusted"`): Standard quantile TOST
+2. **Alpha-qTOST** (`method = "alpha"`): **Recommended** - Finite sample correction [@wu2025quantile]
+
+# Example 1: FDA Drug Label Data
+
+We use real summary statistics from an FDA drug label comparing male and female populations.
+
+## Setup
+
+Data from FDA label (C_trough concentrations):
+
+- **Reference group** (males): mean = 35.6, SD = 16.7, n = 106
+- **Test group** (females): mean = 41.6, SD = 24.3, n = 14
+
+We want to test equivalence at the 80th percentile with margin $\delta = 0.15$.
+
+## Prepare Data
+
+Since the original data are not normally distributed, we apply a log-normal transformation:
+
+```{r}
+# Original summary statistics
+x_bar_orig <- 35.6
+x_sd_orig <- 16.7
+n_x <- 106
+
+y_bar_orig <- 41.6
+y_sd_orig <- 24.3
+n_y <- 14
+
+# Transform to log-normal parameters
+x_bar <- log(x_bar_orig^2 / sqrt(x_bar_orig^2 + x_sd_orig^2))
+x_sd <- sqrt(log(1 + (x_sd_orig^2 / x_bar_orig^2)))
+
+y_bar <- log(y_bar_orig^2 / sqrt(y_bar_orig^2 + y_sd_orig^2))
+y_sd <- sqrt(log(1 + (y_sd_orig^2 / y_bar_orig^2)))
+
+# Create summary statistics lists
+x_summary <- list(mean = x_bar, sd = x_sd, n = n_x)
+y_summary <- list(mean = y_bar, sd = y_sd, n = n_y)
+
+cat("Reference (males) - transformed:\n")
+cat("  Mean:", round(x_bar, 4), "\n")
+cat("  SD:", round(x_sd, 4), "\n")
+cat("  n:", n_x, "\n\n")
+
+cat("Test (females) - transformed:\n")
+cat("  Mean:", round(y_bar, 4), "\n")
+cat("  SD:", round(y_sd, 4), "\n")
+cat("  n:", n_y, "\n")
+```
+
+## Run Standard qTOST
+
+```{r, eval=FALSE}
+# Note: This example requires validation of input parameters
+qtost_standard <- qtost(
+  x = x_summary,
+  y = y_summary,
+  pi_x = 0.8,  # 80th percentile
+  delta = 0.15,
+  alpha = 0.05,
+  method = "unadjusted"
+)
+
+print(qtost_standard)
+```
+
+## Run Alpha-qTOST (Recommended)
+
+The alpha-qTOST applies finite sample corrections for improved power:
+
+```{r}
+qtost_alpha <- qtost(
+  x = x_summary,
+  y = y_summary,
+  pi_x = 0.8,
+  delta = 0.15,
+  alpha = 0.05,
+  method = "alpha",
+  B = 10000  # Monte Carlo replications
+)
+
+print(qtost_alpha)
+cat("\nCorrected alpha:", round(qtost_alpha$corrected_alpha, 4), "\n")
+```
+
+## Compare Methods
+
+```{r}
+compare_to_qtost(qtost_alpha)
+```
+
+**Interpretation:**
+
+- Standard qTOST: **rejects** equivalence
+- Alpha-qTOST: **accepts** equivalence
+- The finite sample correction is crucial here due to the small sample size in the female group (n=14)
+
+# Example 2: Simulated Raw Data
+
+When raw data are available, `qtost()` can work directly with the data vectors.
+
+## Generate Data
+
+```{r}
+set.seed(12345)
+
+# Reference group
+n_x <- 50
+x_data <- rnorm(n_x, mean = 0, sd = 0.15)
+
+# Test group (slightly shifted)
+n_y <- 30
+y_data <- rnorm(n_y, mean = 0.02, sd = 0.15)
+
+# Visualize
+hist(x_data, breaks = 15, col = rgb(0, 0, 1, 0.3),
+     xlim = range(c(x_data, y_data)),
+     main = "Distribution Comparison",
+     xlab = "Value")
+hist(y_data, breaks = 15, col = rgb(1, 0, 0, 0.3), add = TRUE)
+legend("topright", legend = c("Reference", "Test"),
+       fill = c(rgb(0, 0, 1, 0.3), rgb(1, 0, 0, 0.3)))
+```
+
+## Test Multiple Quantiles
+
+We can test equivalence at several quantiles simultaneously:
+
+```{r}
+# Test 50th and 80th percentiles
+quantiles <- c(0.5, 0.8)
+
+mqtost_result <- qtost(
+  x = x_data,
+  y = y_data,
+  pi_x = quantiles,
+  delta = 0.15,
+  alpha = 0.05,
+  method = "alpha",
+  B = 10000
+)
+
+print(mqtost_result)
+```
+
+**Interpretation:**
+
+- Both quantiles satisfy equivalence individually
+- The overall test accepts equivalence
+
+# Single vs. Multiple Quantiles
+
+## Single Quantile Testing
+
+Use a scalar for `pi_x`:
+
+```{r}
+single_qtost <- qtost(
+  x = x_data,
+  y = y_data,
+  pi_x = 0.9,  # Test only 90th percentile
+  delta = 0.15,
+  method = "alpha"
+)
+
+print(single_qtost)
+```
+
+## Multiple Quantile Testing
+
+Use a vector for `pi_x`:
+
+```{r}
+multiple_qtost <- qtost(
+  x = x_data,
+  y = y_data,
+  pi_x = c(0.25, 0.5, 0.75, 0.9),  # Test multiple percentiles
+  delta = 0.15,
+  method = "alpha"
+)
+
+print(multiple_qtost)
+```
+
+**Note:** When testing multiple quantiles, the test controls the family-wise error rate.
+
+# Understanding the Method
+
+## Why Quantile Testing is Different
+
+Testing quantiles is fundamentally different from testing means because:
+
+1. **Nonlinear transformation**: Quantiles depend nonlinearly on distribution parameters
+2. **Variance structure**: Quantile estimators have complex variance expressions
+3. **Tail behavior**: Extreme quantiles (e.g., 95th percentile) are harder to estimate
+4. **Finite sample behavior**: Small samples affect quantile estimates more severely
+
+## Alpha-qTOST Correction
+
+The alpha-qTOST adjusts the significance level to account for:
+
+- **Conservative bias** in finite samples
+- **Multiple testing** when evaluating several quantiles
+- **Asymmetric behavior** at extreme quantiles
+
+The correction is computed via:
+
+1. **Monte Carlo simulation** to find the supremum of the rejection region
+2. **Iterative optimization** to achieve the desired type I error rate
+3. **Power calculations** to verify finite sample performance
+
+# Practical Guidelines
+
+## Choosing Quantiles to Test
+
+Common choices:
+
+- **Median** ($\pi = 0.5$): Central tendency, less sensitive to outliers than mean
+- **Lower quantiles** ($\pi = 0.1, 0.25$): Safety margins, worst-case scenarios
+- **Upper quantiles** ($\pi = 0.75, 0.9$): Peak exposures, maximum responses
+- **Multiple quantiles**: Comprehensive assessment of distribution shape
+
+## Choosing Equivalence Margins
+
+The margin $\delta$ should be chosen based on:
+
+- **Clinical relevance**: What quantile difference is meaningful?
+- **Scale of measurement**: Absolute vs. relative margins
+- **Historical data**: Variability in previous studies
+- **Regulatory requirements**: Guidelines may specify margins
+
+**Example:** For a log-transformed pharmacokinetic parameter, $\delta = 0.15$ corresponds to roughly a 16% difference on the original scale.
+
+## Sample Size Considerations
+
+Quantile estimation requires adequate sample sizes, especially for:
+
+- **Extreme quantiles** (e.g., 5th or 95th percentile)
+- **Small groups**: Both $n_x$ and $n_y$ should be reasonably large
+- **High variability**: More samples needed when SD is large
+
+**Rule of thumb:**
+
+- For median ($\pi = 0.5$): Similar requirements to mean testing
+- For extreme quantiles ($\pi < 0.1$ or $\pi > 0.9$): Need 2-3× larger samples
+
+## Data Requirements
+
+### With Raw Data
+
+```{r, eval = FALSE}
+qtost(x = x_vector, y = y_vector, pi_x = 0.8, delta = 0.15)
+```
+
+Requirements:
+
+- Numeric vectors
+- Normality assumption (test with `shapiro.test()` if unsure)
+
+### With Summary Statistics
+
+```{r, eval = FALSE}
+qtost(
+  x = list(mean = mean_x, sd = sd_x, n = n_x),
+  y = list(mean = mean_y, sd = sd_y, n = n_y),
+  pi_x = 0.8,
+  delta = 0.15
+)
+```
+
+Requirements:
+
+- Mean, SD, and sample size for each group
+- Assumes normality
+
+## Monte Carlo Replications
+
+The `B` parameter controls precision of the alpha correction:
+
+- **Default**: B = 100,000 for single quantile, 10,000 for multiple quantiles
+- **Larger B**: More accurate but slower
+- **Smaller B**: Faster but less precise
+
+```{r, eval = FALSE}
+# Fast (less precise)
+qtost(..., B = 1000)
+
+# Slow (more precise)
+qtost(..., B = 50000)
+```
+
+# Comparison with Mean-Based Testing
+
+Let's compare quantile and mean-based equivalence testing:
+
+```{r}
+# Quantile test at median (50th percentile)
+qtost_median <- qtost(
+  x = x_data,
+  y = y_data,
+  pi_x = 0.5,
+  delta = 0.15,
+  method = "alpha"
+)
+
+# Mean-based test
+mean_test <- ctost(
+  theta = mean(y_data) - mean(x_data),
+  sigma = var(y_data)/length(y_data) + var(x_data)/length(x_data),
+  nu = min(length(x_data), length(y_data)) - 1,
+  delta = 0.15,
+  method = "optimal"
+)
+
+cat("Quantile test (median):", qtost_median$decision, "\n")
+cat("Mean test:", mean_test$decision, "\n")
+```
+
+**When they differ:**
+
+- For **symmetric distributions**, median ≈ mean, so results are similar
+- For **skewed distributions**, quantile tests may be more appropriate
+- For **safety margins**, lower quantiles are more relevant than means
+
+# Advanced Topics
+
+## Testing Ratios of Quantiles
+
+For log-transformed data, equivalence on the log scale corresponds to ratios on the original scale:
+
+```{r}
+# On log scale: test if -0.15 < log(pi_y / pi_x) < 0.15
+# On original scale: test if exp(-0.15) < pi_y / pi_x < exp(0.15)
+
+cat("Equivalence margin:\n")
+cat("  Log scale: [-0.15, 0.15]\n")
+cat("  Original scale: [", round(exp(-0.15), 3), ",", round(exp(0.15), 3), "]\n")
+cat("  Percentage: [", round((exp(-0.15) - 1) * 100, 1), "%,",
+    round((exp(0.15) - 1) * 100, 1), "%]\n")
+```
+
+## Assessing Normality
+
+The quantile tests assume normality. Check this assumption:
+
+```{r}
+# Visual check
+qqnorm(x_data, main = "Q-Q Plot: Reference Group")
+qqline(x_data)
+
+# Formal test
+shapiro_test <- shapiro.test(x_data)
+cat("Shapiro-Wilk test p-value:", round(shapiro_test$p.value, 4), "\n")
+```
+
+If normality is violated:
+
+1. **Transform the data** (log, Box-Cox, etc.)
+2. **Use non-parametric methods** (if available)
+3. **Collect more data** to invoke asymptotic normality
+
+## Sensitivity Analysis
+
+Test equivalence at multiple quantiles to assess robustness:
+
+```{r}
+quantiles_seq <- c(0.1, 0.25, 0.5, 0.75, 0.9)
+
+results <- sapply(quantiles_seq, function(q) {
+  test <- qtost(x = x_data, y = y_data, pi_x = q, delta = 0.15, method = "alpha")
+  test$decision
+})
+
+data.frame(
+  Quantile = quantiles_seq,
+  Percentile = paste0(quantiles_seq * 100, "th"),
+  Equivalent = results
+)
+```
+
+# Summary
+
+- **Quantile equivalence testing** assesses distributional similarity beyond means
+- Use `method = "alpha"` for finite sample correction
+- Can work with **raw data** or **summary statistics**
+- Test **single** or **multiple quantiles** simultaneously
+- Requires **normality assumption** (transform data if needed)
+- Choose quantiles based on **scientific relevance** (median, tails, safety margins)
+- Larger samples needed for **extreme quantiles**
+
+# References
+
+For methodological details:
+
+- @wu2025quantile for quantile equivalence testing methodology
+
+For related methods:
+
+- **Average Equivalence Testing: Univariate** for mean-based testing
+- **Average Equivalence Testing: Multivariate** for multivariate mean testing

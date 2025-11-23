@@ -1,0 +1,238 @@
+---
+title: "Getting Started with cTOST"
+output:
+  rmarkdown::html_vignette:
+    fig_caption: yes
+    toc: true
+vignette: >
+  %\VignetteIndexEntry{Getting Started with cTOST}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+---
+
+```{r setup, include = FALSE}
+knitr::opts_chunk$set(
+  collapse = TRUE,
+  comment = "#>",
+  fig.width = 7,
+  fig.height = 5
+)
+library(cTOST)
+```
+
+# Introduction
+
+The `cTOST` package provides tools for **equivalence testing** using the Two One-Sided Tests (TOST) procedure. Unlike traditional hypothesis testing that aims to detect differences, equivalence testing aims to demonstrate that two treatments are *similar enough* to be considered equivalent.
+
+**Key features:**
+
+- **Finite sample corrections** for more accurate testing with small samples
+- **Univariate and multivariate** equivalence testing
+- **Quantile-based** equivalence testing
+- **Differential privacy** equivalence testing for sensitive data
+
+This vignette provides a quick start guide to using the main functions in the package.
+
+## Installation
+
+```{r, eval = FALSE}
+# From CRAN
+install.packages("cTOST")
+
+# From GitHub (development version)
+devtools::install_github("stephaneguerrier/cTOST")
+```
+
+# What is Equivalence Testing?
+
+In many applications, especially bioequivalence studies for generic drugs, we want to show that two treatments produce *equivalent* effects. The equivalence region is typically defined as $(-\delta, \delta)$, where $\delta$ is the **equivalence margin**.
+
+**Key concepts:**
+
+- **Null hypothesis**: The treatments are NOT equivalent (difference is outside $[-\delta, \delta]$)
+- **Alternative hypothesis**: The treatments ARE equivalent (difference is inside $[-\delta, \delta]$)
+- **Common equivalence margin**: $\delta = \log(1.25)$ in bioequivalence studies
+
+# Basic Usage: Univariate TOST
+
+Let's start with a simple example using the built-in `skin` dataset, which contains measurements of econazole nitrate delivery from a reference product and a generic bioequivalent product.
+
+## Load and Inspect Data
+
+```{r}
+data(skin)
+head(skin)
+
+# Sample size
+n <- nrow(skin)
+```
+
+The dataset has `r n` paired observations comparing a Reference and Generic product.
+
+## Compute Test Statistics
+
+For a paired design, we compute the mean difference and its variance:
+
+```{r}
+# Mean difference (Generic - Reference)
+theta_hat <- diff(apply(skin, 2, mean))
+
+# Degrees of freedom
+nu <- n - 1
+
+# Variance of the difference
+sig_hat <- var(apply(skin, 1, diff)) / nu
+
+cat("Estimated difference:", round(theta_hat, 4), "\n")
+cat("Estimated variance:", round(sig_hat, 4), "\n")
+cat("Degrees of freedom:", nu, "\n")
+```
+
+## Run Standard TOST
+
+The standard Two One-Sided Tests (TOST) can be performed using `ctost()` with `method = "unadjusted"`:
+
+```{r}
+# Equivalence margin (log(1.25) is standard for bioequivalence)
+delta <- log(1.25)
+
+# Standard TOST (unadjusted)
+standard_tost <- ctost(
+  theta = theta_hat,
+  sigma = sig_hat,
+  nu = nu,
+  delta = delta,
+  alpha = 0.05,
+  method = "unadjusted"
+)
+
+print(standard_tost)
+```
+
+## Run Corrected TOST (cTOST)
+
+The standard TOST is known to be **conservative** (too strict) in finite samples. The `cTOST` package implements finite sample corrections to improve power while maintaining the correct type I error rate.
+
+### Alpha-TOST
+
+The alpha-TOST adjusts the significance level:
+
+```{r}
+alpha_tost <- ctost(
+  theta = theta_hat,
+  sigma = sig_hat,
+  nu = nu,
+  delta = delta,
+  alpha = 0.05,
+  method = "alpha"
+)
+
+print(alpha_tost)
+```
+
+### Optimal cTOST (Recommended)
+
+The optimal method provides the best power:
+
+```{r}
+optimal_tost <- ctost(
+  theta = theta_hat,
+  sigma = sig_hat,
+  nu = nu,
+  delta = delta,
+  alpha = 0.05,
+  method = "optimal"
+)
+
+print(optimal_tost)
+```
+
+## Compare Methods
+
+Use `compare_to_tost()` to see the difference between standard and corrected methods:
+
+```{r}
+compare_to_tost(alpha_tost)
+```
+
+## Visualize Results
+
+The package provides plotting functionality to visualize confidence intervals:
+
+```{r, fig.width=7, fig.height=4}
+plot(standard_tost, alpha_tost, optimal_tost)
+```
+
+The plot shows:
+
+- **Point estimates** (dots)
+- **Confidence intervals** (lines)
+- **Equivalence region** (shaded area)
+- **Decisions** (checkmark = accept equivalence, cross = reject)
+
+# Multivariate Equivalence Testing
+
+For testing multiple parameters simultaneously, use the same `ctost()` function with a covariance matrix.
+
+## Example with Ticlopidine Data
+
+```{r}
+data(ticlopidine)
+head(ticlopidine)
+
+# Sample size and dimensions
+n <- nrow(ticlopidine)
+p <- ncol(ticlopidine)
+
+# Compute multivariate statistics
+theta_hat <- colMeans(ticlopidine)
+Sigma_hat <- cov(ticlopidine) / n
+nu <- n - 1
+
+cat("Number of parameters:", p, "\n")
+cat("Sample size:", n, "\n")
+```
+
+## Run Multivariate TOST
+
+```{r}
+mv_tost <- ctost(
+  theta = theta_hat,
+  sigma = Sigma_hat,
+  nu = nu,
+  delta = log(1.25),
+  alpha = 0.05,
+  method = "optimal"
+)
+
+print(mv_tost)
+```
+
+The test evaluates whether **all** parameters simultaneously fall within the equivalence region.
+
+## Visualize Multivariate Results
+
+```{r, eval=FALSE}
+# Plotting functionality for multivariate TOST is under development
+plot(mv_tost)
+```
+
+Each row shows a different parameter with its confidence interval and equivalence decision.
+
+# Next Steps
+
+This vignette covered the basics of equivalence testing with `cTOST`. For more details, see:
+
+- **Average Equivalence Testing: Univariate** - In-depth guide to univariate methods
+- **Average Equivalence Testing: Multivariate** - Multivariate testing details
+- **Quantile Equivalence Testing** - Testing equivalence at specific quantiles
+- **Differential Privacy Equivalence Testing** - Equivalence testing for sensitive data
+- **Mathematical Background** - Theory and mathematical details
+
+# References
+
+- Boulaguiem, Y., Quartier, J., Lapteva, M., Kalia, Y. N., Victoria-Feser, M. P., & Guerrier, S. (2024). Finite sample adjustments for average equivalence testing. *Statistics in Medicine*, 43(3), 535-556. https://doi.org/10.1002/sim.9993
+
+- Boulaguiem, Y., Insolia, L., Victoria-Feser, M. P., & Guerrier, S. (2024). Multivariate adjustments for average equivalence testing. *arXiv preprint* arXiv:2411.16429.
+
+- Insolia, L., Boulaguiem, Y., Victoria-Feser, M. P., Salvioni, C., Mandija, F., & Guerrier, S. (2025). Bioequivalence assessment for locally acting drugs: A framework for feasible and efficient evaluation. *arXiv preprint* arXiv:2507.22756.

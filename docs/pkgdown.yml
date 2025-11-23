@@ -1,10 +1,14 @@
-pandoc: 3.1.11
+pandoc: 3.8.2.1
 pkgdown: 2.1.1
 pkgdown_sha: ~
 articles:
-  get_started: get_started.html
+  average-equivalence-multivariate: average-equivalence-multivariate.html
+  average-equivalence-univariate: average-equivalence-univariate.html
+  dp-equivalence: dp-equivalence.html
+  getting-started: getting-started.html
+  mathematical-background: mathematical-background.html
   reproducibility: reproducibility.html
-last_built: 2025-11-13T18:22Z
+last_built: 2025-11-23T22:43Z
 urls:
   reference: https://stephaneguerrier.github.io/cTOST/reference
   article: https://stephaneguerrier.github.io/cTOST/articles

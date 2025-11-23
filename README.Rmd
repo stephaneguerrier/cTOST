@@ -15,18 +15,10 @@ knitr::opts_chunk$set(
   comment = "#>",
   out.width = "100%"
 )
-# Turn on ANSI colors
-asciicast::init_knitr_engine(
-  startup = quote({
-    library(cli)
-    library(cTOST)
-    set.seed(1) }),
-  echo = FALSE,
-  echo_input = FALSE)
 ```
  
 
-# `cTOST` Overview  <a href="https://yboulag.github.io/cTOST/"><img src="man/figures/hex-cTOST.png" alt="" align="right" height="138" width="125" /></a>
+# `cTOST` Overview  <a href="https://stephaneguerrier.github.io/cTOST/"><img src="man/figures/hex-cTOST.png" alt="cTOST logo" align="right" height="138" width="125" /></a>
 
 <!-- badges: start -->
 [![Licence](https://img.shields.io/badge/licence-AGPL--3.0-blue.svg)](https://opensource.org/licenses/AGPL-3.0)
@@ -36,11 +28,29 @@ asciicast::init_knitr_engine(
 [![CRAN RStudio mirror downloads](https://cranlogs.r-pkg.org/badges/grand-total/cTOST)](https://www.r-pkg.org/pkg/cTOST)
 <!-- badges: end -->
 
-## 1. `cTOST` Overview
+## Overview
 
-This R package contains functions for testing equivalence in both univariate and multivariate settings, based on the Two One-Sided Tests (TOST). The `cTOST` package implements the $\alpha$-TOST and $\delta$-TOST methods proposed by Boulaguiem et al. (2024a, 2024b). These two corrective procedures that can be applied to the standard TOST to adjust the size of the procedure to the desired nominal level, resulting in more powerful procedures.
+The `cTOST` package provides **finite sample corrections** for equivalence testing using the Two One-Sided Tests (TOST) procedure. Unlike traditional hypothesis testing that aims to detect differences, equivalence testing aims to demonstrate that two treatments are *similar enough* to be considered equivalent.
 
-## 2. Install Instructions
+### Key Features
+
+- **Finite sample corrections**: alpha-TOST, delta-TOST, and optimal cTOST for improved power
+- **Univariate and multivariate** equivalence testing
+- **Quantile-based** equivalence testing for distribution tails
+- **Differential privacy** equivalence testing for sensitive data
+- Comprehensive **visualization** and **comparison** tools
+
+### Methods Implemented
+
+| Method | Reference | Description |
+|--------|-----------|-------------|
+| **alpha-TOST** | Boulaguiem et al. (2024) | Adjusts significance level |
+| **delta-TOST** | Boulaguiem et al. (2024) | Adjusts equivalence bounds |
+| **Optimal cTOST** | Insolia et al. (2025) | Best power (recommended) |
+| **alpha-qTOST** | Wu et al. (2025) | Quantile-based testing |
+| **DP-TOST** | Pareek et al. (2025) | Differential privacy |
+
+## Installation
 
 The `cTOST` package is available on cran and on GitHub. The version on GitHub is subject to ongoing updates that may lead to stability issues.  
 
@@ -59,11 +69,11 @@ devtools::install_github("stephaneguerrier/cTOST")
 
 Note that Windows users are assumed that have Rtools installed (if this is not the case, please visit this [link](https://cran.r-project.org/bin/windows/Rtools/).
 
-## 3. How to use
+## Quick Start
 
-We provide here a few examples on the usage of the `cTOST` package.
+Here are a few examples demonstrating the usage of the `cTOST` package.
 
-### 3.1. Univariate settings
+### Univariate Equivalence Testing
 
 To illustrate the use of the proposed method in the univariate settings, we consider the `skin` dataset analyzed in Boulaguiem et al. (2024a), which can be loaded as follows:
 
@@ -74,104 +84,55 @@ nu = nrow(skin) - 1
 sig_hat = var(apply(skin,1,diff))/nu
 ```
 
-### 3.1.1. Standard TOST
+#### Standard TOST
 
 The standard TOST can be used as follows:
 
-```{r, eval = F}
-stost = tost(theta = theta_hat, sigma = sig_hat, nu = nu, delta = log(1.25))
+```{r}
+stost = ctost(theta = theta_hat, sigma = sig_hat, nu = nu,
+              delta = log(1.25), method = "unadjusted")
 stost
 ```
 
-```{asciicast}
-library(cTOST)
-data(skin)
-theta_hat = diff(apply(skin,2,mean))
-nu = nrow(skin) - 1
-sig_hat = var(apply(skin,1,diff))/nu
-stost = tost(theta = theta_hat, sigma = sig_hat, nu = nu, delta = log(1.25))
-stost
-```
-
-#### 3.1.2. cTOST
+#### Optimal cTOST
 
 The cTOST can be used through the function `ctost` as follows:
 
-```{r, eval = F}
-opt_tost = ctost(theta = theta_hat, sigma = sig_hat, nu = nu, 
+```{r}
+opt_tost = ctost(theta = theta_hat, sigma = sig_hat, nu = nu,
               delta = log(1.25), method = "optimal")
 opt_tost
 ```
 
-```{asciicast}
-library(cTOST)
-data(skin)
-theta_hat = diff(apply(skin,2,mean))
-nu = nrow(skin) - 1
-sig_hat = var(apply(skin,1,diff))/nu
-opt_tost = ctost(theta = theta_hat, sigma = sig_hat, nu = nu, delta = log(1.25), method = "alpha")
-opt_tost
-```
-
-#### 3.1.3. $\alpha$-TOST
+#### Alpha-TOST
 
 The $\alpha$-TOST can be used through the function `ctost` as follows:
 
-```{r, eval = F}
-atost = ctost(theta = theta_hat, sigma = sig_hat, nu = nu, 
+```{r}
+atost = ctost(theta = theta_hat, sigma = sig_hat, nu = nu,
               delta = log(1.25), method = "alpha")
-atost
-```
-
-```{asciicast}
-library(cTOST)
-data(skin)
-theta_hat = diff(apply(skin,2,mean))
-nu = nrow(skin) - 1
-sig_hat = var(apply(skin,1,diff))/nu
-atost = ctost(theta = theta_hat, sigma = sig_hat, nu = nu, delta = log(1.25), method = "alpha")
 atost
 ```
 
 It is possible to compare the results of the $\alpha$-TOST (or $\delta$-TOST, see below) with the standard TOST as follows:
 
-```{r, eval = F}
+```{r}
 compare_to_tost(atost)
 ```
 
-```{asciicast}
-library(cTOST)
-data(skin)
-theta_hat = diff(apply(skin,2,mean))
-nu = nrow(skin) - 1
-sig_hat = var(apply(skin,1,diff))/nu
-atost = ctost(theta = theta_hat, sigma = sig_hat, nu = nu, delta = log(1.25), method = "alpha")
-compare_to_tost(atost)
-```
-
-### 3.1.4. $\delta$-TOST
+#### Delta-TOST
 
 The $\delta$-TOST can be used through the function `ctost` as follows:
 
 ```{r}
-dtost = ctost(theta = theta_hat, sigma = sig_hat, nu = nu, 
+dtost = ctost(theta = theta_hat, sigma = sig_hat, nu = nu,
               delta = log(1.25), method = "delta")
 dtost
 ```
 
-```{asciicast}
-library(cTOST)
-data(skin)
-theta_hat = diff(apply(skin,2,mean))
-nu = nrow(skin) - 1
-sig_hat = var(apply(skin,1,diff))/nu
-dtost = ctost(theta = theta_hat, sigma = sig_hat, nu = nu, delta = log(1.25), method = "delta")
-dtost
-```
+### Multivariate Equivalence Testing
 
-### 3.2. Multivariate settings
-
-```{r, eval = FALSE}
+```{r}
 data(ticlopidine)
 n = nrow(ticlopidine)
 p = ncol(ticlopidine)
@@ -180,45 +141,35 @@ theta_hat = colMeans(ticlopidine)
 Sigma_hat = cov(ticlopidine)/n
 ```
 
-#### 3.2.1. Multivariate TOST
+#### Standard Multivariate TOST
 
-```{r, eval = FALSE}
-mtost = tost(theta = theta_hat, sigma = Sigma_hat, nu = nu, delta = log(1.25))
+```{r}
+mtost = ctost(theta = theta_hat, sigma = Sigma_hat, nu = nu,
+              delta = log(1.25), method = "unadjusted")
 mtost
 ```
 
-```{asciicast}
-library(cTOST)
-data(ticlopidine)
-n = nrow(ticlopidine)
-p = ncol(ticlopidine)
-nu = n-1
-theta_hat = colMeans(ticlopidine)
-Sigma_hat = cov(ticlopidine)/n
-mtost = tost(theta = theta_hat, sigma = Sigma_hat, nu = nu, delta = log(1.25))
-mtost
-```
+#### Multivariate Alpha-TOST
 
-#### 3.2.2. Multivariate $\alpha$-TOST
-
-```{r, eval = FALSE}
+```{r}
 matost = ctost(theta = theta_hat, sigma = Sigma_hat, nu = nu, delta = log(1.25))
 matost
 ```
 
-```{asciicast}
-library(cTOST)
-data(ticlopidine)
-n = nrow(ticlopidine)
-p = ncol(ticlopidine)
-nu = n-1
-theta_hat = colMeans(ticlopidine)
-Sigma_hat = cov(ticlopidine)/n
-matost = ctost(theta = theta_hat, sigma = Sigma_hat, nu = nu, delta = log(1.25))
-matost
-```
+## 4. Learn More
 
-## 4. How to cite
+For detailed guides and examples, see the package vignettes:
+
+- **[Getting Started](articles/getting-started.html)** - Quick introduction and basic usage
+- **[Average Equivalence: Univariate](articles/average-equivalence-univariate.html)** - In-depth guide to univariate testing
+- **[Average Equivalence: Multivariate](articles/average-equivalence-multivariate.html)** - Multivariate testing with examples
+- **[Quantile Equivalence Testing](articles/quantile-equivalence.html)** - Testing at specific quantiles
+- **[Differential Privacy Testing](articles/dp-equivalence.html)** - Equivalence testing for sensitive data
+- **[Mathematical Background](articles/mathematical-background.html)** - Theory and mathematical details
+
+Or browse the [full reference documentation](reference/index.html).
+
+## 5. How to cite
 
 ```{}
 @Manual{boulaguiem2024ctost,
@@ -230,11 +181,11 @@ matost
 }
 ```
 
-## 5. License
+## 6. License
 
 The license this source code is released under is the GNU AFFERO GENERAL PUBLIC LICENSE (AGPL) v3.0. Please see the LICENSE file for full text. Otherwise, please consult [GNU](https://www.gnu.org/licenses/agpl-3.0.en.html) which will provide a synopsis of the restrictions placed upon the code.
 
-## 6. References
+## 7. References
 
 Boulaguiem, Y., Quartier, J., Lapteva, M., Kalia, Y. N., Victoria-Feser, M. P., Guerrier, S. & Couturier, D. L., "*Finite Sample Adjustments for Average Equivalence Testing*", Statistics in Medicine, 2024a, [https://doi.org/10.1002/sim.9993]( https://doi.org/10.1002/sim.9993).
 

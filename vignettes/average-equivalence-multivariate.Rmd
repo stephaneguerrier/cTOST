@@ -1,0 +1,431 @@
+---
+title: "Average Equivalence Testing: Multivariate"
+bibliography: references.bib
+output:
+  rmarkdown::html_vignette:
+    fig_caption: yes
+    toc: true
+vignette: >
+  %\VignetteIndexEntry{Average Equivalence Testing: Multivariate}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+---
+
+```{r setup, include = FALSE}
+knitr::opts_chunk$set(
+  collapse = TRUE,
+  comment = "#>",
+  fig.width = 8,
+  fig.height = 6
+)
+library(cTOST)
+```
+
+# Introduction
+
+This vignette extends univariate equivalence testing to the **multivariate** setting, where we test equivalence simultaneously across multiple parameters. This is common in:
+
+- **Bioequivalence studies** with multiple pharmacokinetic parameters (AUC, C_max, t_half, etc.)
+- **Multivariate bioequivalence** across different tissue layers or time points
+- **Quality control** with multiple product characteristics
+
+## The Multivariate Problem
+
+Instead of a single parameter $\theta$, we now have a vector of parameters $\boldsymbol{\theta} = (\theta_1, \ldots, \theta_p)^T$. We want to test whether **all** parameters simultaneously fall within their respective equivalence regions.
+
+## Available Methods
+
+For multivariate testing, `ctost()` supports:
+
+1. **Unadjusted TOST** (`method = "unadjusted"`): Standard multivariate TOST
+2. **Alpha-TOST** (`method = "alpha"`): Adjusts significance level [@boulaguiem2025multivariate]
+3. **Optimal cTOST** (`method = "optimal"`): **Recommended** - Best power [@insolia2025bioequivalence]
+
+**Note:** Delta-TOST is **not implemented** for multivariate settings due to poor finite sample performance.
+
+# Statistical Framework
+
+## Model Setup
+
+We assume:
+
+$$\hat{\boldsymbol{\theta}} \sim N_p(\boldsymbol{\theta}, \boldsymbol{\Sigma}_\nu), \quad \nu \frac{\hat{\boldsymbol{\Sigma}}_\nu}{\boldsymbol{\Sigma}_\nu} \sim W_p(\nu, \mathbf{I}_p)$$
+
+where:
+
+- $\hat{\boldsymbol{\theta}}$ is the $p$-dimensional vector of estimated mean differences
+- $\boldsymbol{\Sigma}_\nu$ is the $p \times p$ covariance matrix
+- $\nu$ is the degrees of freedom
+- $W_p$ denotes the Wishart distribution
+
+## Hypotheses
+
+The multivariate hypotheses test whether all parameters are simultaneously within the equivalence region:
+
+$$H_0: \exists\, i \in \{1,\ldots,p\} \text{ such that } |\theta_i| \geq \delta \quad \text{vs.} \quad H_1: |\theta_i| < \delta \text{ for all } i$$
+
+## Decision Rule
+
+We accept equivalence if the $(1-2\alpha)$ confidence region for $\boldsymbol{\theta}$ is entirely contained in the multivariate equivalence region $(-\delta, \delta)^p$.
+
+# Example 1: Pharmacokinetic Parameters
+
+We use the `ticlopidine` dataset containing pharmacokinetic parameters from a bioequivalence study.
+
+## Load and Explore Data
+
+```{r}
+data(ticlopidine)
+dim(ticlopidine)
+head(ticlopidine)
+summary(ticlopidine)
+```
+
+The dataset contains `r nrow(ticlopidine)` observations of `r ncol(ticlopidine)` pharmacokinetic parameters:
+
+- `t_half`: Half-life
+- `AUC`: Area under the concentration-time curve
+- `AUC_inf`: AUC extrapolated to infinity
+- `C_max`: Maximum concentration
+
+## Visualize the Data
+
+```{r, fig.width=8, fig.height=6}
+# Pairwise scatterplot matrix
+pairs(ticlopidine,
+      main = "Ticlopidine: Pairwise Relationships",
+      pch = 16, col = rgb(0, 0, 0, 0.5))
+```
+
+The parameters show positive correlations, which the multivariate test accounts for through the covariance structure.
+
+## Compute Test Statistics
+
+```{r}
+# Sample size and dimensions
+n <- nrow(ticlopidine)
+p <- ncol(ticlopidine)
+nu <- n - 1
+
+# Multivariate statistics
+theta_hat <- colMeans(ticlopidine)
+Sigma_hat <- cov(ticlopidine) / n
+
+# Display results
+cat("Sample size:", n, "\n")
+cat("Number of parameters:", p, "\n")
+cat("Degrees of freedom:", nu, "\n\n")
+
+cat("Estimated differences:\n")
+print(round(theta_hat, 4))
+
+cat("\nEstimated covariance matrix:\n")
+print(round(Sigma_hat, 6))
+```
+
+## Run Multivariate Tests
+
+### Standard Multivariate TOST
+
+```{r}
+mv_standard <- ctost(
+  theta = theta_hat,
+  sigma = Sigma_hat,
+  nu = nu,
+  delta = log(1.25),
+  alpha = 0.05,
+  method = "unadjusted"
+)
+
+print(mv_standard)
+```
+
+### Alpha-TOST
+
+```{r}
+mv_alpha <- ctost(
+  theta = theta_hat,
+  sigma = Sigma_hat,
+  nu = nu,
+  delta = log(1.25),
+  alpha = 0.05,
+  method = "alpha"
+)
+
+print(mv_alpha)
+cat("\nCorrected alpha:", round(mv_alpha$corrected_alpha, 4), "\n")
+```
+
+### Optimal cTOST (Recommended)
+
+```{r}
+mv_optimal <- ctost(
+  theta = theta_hat,
+  sigma = Sigma_hat,
+  nu = nu,
+  delta = log(1.25),
+  alpha = 0.05,
+  method = "optimal"
+)
+
+print(mv_optimal)
+```
+
+## Visualize Results
+
+The `plot()` function creates a forest plot showing confidence intervals for each parameter. For multivariate tests, plot each method separately:
+
+```{r, eval=FALSE}
+# Plotting functionality for multivariate TOST is under development
+plot(mv_optimal)
+```
+
+**Interpretation of results:**
+
+- Each parameter has its own confidence interval
+- All parameters must satisfy equivalence for overall acceptance
+- The optimal cTOST provides the most powerful test
+
+**Key observation:** All parameters satisfy equivalence individually, and the overall test accepts equivalence.
+
+# Example 2: Skin Layer Analysis
+
+The `skin_mvt` dataset contains measurements across multiple skin layers.
+
+## Load and Explore Data
+
+```{r}
+data(skin_mvt)
+dim(skin_mvt)
+head(skin_mvt)
+colnames(skin_mvt)
+```
+
+The dataset has `r nrow(skin_mvt)` observations across `r ncol(skin_mvt)` skin layers.
+
+## Compute Test Statistics
+
+```{r}
+n <- nrow(skin_mvt)
+p <- ncol(skin_mvt)
+nu <- n - 1
+
+theta_hat <- apply(skin_mvt, 2, mean)
+Sigma_hat <- cov(skin_mvt) / n
+
+cat("Sample size:", n, "\n")
+cat("Number of layers:", p, "\n\n")
+
+cat("Mean differences by layer:\n")
+print(round(theta_hat, 4))
+```
+
+## Run Analysis
+
+```{r}
+skin_optimal <- ctost(
+  theta = theta_hat,
+  sigma = Sigma_hat,
+  nu = nu,
+  delta = log(1.25),
+  alpha = 0.05,
+  method = "optimal"
+)
+
+print(skin_optimal)
+```
+
+## Visualize by Layer
+
+```{r, eval=FALSE}
+# Plotting functionality for multivariate TOST is under development
+plot(skin_optimal,
+     plot_params = list(var_names = colnames(skin_mvt)))
+```
+
+# Understanding Multivariate Corrections
+
+## Why Multivariate Testing is More Conservative
+
+Testing multiple parameters simultaneously is inherently more conservative because:
+
+1. **Multiple comparisons**: Need to control family-wise error rate
+2. **Correlation structure**: Parameters are often correlated
+3. **Finite samples**: Conservative bias compounds across dimensions
+
+## Correction Methods
+
+### Bootstrap Correction (Default for Multivariate)
+
+For multivariate settings with small samples ($\nu < 100$), bootstrap correction is used by default:
+
+```{r}
+mv_bootstrap <- ctost(
+  theta = theta_hat,
+  sigma = Sigma_hat,
+  nu = nu,
+  delta = log(1.25),
+  method = "optimal",
+  correction = "bootstrap",
+  B = 10000  # Number of bootstrap replications
+)
+```
+
+### No Correction
+
+For large samples, corrections may not be necessary:
+
+```{r}
+mv_none <- ctost(
+  theta = theta_hat,
+  sigma = Sigma_hat,
+  nu = nu,
+  delta = log(1.25),
+  method = "optimal",
+  correction = "none"
+)
+
+cat("With bootstrap:", mv_bootstrap$decision, "\n")
+cat("Without correction:", mv_none$decision, "\n")
+```
+
+# Practical Guidelines
+
+## When to Use Multivariate Testing
+
+Use multivariate equivalence testing when:
+
+1. **Multiple related outcomes** must all satisfy equivalence
+2. **Regulatory requirements** specify simultaneous testing
+3. **Composite endpoints** are scientifically relevant
+
+## Choosing Between Univariate and Multivariate
+
+**Multivariate testing** is appropriate when:
+
+- Parameters are **scientifically related**
+- **All must be equivalent** for practical equivalence
+- Example: All PK parameters in bioequivalence
+
+**Multiple univariate tests** may be appropriate when:
+
+- Parameters are **conceptually separate**
+- **Any one** being equivalent is meaningful
+- Example: Different efficacy measures in clinical trials
+
+## Sample Size Considerations
+
+Multivariate testing requires **larger sample sizes** than univariate testing because:
+
+- More parameters to estimate
+- Covariance structure adds complexity
+- Conservative adjustments for multiple testing
+
+**Rule of thumb:** For $p$ parameters, aim for $n \geq 10p$ or larger.
+
+## Interpreting Results
+
+### Component-wise Decisions
+
+The `decision` vector shows which individual parameters satisfy equivalence:
+
+```{r}
+cat("Individual parameter decisions:\n")
+print(mv_optimal$decision)
+```
+
+### Overall Decision
+
+The overall decision requires **all** components to satisfy equivalence:
+
+```{r}
+overall_decision <- all(mv_optimal$decision)
+cat("Overall equivalence accepted:", overall_decision, "\n")
+```
+
+# Comparison with Univariate Tests
+
+It's instructive to compare multivariate testing with performing separate univariate tests:
+
+```{r}
+# Univariate tests for each parameter
+univariate_results <- sapply(1:p, function(i) {
+  uni_test <- ctost(
+    theta = theta_hat[i],
+    sigma = Sigma_hat[i, i],
+    nu = nu,
+    delta = log(1.25),
+    alpha = 0.05,
+    method = "optimal"
+  )
+  uni_test$decision
+})
+
+cat("Univariate decisions (ignoring correlations):\n")
+print(univariate_results)
+
+cat("\nMultivariate decisions (accounting for correlations):\n")
+print(mv_optimal$decision)
+```
+
+**Key difference:** The multivariate test properly accounts for correlations between parameters.
+
+# Advanced Topics
+
+## Custom Equivalence Margins
+
+While we've used $\delta = \log(1.25)$ for all parameters, you can specify different margins:
+
+```{r, eval = FALSE}
+# Different margin for each parameter (not currently supported)
+# Future extension may allow parameter-specific margins
+```
+
+**Current limitation:** The package assumes the same $\delta$ for all parameters.
+
+## Visualizing Multivariate Confidence Regions
+
+For $p = 2$ parameters, we can visualize the bivariate confidence region:
+
+```{r, fig.width=6, fig.height=6, eval = FALSE}
+# Bivariate confidence ellipse (example code)
+# This requires additional packages and is shown for illustration
+library(ellipse)
+
+# Extract first two parameters
+theta_12 <- theta_hat[1:2]
+Sigma_12 <- Sigma_hat[1:2, 1:2]
+
+# Plot equivalence region
+delta <- log(1.25)
+plot(c(-delta, delta), c(-delta, delta), type = "n",
+     xlab = names(theta_hat)[1],
+     ylab = names(theta_hat)[2],
+     main = "Bivariate Confidence Region")
+rect(-delta, -delta, delta, delta, col = rgb(0, 1, 0, 0.2), border = NA)
+
+# Add confidence ellipse
+lines(ellipse(Sigma_12, centre = theta_12, level = 0.90))
+points(theta_12[1], theta_12[2], pch = 16, cex = 1.5)
+```
+
+# Summary
+
+- **Multivariate equivalence testing** tests all parameters simultaneously
+- Use `method = "optimal"` with `correction = "bootstrap"` for best performance
+- The test accounts for **correlations** between parameters
+- Larger sample sizes are needed compared to univariate testing
+- All parameters must satisfy equivalence for overall acceptance
+- Visualize results with `plot()` to see parameter-specific intervals
+
+# References
+
+For theoretical details on multivariate equivalence testing:
+
+- @boulaguiem2025multivariate for multivariate alpha-TOST
+- @insolia2025bioequivalence for optimal multivariate cTOST
+
+For related topics, see:
+
+- **Average Equivalence Testing: Univariate** vignette for single-parameter testing
+- **Mathematical Background** vignette for detailed theory

@@ -2,108 +2,146 @@ url: https://stephaneguerrier.github.io/cTOST/
 
 template:
   bootstrap: 5
-
-logo:
-  src: man/figures/hex-cTOST.png
-  alt: "cTOST logo"
+  bslib:
+    primary: "#2c3e50"
+    secondary: "#95a5a6"
+    success: "#18bc9c"
+    info: "#3498db"
+    base_font: {google: "Source Sans Pro"}
+    heading_font: {google: "Source Sans Pro"}
+    border-radius: 0.3rem
+    btn-border-radius: 0.2rem
 
 home:
-  title: "cTOST: Finite Sample Correction of the Two One-Sided Tests"
-  description: "Tools for bioequivalence assessment in univariate and multivariate settings"
+  title: "cTOST: Finite Sample Corrected TOST for Equivalence Testing"
+  description: "Finite sample corrections for average and quantile equivalence testing in univariate and multivariate settings, with differential privacy support"
   strip_header: true
-  links:
-  - text: Browse source code
-    href: https://github.com/stephaneguerrier/cTOST
+
+logo: man/figures/hex-cTOST.png
 
 navbar:
   structure:
-    left:  [intro, reference, articles, news]
+    left:  [intro, reference, articles, reproducibility, news]
     right: [search, github]
   components:
+    intro:
+      text: Get Started
+      href: articles/getting-started.html
+    reference:
+      text: Reference
+      href: reference/index.html
     articles:
       text: Articles
       menu:
       - text: Getting Started
-        href: articles/get_started.html
-      - text: Reproducibility
+        href: articles/getting-started.html
+      - text: -------
+      - text: "Average Equivalence"
+      - text: "  Univariate Testing"
+        href: articles/average-equivalence-univariate.html
+      - text: "  Multivariate Testing"
+        href: articles/average-equivalence-multivariate.html
+      - text: -------
+      - text: "Differential Privacy Testing"
+        href: articles/dp-equivalence.html
+      - text: -------
+      - text: "Advanced Topics"
+      - text: "  Mathematical Background"
+        href: articles/mathematical-background.html
+    reproducibility:
+      text: Reproducibility
+      menu:
+      - text: "Paper Reproductions"
+      - text: "  Finite Sample Adjustments (2024)"
         href: articles/reproducibility.html
+      - text: -------
+      - text: "Future Papers"
+      - text: "  [Add new papers here]"
 
 reference:
-- title: "Main TOST Functions"
-  desc: "Core functions for Two One-Sided Tests"
+- title: Average Equivalence Testing
+  desc: >
+    Functions for testing equivalence of means in univariate and multivariate settings
+    using finite sample corrections (alpha-TOST, delta-TOST, optimal cTOST).
   contents:
-  - tost
   - ctost
-  - atost
-  - dtost
+  - compare_to_tost
 
-- title: "Quantile Equivalence Tests"
-  desc: "Tests for quantile-based bioequivalence"
+- title: Quantile Equivalence Testing
+  desc: >
+    Functions for testing equivalence at specific quantiles or across multiple quantiles.
   contents:
   - qtost
-
-- title: "Extended TOST Methods"
-  desc: "Extended approaches for equivalence testing"
-  contents:
-  - xtost
-
-- title: "Multivariate Methods"
-  desc: "Equivalence tests for multivariate data"
-  contents:
-  - starts_with("mtost")
-  - starts_with("m_qtost")
-
-- title: "Power and Sample Size"
-  desc: "Functions for study planning and power analysis"
-  contents:
-  - power_TOST
-  - power_xTOST
-  - power_qTOST_MC
-  - power_xTOST_mv
-  - power_TOST_MC_mv
-  - size_TOST
-  - size_xTOST
-
-- title: "Alpha Calibration"
-  desc: "Functions for significance level adjustment"
-  contents:
-  - get_alpha_star
-  - get_alpha_TOST
-  - get_alpha_qTOST_MC
-  - get_alpha_TOST_MC_mv
-
-- title: "Comparison Functions"
-  desc: "Compare different TOST approaches"
-  contents:
-  - compare_to_tost
   - compare_to_qtost
 
-- title: "Visualization and Output"
-  desc: "Plot and print methods"
+- title: Differential Privacy Equivalence Testing
+  desc: >
+    Functions for equivalence testing under differential privacy constraints.
+  contents:
+  - prop_test_equiv_dp
+  - tost_equiv_dp
+
+- title: Visualization and Output
+  desc: >
+    Print and plot methods for displaying test results.
   contents:
   - plot.tost
   - print.tost
-  - print.qtost
   - print.mtost
+  - print.qtost
   - print.m_qtost
-  - ci
+  - print.prop_test_dp
+  - print.tost_dp
 
-- title: "Datasets"
-  desc: "Example datasets included in the package"
+- title: Datasets
+  desc: >
+    Real datasets for bioequivalence studies and examples.
   contents:
   - skin
   - ticlopidine
+  - skin_mvt
+  - biodistribution
 
-- title: "Simulation Tools"
-  desc: "Functions for data simulation"
+- title: Internal/C++ Functions
+  desc: >
+    Low-level C++ implementations for differential privacy computations.
   contents:
-  - simulate_data
+  - tost_dp_one_sample_ultra_fast
+
+articles:
+- title: Getting Started
+  navbar: Getting Started
+  contents:
+  - getting-started
+
+- title: Methodology Guides
+  desc: >
+    Detailed guides for different equivalence testing methods.
+  navbar: ~
+  contents:
+  - average-equivalence-univariate
+  - average-equivalence-multivariate
+  - dp-equivalence
+
+- title: Advanced Topics
+  desc: >
+    Mathematical details and theoretical foundations.
+  navbar: ~
+  contents:
+  - mathematical-background
+
+- title: Reproducibility
+  desc: >
+    Reproduce results from published papers.
+  navbar: Reproducibility
+  contents:
+  - reproducibility
 
 authors:
   Stéphane Guerrier:
     href: https://github.com/stephaneguerrier
   Younes Boulaguiem:
-    href: https://github.com/yboulaguiem
+    href: https://github.com/yboulag
   Dominique-Laurent Couturier:
     href: https://github.com/dlc48
   Luca Insolia:

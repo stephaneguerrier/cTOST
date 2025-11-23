@@ -1,11 +1,11 @@
 ---
-title: "`cTOST` Vignette"
+title: "Mathematical Background"
 bibliography: references.bib
-output: 
+output:
   rmarkdown::html_vignette:
     fig_caption: yes
 vignette: >
-  %\VignetteIndexEntry{`cTOST` Vignette}
+  %\VignetteIndexEntry{Mathematical Background}
   %\VignetteEngine{knitr::rmarkdown}
   %\VignetteEncoding{UTF-8}
 ---

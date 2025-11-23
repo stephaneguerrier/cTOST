@@ -3,20 +3,20 @@
 \docType{data}
 \name{ticlopidine}
 \alias{ticlopidine}
-\title{????????}
+\title{Ticlopidine Bioequivalence Data}
 \format{
-????
+A data frame. [PLACEHOLDER: Specify dimensions and variable descriptions]
 }
 \usage{
 data(ticlopidine)
 }
 \description{
-??????
+Bioequivalence data for ticlopidine. [PLACEHOLDER: Source and detailed description needed]
 }
 \examples{
 data(ticlopidine)
 }
 \references{
-????
+[PLACEHOLDER: Add source reference]
 }
 \keyword{datasets}

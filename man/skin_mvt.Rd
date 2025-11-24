@@ -3,29 +3,38 @@
 \docType{data}
 \name{skin_mvt}
 \alias{skin_mvt}
-\title{Multivariate Skin Bioequivalence Data}
+\title{Multivariate measurements for log-transformed cutaneous delivery of econazole (ECZ) from bioequivalent products on porcine skin}
 \format{
 A `data.frame` with 12 rows and 4 columns:
 \describe{
-  \item{stratum corneum}{Log-transformed drug delivery measurement in stratum corneum layer.}
-  \item{viable epidermis}{Log-transformed drug delivery measurement in viable epidermis layer.}
-  \item{upper dermis}{Log-transformed drug delivery measurement in upper dermis layer.}
-  \item{lower dermis}{Log-transformed drug delivery measurement in lower dermis layer.}
+  \item{`stratum corneum`}{Differences of log-transformed econazole nitrate delivery for the two creams across the stratum corneum (0-20 μm).}
+  \item{`viable epidermis`}{Differences of log-transformed econazole nitrate delivery for the two creams across the viable epidermis (20-160 μm).}
+  \item{`upper dermis`}{Differences of log-transformed econazole nitrate delivery for the two creams across the upper dermis (160-400 μm).}
+  \item{`lower dermis`}{Differences of log-transformed econazole nitrate delivery for the two creams across the lower dermis (400-800 μm).}
 }
 }
 \usage{
 data(skin_mvt)
 }
 \description{
-Multivariate skin bioequivalence data measuring drug delivery across multiple
-skin layers. Contains measurements from stratum corneum, viable epidermis, upper dermis,
-and lower dermis. [PLACEHOLDER: Source and detailed description needed]
+Original data were collected using the cutaneous biodistribution method described in Quartier et. al. (2019),
+and represents cutaneous delivery of econazole nitrate (ECZ in ng/cm^2) on porcine skin from a reference medicinal
+product and an approved bioequivalent product across multiple skin layers (from the surface to a depth of approximately 800 μm).
+The dataset contains differences of log-transformed measurements of ECZ deposition for the two creams,
+across 12 comparable porcine skin samples and four anatomical regions.
 }
 \examples{
 data(skin_mvt)
-head(skin_mvt)
+n <- nrow(skin_mvt)
+nu <- n - 1
+theta <- apply(skin_mvt,2,mean)
+Sigma <- cov(skin_mvt) / n
 }
 \references{
-[PLACEHOLDER: Add source reference]
+Quartier J. et al. "Cutaneous Biodistribution: A High-Resolution Methodology
+to Assess Bioequivalence in Topical Skin Delivery", Pharmaceutics, 2019.
+
+Insolia L. et al. "Bioequivalence Assessment for Locally Acting Drugs: A Framework for Feasible
+and Efficient Evaluation", arXiv, 2025.
 }
 \keyword{datasets}

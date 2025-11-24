@@ -199,7 +199,7 @@ tost_dp_one_sample <- function(a, b, n, epsilon, mean_private_obs, sd_private_ob
       fn = obj_fun_one_sample,
       method = "L-BFGS-B",
       lower = c(a, 0.000001),           # mu >= a, sigma > 0
-      upper = c(b, (b - a) * 3),        # mu <= b, sigma <= (b-a) * 3
+      upper = c(b, (b - a) / 2 + 5 * scale_sd),  # mu <= b, sigma <= (b-a)/2 + 5*scale_sd
       a = a, b = b, n = n,
       scale_mean = scale_mean,
       scale_sd = scale_sd,

@@ -201,7 +201,7 @@ List tost_dp_one_sample_ultra_fast(double a, double b, int n, double epsilon,
   const double lower_mu = a;
   const double lower_sigma = 0.000001;
   const double upper_mu = b;
-  const double upper_sigma = (b - a) / 2.0 + 5.0 * scale_sd;
+  const double upper_sigma = (b - a) * 3;
 
   // Main loop - fully optimized
   for (int i = 0; i < B; i++) {

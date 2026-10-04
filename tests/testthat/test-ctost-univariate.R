@@ -92,8 +92,9 @@ test_that("cTOST on skin (offline default, bootstrap, none) is locked to cdd680d
   expect_equal(round(unname(off$corrected_c), 5), 0.02553)
   expect_equal(round(unname(off$corrected_alpha), 5), 0.03853)
   expect_equal(round(unname(off$ci), 5), c(-0.17492, 0.22032))
-  # cdd680d stores the estimate as 'theta_hat' for this method only (audit F79)
-  expect_true("theta_hat" %in% names(off))
+  # the estimate is stored as 'theta' like every other tost object (audit F79, fixed in PR 4a)
+  expect_true("theta" %in% names(off))
+  expect_false("theta_hat" %in% names(off))
   # interval = theta +/- (delta - c), decision = interval inside +/- delta
   expect_equal(unname(off$ci), unname(s$theta) + c(-1, 1) * (off$delta - off$corrected_c),
                tolerance = tol_exact)

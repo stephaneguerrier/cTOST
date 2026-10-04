@@ -244,6 +244,9 @@ print.mtost = function(x, ticks = 30, rn = 5, ...){
   } else {
     names_var = colnames(x$sigma)
   }
+  if (is.null(names_var)){
+    names_var = if (!is.null(names(x$theta))) names(x$theta) else paste0("theta", seq_len(p))
+  }
   names_len = nchar(names_var)
 
 
@@ -416,6 +419,9 @@ print.mtost = function(x, ticks = 30, rn = 5, ...){
 #'
 #' @export
 compare_to_tost = function(x, ticks = 30, rn = 5){
+  if (!inherits(x, "tost") || inherits(x, "mtost") || identical(x$setting, "multivariate")){
+    stop("compare_to_tost() is only implemented for univariate settings, i.e. objects of class 'tost' returned by ctost() with a scalar theta.")
+  }
   result_tost = tost(theta = x$theta, sigma = sqrt(x$sigma), nu = x$nu,
                      alpha = x$alpha, delta = x$delta)
 

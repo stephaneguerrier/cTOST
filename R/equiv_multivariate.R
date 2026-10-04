@@ -92,7 +92,7 @@ obj_fun_alpha_TOST_MC_mv = function(test, alpha, Sigma, nu, delta, theta=NULL, B
 #' @param ...                   Additional parameters.
 #'
 #' @details
-#' In multivariate setting, two methods to compute supremum are available: Monte Carlo (using \code{argsup_meth} = "MC") or ... (using \code{argsup_meth} = "x").
+#' The supremum of the size over the boundary of the equivalence region is found by direct optimisation (\code{argsup_meth = "x"}, the only implemented option).
 #' The former is introduced in Boulaguiem et al. (2024, <https://doi.org/10.48550/arXiv.2411.16429>) and the latter is introduced in ...
 #'
 #' @keywords internal
@@ -100,10 +100,9 @@ obj_fun_alpha_TOST_MC_mv = function(test, alpha, Sigma, nu, delta, theta=NULL, B
 #' @return The function returns a \code{numeric} value that corresponds to the solution of the optimization.
 get_alpha_TOST_MC_mv_core = function(alpha, Sigma, nu, delta, theta=NULL, B=10^5, tol = .Machine$double.eps^0.5, seed=NULL, argsup_meth="x", ...){
   if(is.null(seed)) seed=10^8
-  # theta = find_sup_MC(alpha, Sigma, nu, delta, B=10^4,seed=seed)
   if(is.null(theta)){
     if(argsup_meth=="MC"){
-      theta = find_sup_MC(alpha,Sigma,nu,delta,B)
+      stop("argsup_meth = 'MC' is not implemented; use argsup_meth = 'x'.")
     }else if(argsup_meth=="x"){
       theta = find_sup_x(alpha,Sigma,delta)
     }

@@ -34,12 +34,12 @@ ctost(
 
 \item{seed}{A \code{numeric} value specifying a seed for reproducibility (default: \code{seed = 101010}).}
 
-\item{correction}{A \code{character} string specifying the correction method. Available options are: \code{"none"} (no correction), \code{"offline"} (offline adjustment), and \code{"bootstrap"} (bootstrap adjustment). In univariate settings, the default is \code{"offline"}; in multivariate settings, the default is \code{"bootstrap"} if \code{nu} < 100, otherwise \code{"none"}.}
+\item{correction}{A \code{character} string specifying the finite sample correction of the significance level used by the cTOST (\code{method = "optimal"}) in univariate settings: \code{"offline"} (default; precomputed table), \code{"bootstrap"} or \code{"none"}. No correction is available in multivariate settings, where \code{"none"} is used.}
 
 \item{...}{Additional parameters.}
 }
 \value{
-An object of class \code{tost} with the following components:
+An object of class \code{tost} (univariate) or \code{mtost} (multivariate) with the following components:
 \itemize{
   \item \code{decision}: Logical; indicates whether (bio)equivalence is accepted.
   \item \code{ci}: Confidence region at the \eqn{1 - 2\alpha} level.
@@ -47,7 +47,10 @@ An object of class \code{tost} with the following components:
   \item \code{sigma}: The estimated variance of \code{theta}; a \code{numeric} value (univariate) or \code{matrix} (multivariate).
   \item \code{nu}: The degrees of freedom used in the test.
   \item \code{alpha}: The significance level used in the test.
-  \item \code{corrected_alpha}: The significance level after adjustment (if \code{method = "alpha"}).
+  \item \code{corrected_alpha}: The significance level after adjustment (if \code{method = "alpha"} or \code{"optimal"}).
+  \item \code{corrected_c}: The corrected critical value \eqn{c(0)} (univariate cTOST); \code{c0} holds the per-coordinate values in multivariate settings.
+  \item \code{correction}: The finite sample correction applied (cTOST only).
+  \item \code{corrected_ci}: The TOST interval re-expressed on the nominal \eqn{\pm\delta} scale (if \code{method = "delta"}).
   \item \code{corrected_delta}: The (bio)equivalence limits after adjustment (if \code{method = "delta"}).
   \item \code{delta}: The (bio)equivalence limits used in the test.
   \item \code{method}: The adjustment method used (optimal, alpha-TOST, or delta-TOST).

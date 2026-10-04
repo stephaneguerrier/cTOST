@@ -147,6 +147,26 @@ prop_test_equiv_dp <- function(p_hat, n, p_hat2 = NULL, n2 = NULL,
     stop("epsilon must be a single value or a vector of length 2")
   }
 
+  # Validate the remaining inputs (p_hat is a privatized proportion and may legitimately
+  # fall outside [0, 1], so its range is not restricted)
+  .check_scalar(p_hat, "p_hat")
+  .check_scalar(n, "n", min = 1, integer = TRUE)
+  .check_scalar(lower, "lower"); .check_scalar(upper, "upper")
+  if (lower >= upper) stop("'lower' must be smaller than 'upper'.")
+  .check_scalar(alpha, "alpha", min = 0, max = 0.5, strict_min = TRUE, strict_max = TRUE)
+  .check_scalar(B, "B", min = 1, integer = TRUE)
+  .check_scalar(max_resample, "max_resample", min = 0, integer = TRUE)
+  if (!is.numeric(epsilon) || any(!is.finite(epsilon)) || any(epsilon <= 0)) {
+    stop("'epsilon' must be positive and finite.")
+  }
+  if (two_sample) {
+    .check_scalar(p_hat2, "p_hat2")
+    .check_scalar(n2, "n2", min = 1, integer = TRUE)
+  }
+  # Seed: NULL draws one from the caller's stream; otherwise the caller's stream is restored on exit
+  if (!is.null(seed)) .restore_rng_on_exit()
+  seed <- .resolve_seed(seed, margin = as.integer(min(B, .Machine$integer.max - 1)) + 1L)
+
   # Perform the appropriate test
   if (two_sample) {
     # Two-sample test
@@ -275,8 +295,15 @@ prop_test_dp_one_sample <- function(p_hat, n, lower, upper,
   }
 
   # Confidence interval (percentile method)
-  ci_lower <- quantile(nu_samples, probs = alpha, na.rm = TRUE)
-  ci_upper <- quantile(nu_samples, probs = 1 - alpha, na.rm = TRUE)
+  n_na <- sum(is.na(nu_samples))
+  if (n_na == B) {
+    stop("No valid moment-matching solution was found in any of the B replications; check p_hat, n and epsilon.")
+  }
+  if (n_na > 0.1 * B) {
+    warning(sprintf("%d of %d Monte Carlo replications had no valid moment-matching solution and were dropped.", n_na, B))
+  }
+  ci_lower <- quantile(nu_samples, probs = alpha, na.rm = TRUE, names = FALSE)
+  ci_upper <- quantile(nu_samples, probs = 1 - alpha, na.rm = TRUE, names = FALSE)
 
   # Equivalence decision: CI must be entirely within [lower, upper]
   decision <- (ci_lower > lower) && (ci_upper < upper)
@@ -455,8 +482,15 @@ prop_test_dp_two_sample <- function(p1_hat, p2_hat, n1, n2, lower, upper,
   diff_samples <- nu_samples_1 - nu_samples_2
 
   # Confidence interval (percentile method)
-  ci_lower <- quantile(diff_samples, probs = alpha, na.rm = TRUE)
-  ci_upper <- quantile(diff_samples, probs = 1 - alpha, na.rm = TRUE)
+  n_na <- sum(is.na(diff_samples))
+  if (n_na == B) {
+    stop("No valid moment-matching solution was found in any of the B replications; check p_hat, n and epsilon.")
+  }
+  if (n_na > 0.1 * B) {
+    warning(sprintf("%d of %d Monte Carlo replications had no valid moment-matching solution and were dropped.", n_na, B))
+  }
+  ci_lower <- quantile(diff_samples, probs = alpha, na.rm = TRUE, names = FALSE)
+  ci_upper <- quantile(diff_samples, probs = 1 - alpha, na.rm = TRUE, names = FALSE)
 
   # Equivalence decision: CI must be entirely within [lower, upper]
   decision <- (ci_lower > lower) && (ci_upper < upper)

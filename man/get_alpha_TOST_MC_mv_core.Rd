@@ -45,7 +45,7 @@ The function returns a \code{numeric} value that corresponds to the solution of 
 Get alpha star for multivariate TOST or xTOST
 }
 \details{
-In multivariate setting, two methods to compute supremum are available: Monte Carlo (using \code{argsup_meth} = "MC") or ... (using \code{argsup_meth} = "x").
+The supremum of the size over the boundary of the equivalence region is found by direct optimisation (\code{argsup_meth = "x"}, the only implemented option).
 The former is introduced in Boulaguiem et al. (2024, <https://doi.org/10.48550/arXiv.2411.16429>) and the latter is introduced in ...
 }
 \author{

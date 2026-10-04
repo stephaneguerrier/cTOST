@@ -82,6 +82,32 @@
 #' print(result_summary)
 #'
 qtost <- function(x, y, pi_x, delta, alpha = 0.05, method = "alpha", B = NULL, seed = 101010, tol = 1e-6, max_iter=10, tolpower = 1e-3, MC_sup = TRUE, ...) {
+  if (!is.numeric(pi_x) || length(pi_x) < 1 || any(!is.finite(pi_x)) || any(pi_x <= 0 | pi_x >= 1)) {
+    stop("'pi_x' must be numeric with all values strictly between 0 and 1.")
+  }
+  if (!is.numeric(delta) || length(delta) != 1 || !is.finite(delta)) {
+    stop("'delta' must be a single finite number.")
+  }
+  if (!is.numeric(alpha) || length(alpha) != 1 || !is.finite(alpha)) {
+    stop("'alpha' must be a single finite number.")
+  }
+  if (!is.null(B) && (!is.numeric(B) || length(B) != 1 || !is.finite(B) || B < 1)) {
+    stop("'B' must be NULL or a single number greater than or equal to 1.")
+  }
+  if (!is.numeric(max_iter) || length(max_iter) != 1 || !is.finite(max_iter) || max_iter < 1) {
+    stop("'max_iter' must be a single number greater than or equal to 1.")
+  }
+  if (!is.numeric(tolpower) || length(tolpower) != 1 || !is.finite(tolpower) || tolpower <= 0) {
+    stop("'tolpower' must be a single positive number.")
+  }
+  if (!is.logical(MC_sup) || length(MC_sup) != 1 || is.na(MC_sup)) {
+    stop("'MC_sup' must be TRUE or FALSE.")
+  }
+  if (!is.null(seed) && (!is.numeric(seed) || length(seed) != 1 || !is.finite(seed))) {
+    stop("'seed' must be NULL or a single finite number.")
+  }
+  # the alpha-qTOST fixes the seed internally: leave the caller's stream untouched
+  if (!is.null(seed)) .restore_rng_on_exit()
   if (is.null(B)) {
    B = if (length(pi_x)==1) 1e5 else 1e4
   }
@@ -112,6 +138,9 @@ qtost <- function(x, y, pi_x, delta, alpha = 0.05, method = "alpha", B = NULL, s
   } else {
     delta_l = pi_x - delta
     delta_u = pi_x + delta
+  }
+  if (any(delta_l <= 0 | delta_u >= 1)) {
+    stop("'pi_x' - 'delta' and 'pi_x' + 'delta' must lie strictly in (0, 1).")
   }
   if (length(pi_x) > 1) {
     setting = "multiple"

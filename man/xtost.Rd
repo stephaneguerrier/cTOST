@@ -37,7 +37,7 @@ An object of class \code{tost} with the structure:
 \itemize{
  \item \code{decision}:    A boolean variable indicating whether (bio)equivalence is accepted or not.
  \item \code{ci}:          Confidence region at the \eqn{1 - 2\alpha} level.
- \item \code{theta_hat}:   The estimated difference(s) used in the test.
+ \item \code{theta}:   The estimated difference(s) used in the test.
  \item \code{sigma}:       The estimated variance of \code{theta}, a \code{numeric} in univariate settings or \code{matrix} in multivariate settings.
  \item \code{nu}:          The number of degrees of freedom used in the test.
  \item \code{alpha}:       The significance level used in the test.

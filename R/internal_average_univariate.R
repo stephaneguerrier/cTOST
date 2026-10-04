@@ -356,8 +356,7 @@ size_xTOST = function(sig_hat, delta, delta_star, ...){
 #' @param optim   A \code{character} value representing the method to use (default: optim = \code{"NR"}), see Details below for more information.
 #'
 #' @details
-#' There are two methods available for optimization: Newton-Raphson (using \code{optim} = "NR") and minimization without
-#' derivatives (using \code{optim} = "uniroot").
+#' Only the Newton-Raphson method (\code{optim = "NR"}) is implemented.
 #'
 #' @keywords internal
 #' @importFrom stats pnorm
@@ -376,10 +375,7 @@ get_c_of_0 = function(delta, sigma, alpha, B = 1000, tol = 10^(-8), l=1, optim =
   alpha0 = alpha
   # argzero
   if(optim=="uniroot"){
-    c_uniroot_ = uniroot(obj_fun_c_of_0, interval=c(10^-8,l),
-                         alpha=alpha0, sigma=sigma, delta=c0,tol=.Machine$double.eps)
-    size_uniroot = size_xTOST(sig_hat=sigma,delta=c0,delta_star=c_uniroot_$root)
-    out = list(c = c_uniroot_$root, size = size_uniroot)
+    stop("optim = 'uniroot' is not implemented; use optim = 'NR'.")
   }else if(optim == "NR"){
     # Sequence of c's
     m=30
@@ -445,7 +441,7 @@ get_c_of_0 = function(delta, sigma, alpha, B = 1000, tol = 10^(-8), l=1, optim =
 #' \itemize{
 #'  \item \code{decision}:    A boolean variable indicating whether (bio)equivalence is accepted or not.
 #'  \item \code{ci}:          Confidence region at the \eqn{1 - 2\alpha} level.
-#'  \item \code{theta_hat}:   The estimated difference(s) used in the test.
+#'  \item \code{theta}:   The estimated difference(s) used in the test.
 #'  \item \code{sigma}:       The estimated variance of \code{theta}, a \code{numeric} in univariate settings or \code{matrix} in multivariate settings.
 #'  \item \code{nu}:          The number of degrees of freedom used in the test.
 #'  \item \code{alpha}:       The significance level used in the test.
@@ -475,7 +471,9 @@ xtost = function(theta_hat, sig_hat, nu, alpha, delta, correction = "none", B = 
     stop("correction must be one of 'none', 'bootstrap' or 'offline'")
   }
 
-  if (correction == "bootstrap"){
+  # Finite sample correction of the level: 2*alpha - TIER, where TIER is the type I
+  # error rate of the uncorrected procedure at the boundary.
+  bootstrap_alpha = function(){
     res = rep(NA, B)
     for (i in 1:B){
       dat = simulate_data(mu = delta, sigma = sig_hat,
@@ -483,7 +481,22 @@ xtost = function(theta_hat, sig_hat, nu, alpha, delta, correction = "none", B = 
       c_0_hat = get_c_of_0(delta = delta, sigma = dat$sig_hat, alpha = alpha)
       res[i] = abs(dat$theta_hat) < c_0_hat$c
     }
-    correct_alpha = 2*alpha - mean(res)
+    2*alpha - mean(res)
+  }
+  # The correction can be non-positive when the uncorrected size exceeds 2*alpha
+  # (very small nu and/or alpha); the level is then floored at 1e-6 with a warning.
+  floor_alpha = function(correct_alpha){
+    if (correct_alpha < 1e-6){
+      warning(sprintf(paste0("The finite sample correction is not available for alpha = %g, nu = %g and this ",
+                             "standard error (the uncorrected size exceeds 2*alpha); the corrected level is floored ",
+                             "at 1e-6. Consider correction = 'none' or method = 'alpha'."), alpha, nu))
+      correct_alpha = 1e-6
+    }
+    correct_alpha
+  }
+
+  if (correction == "bootstrap"){
+    correct_alpha = floor_alpha(bootstrap_alpha())
   }
 
   if (correction == "offline"){
@@ -506,7 +519,15 @@ xtost = function(theta_hat, sig_hat, nu, alpha, delta, correction = "none", B = 
     index_sigma = which.min(abs(ctost_offline_adj$sigmas - sig_hat_sc))
     index_nu = which.min(abs(ctost_offline_adj$nus - nu))
     correct_alpha = 2*alpha - ctost_offline_adj$tier[index_nu, index_sigma, index_alpha]
-    correct_alpha = max(correct_alpha, 1e-6) # CHECK-ME/FIXME: to avoid close to zero or negatives
+    if (is.na(correct_alpha)){
+      # no table entry for this (nu, sigma, alpha) cell: fall back to the bootstrap
+      warning(sprintf(paste0("The offline correction table has no entry for nu = %g, rescaled standard error = %.3g ",
+                             "and alpha = %g; correction = 'bootstrap' (B = %d) is used instead."),
+                      nu, sig_hat_sc, alpha, as.integer(B)))
+      correction = "bootstrap"
+      correct_alpha = bootstrap_alpha()
+    }
+    correct_alpha = floor_alpha(correct_alpha)
     # if (plot){
     #   correct_alpha_all = 2*alpha - ctost_offline_adj$tier[,,index_alpha]
     #   library(pheatmap)
@@ -524,7 +545,7 @@ xtost = function(theta_hat, sig_hat, nu, alpha, delta, correction = "none", B = 
   decision = abs(theta_hat) < c_0_hat$c
   ci_half_length = delta - c_0_hat$c
   ci = theta_hat + c(-1, 1) * ci_half_length
-  out = list(decision = decision, ci = ci, theta_hat = theta_hat,
+  out = list(decision = decision, ci = ci, theta = theta_hat,
              sigma = sig_hat^2, nu = nu, alpha = alpha,
              corrected_c = c_0_hat$c,
              correction = correction,

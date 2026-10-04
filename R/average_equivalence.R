@@ -9,7 +9,7 @@
 #' @param method A \code{character} string specifying the finite sample adjustment method. Available methods are: \code{"unadjusted"} (standard unadjusted TOST), \code{"alpha"} (alpha-TOST), \code{"delta"} (delta-TOST, not implemented for multivariate settings), and \code{"optimal"} (cTOST, default). See Details.
 #' @param alpha A \code{numeric} value specifying the significance level, which must be between 0 and 0.5 (default: \code{alpha = 0.05}).
 #' @param B A \code{numeric} value specifying the number of Monte Carlo replications, required for some methods (default: \code{B = 10^4}).
-#' @param correction A \code{character} string specifying the correction method. Available options are: \code{"none"} (no correction), \code{"offline"} (offline adjustment), and \code{"bootstrap"} (bootstrap adjustment). In univariate settings, the default is \code{"offline"}; in multivariate settings, the default is \code{"bootstrap"} if \code{nu} < 100, otherwise \code{"none"}.
+#' @param correction A \code{character} string specifying the finite sample correction of the significance level used by the cTOST (\code{method = "optimal"}) in univariate settings: \code{"offline"} (default; precomputed table), \code{"bootstrap"} or \code{"none"}. No correction is available in multivariate settings, where \code{"none"} is used.
 #' @param seed A \code{numeric} value specifying a seed for reproducibility (default: \code{seed = 101010}).
 #' @param ... Additional parameters.
 #'
@@ -20,7 +20,7 @@
 #'
 #' Generally, cTOST outperforms other methods, with alpha-TOST performing better than delta-TOST. For this reason, delta-TOST is not implemented for multivariate settings and is not recommended.
 #'
-#' @return An object of class \code{tost} with the following components:
+#' @return An object of class \code{tost} (univariate) or \code{mtost} (multivariate) with the following components:
 #' \itemize{
 #'   \item \code{decision}: Logical; indicates whether (bio)equivalence is accepted.
 #'   \item \code{ci}: Confidence region at the \eqn{1 - 2\alpha} level.
@@ -28,7 +28,10 @@
 #'   \item \code{sigma}: The estimated variance of \code{theta}; a \code{numeric} value (univariate) or \code{matrix} (multivariate).
 #'   \item \code{nu}: The degrees of freedom used in the test.
 #'   \item \code{alpha}: The significance level used in the test.
-#'   \item \code{corrected_alpha}: The significance level after adjustment (if \code{method = "alpha"}).
+#'   \item \code{corrected_alpha}: The significance level after adjustment (if \code{method = "alpha"} or \code{"optimal"}).
+#'   \item \code{corrected_c}: The corrected critical value \eqn{c(0)} (univariate cTOST); \code{c0} holds the per-coordinate values in multivariate settings.
+#'   \item \code{correction}: The finite sample correction applied (cTOST only).
+#'   \item \code{corrected_ci}: The TOST interval re-expressed on the nominal \eqn{\pm\delta} scale (if \code{method = "delta"}).
 #'   \item \code{corrected_delta}: The (bio)equivalence limits after adjustment (if \code{method = "delta"}).
 #'   \item \code{delta}: The (bio)equivalence limits used in the test.
 #'   \item \code{method}: The adjustment method used (optimal, alpha-TOST, or delta-TOST).
@@ -56,9 +59,35 @@
 ctost = function(theta, sigma, nu, delta, alpha = 0.05, method = "optimal", B = 10^4, seed = 101010, correction = NULL, ...){
 
   # Check inputs
-  if (alpha < 0.0000001 || alpha > 0.5){
-    stop("alpha must be in (0, 0.5).")
+  if (!is.numeric(alpha) || length(alpha) != 1 || !is.finite(alpha) || alpha <= 0 || alpha >= 0.5){
+    stop("alpha must be a single number in (0, 0.5).")
   }
+  if (!is.numeric(theta) || length(theta) < 1 || any(!is.finite(theta))){
+    stop("theta must be a numeric vector of finite values.")
+  }
+  if (!is.numeric(sigma) || length(sigma) < 1 || any(!is.finite(sigma))){
+    stop("sigma must be numeric and finite.")
+  }
+  if (!is.numeric(nu) || length(nu) != 1 || !is.finite(nu) || nu < 1){
+    stop("nu must be a single number greater than or equal to 1.")
+  }
+  if (!is.numeric(delta) || length(delta) < 1 || any(!is.finite(delta)) || any(delta <= 0)){
+    stop("delta must be positive and finite.")
+  }
+  if (!is.character(method) || length(method) != 1){
+    stop("method must be a single character string.")
+  }
+  if (!is.null(correction) && (!is.character(correction) || length(correction) != 1)){
+    stop("correction must be NULL or a single character string.")
+  }
+  if (!is.numeric(B) || length(B) != 1 || !is.finite(B) || B < 1){
+    stop("B must be a single number greater than or equal to 1.")
+  }
+  if (!is.null(seed) && (!is.numeric(seed) || length(seed) != 1 || !is.finite(seed))){
+    stop("seed must be NULL or a single finite number.")
+  }
+  # Monte Carlo branches fix the seed internally: leave the caller's stream untouched
+  if (!is.null(seed)) .restore_rng_on_exit()
 
   n_theta = length(theta)
 
@@ -68,10 +97,19 @@ ctost = function(theta, sigma, nu, delta, alpha = 0.05, method = "optimal", B = 
     if (length(sigma) > 1 || length(delta) > 1){
       stop("sigma and delta must be scalars in univariate settings.")
     }
+    # drop the dim attribute of 1 x 1 matrices (R >= 4.6 warns on array-vector arithmetic)
+    theta = c(theta)
+    sigma = c(sigma)
+    if (sigma <= 0){
+      stop("sigma must be positive.")
+    }
   }else{
     setting = "multivariate"
     if (!is.matrix(sigma) || ncol(sigma) != nrow(sigma)){
       stop("sigma must be a square matrix.")
+    }
+    if (nrow(sigma) != n_theta){
+      stop("sigma must be a p x p matrix with p = length(theta).")
     }
 
     if (length(delta) > 1){
@@ -86,13 +124,13 @@ ctost = function(theta, sigma, nu, delta, alpha = 0.05, method = "optimal", B = 
   if (method == "delta" && setting == "multivariate") {
     stop("The delta-TOST method is not implemented for multivariate settings.")
   }
+  if (method == "alpha" && setting == "multivariate" && nu < n_theta) {
+    stop("nu must be at least length(theta) for the multivariate alpha-TOST.")
+  }
 
   if (is.null(correction)){
-    if (method == "optimal"){
-      correction = "offline"
-    }else{
-      correction = "none"
-    }
+    # the offline/bootstrap corrections exist for the univariate cTOST only
+    correction = if (method == "optimal" && setting == "univariate") "offline" else "none"
   }
   if (!(correction %in% c("none", "bootstrap", "offline"))) {
     stop("Available correction methods for the cTOST ('optimal') are 'none', 'bootstrap', and 'offline'.")
@@ -170,12 +208,11 @@ ctost = function(theta, sigma, nu, delta, alpha = 0.05, method = "optimal", B = 
       delta_vec = rep(delta, n_theta)
       # TBA: corrected alpha through bootstrap in mvt settings
       # correction = "none"
-      if (correction!="none"){
-        warning("Available correction method for the multivariate cTOST ('optimal') is only 'none' currently ('bootstrap' coming soon).")
-        corrected_alpha = alpha
-      } else if (correction == "none") {
-        corrected_alpha = alpha
+      if (correction != "none"){
+        warning("No finite sample correction is available for the multivariate cTOST yet; correction = 'none' is used.")
+        correction = "none"
       }
+      corrected_alpha = alpha
       c_of_0 = get_ctost_mvt(alpha, sigma, delta_vec)$c_of_0 #, theta=NULL, tol = .Machine$double.eps^0.5, seed=NULL, max_iter=10, tolpower=NULL, ...)
       decision = abs(theta) < c_of_0
       ctost_ci_half_length = delta_vec - c_of_0

@@ -62,7 +62,7 @@ qtost_core <- function(theta, sigma, pi_x, delta_l, delta_u, alpha = 0.05, corre
     setting = if (length(pi_x) > 1) "multiple" else "single"
   )
   if (is.null(corrected_alpha)) {
-    out = out[out != "corrected_alpha"]
+    out = out[names(out) != "corrected_alpha"]
   } else {
     out$alpha = alpha0
     out$method = "alpha-qTOST"
@@ -206,8 +206,11 @@ get_alpha_qTOST_MC = function(gamma, n_x, n_y, pi_x, delta_l, delta_u, alpha, B,
   if (obj_func_a1 > tol) return(list(root = alpha, f.root = obj_func_a1)) # size close to alpha
   obj_func_a2 = obj_fun_qTOST_MC(1/2, lambda, gamma, n_x, n_y, pi_x, delta_l, delta_u, alpha, B, seed)
   if (abs(obj_func_a2) < tol) return(list(root = 1/2, f.root = obj_func_a2)) # size close to 0.5
-  out = uniroot(obj_fun_qTOST_MC, interval = c(alpha, 1/2),
-                lambda, gamma, n_x, n_y, pi_x, delta_l, delta_u,
-                alpha, B, seed)
+  out = tryCatch(uniroot(obj_fun_qTOST_MC, interval = c(alpha, 1/2),
+                         lambda, gamma, n_x, n_y, pi_x, delta_l, delta_u,
+                         alpha, B, seed),
+                 error = function(e) stop(paste0("The corrected significance level could not be found in (alpha, 0.5); ",
+                                                "the sample sizes are too small for the alpha-qTOST with these margins (",
+                                                conditionMessage(e), ")."), call. = FALSE))
   out
 }

@@ -27,14 +27,16 @@ test_that("multivariate alpha-TOST on ticlopidine is locked (Monte Carlo, fixed 
   expect_s3_class(res, "mtost")
   expect_equal(res$method, "alpha-TOST")
   expect_true(all(res$decision))
-  # cdd680d, default B. alpha* is a Monte Carlo estimate (accuracy about +/- 0.005,
-  # audit F34); the multivariate vignette prints 0.05909. The value moves if the
-  # Monte Carlo size, the seed handling (F14) or the sup search (F12) change.
-  expect_equal(unname(res$corrected_alpha), 0.0590946010753, tolerance = tol_exact)
+  # cdd680d, default B, macOS value. alpha* is a Monte Carlo estimate (accuracy about
+  # +/- 0.005, audit F34) and depends on the BLAS/LAPACK used by rmvnorm (0.0590800 on
+  # Linux/Windows CI), hence tol_mc. The multivariate vignette prints 0.05909. The
+  # value moves if the Monte Carlo size, the seed handling (F14) or the sup search
+  # (F12) change.
+  expect_equal(unname(res$corrected_alpha), 0.0590946010753, tolerance = tol_mc)
   ci_ref = matrix(c(-0.150099920315, -0.180297923278, -0.173911114853, -0.217221143689,
                     0.117455254607, 0.00468367212509, 0.010964564234, 0.0149677780853),
                   ncol = 2)
-  expect_equal(unname(res$ci), ci_ref, tolerance = tol_exact)
+  expect_equal(unname(res$ci), ci_ref, tolerance = tol_mc)
   # the intervals use the corrected level per coordinate
   se = sqrt(diag(t$sigma))
   q = qt(1 - res$corrected_alpha, t$nu)

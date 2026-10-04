@@ -38,6 +38,10 @@ qtost_fda_inputs = function() {
 
 # Tolerances (relative, as interpreted by testthat's expect_equal)
 tol_exact = 1e-10   # deterministic values locked from cdd680d (quoted to 12 significant digits)
+tol_mc = 1e-3       # Monte Carlo quantities that go through LAPACK (mvtnorm::rmvnorm):
+                    # the same seed gives 0.0590946 on macOS (Accelerate) and 0.0590800 on
+                    # Linux/Windows (reference BLAS) for the ticlopidine alpha-TOST, i.e.
+                    # last-digit differences in the draws flip a few of the 10^4 decisions.
 tol_cran101 = 1e-3  # alpha-/delta-TOST versus CRAN 1.0.1: 1.1.0 solves the corrected
                     # level/margin only to uniroot's default tolerance (audit F27).
                     # Tighten to 1e-7 once the tolerance is passed to uniroot again.

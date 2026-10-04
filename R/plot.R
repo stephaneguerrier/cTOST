@@ -1,4 +1,4 @@
-#' Plot confidence intervals for one or more `tost` or `mtost` objects
+#' Plot confidence intervals for one or more `tost`, `mtost`, `qtost` or `mqtost` objects
 #'
 #' @description
 #' Displays and compares confidence intervals and rejections regions from one or more
@@ -6,7 +6,7 @@
 #' and confidence intervals against a shaded equivalence region, providing a clear
 #' visual summary of the test results.
 #'
-#' @param ... One or more `tost` or `mtost` objects to be plotted, passed as
+#' @param ... One or more `tost`, `mtost`, `qtost` or `mqtost` objects to be plotted, passed as
 #'   separate arguments.
 #' @param plot_params A named list of parameters to customize the plot's appearance.
 #'   See the "Customization" section for details on key options.
@@ -31,7 +31,9 @@
 #'   its own graphical parameters (`par`) and resets them upon exiting. Set to
 #'   `FALSE` when arranging multiple plots in a grid (e.g., with `par(mfrow=...))`.
 #' - `add_decision`: A logical value. If `TRUE` (the default), ticks showing the
-#'    decisions for equivalence assessment are added next to confidence intervals.
+#'    decisions for equivalence assessment are added next to confidence intervals
+#'    (a check mark or a cross; on PDF/PostScript devices and in non-UTF-8 locales,
+#'    which cannot render these glyphs, `v` and `x` are used instead).
 #'
 #' ### Key `legend_params` options:
 #' - `x`, `title`, `cex`: Standard `legend()` arguments for position, title, and size.
@@ -59,7 +61,7 @@
 #'               alpha = alpha0, delta = c0, method = "alpha")
 #' otost = ctost(theta = theta_hat, sigma = sig_hat,
 #'               nu = nu, alpha = alpha0, delta = c0, method = "optimal")
-#' plot.tost(stost, atost, otost)
+#' plot(stost, atost, otost)
 #' # Multivariate assessment
 #' data(skin_mvt)
 #' n = nrow(skin_mvt)
@@ -71,15 +73,15 @@
 #' # Multivariate assessment of a single method with default inputs
 #' (mvt_stost = ctost(theta = theta_hat, sigma = Sigma_hat, nu = nu,
 #'                    alpha = alpha0, delta = c0, method = "unadjusted"))
-#' plot.tost(mvt_stost)
+#' plot(mvt_stost)
 #' # Multivariate comparison with default inputs
 #' (mvt_atost = ctost(theta = theta_hat, sigma = Sigma_hat, nu = nu,
 #'                    alpha = alpha0, delta = c0, method = "alpha", B=1e3))
 #' (mvt_ctost = ctost(theta = theta_hat, sigma = Sigma_hat, nu = nu,
 #'                    alpha = alpha0, delta = c0, method = "optimal"))
-#' plot.tost(mvt_stost, mvt_atost, mvt_ctost)
+#' plot(mvt_stost, mvt_atost, mvt_ctost)
 #' # Multivariate comparison with custom inputs
-#' plot.tost(
+#' plot(
 #'   mvt_stost, mvt_atost, mvt_ctost,
 #'   plot_params = list(
 #'     main = "Bioequivalence Assessment",
@@ -97,7 +99,7 @@
 #'     line.ylab=2,
 #'     eq_region_fill = grDevices::adjustcolor("grey60", alpha.f = 0.15),
 #'     eq_region_lines = "grey60",
-#'     add_decision = F
+#'     add_decision = FALSE
 #'   ),
 #'   legend_params = list(
 #'     legend = c("TOST", bquote(alpha*"-TOST"), "cTOST"),
@@ -106,7 +108,7 @@
 #'     inset = -0.7,
 #'     title = "Method:",
 #'     bty = "o",
-#'     horiz = F
+#'     horiz = FALSE
 #'   )
 #' )
 plot.tost = function(..., plot_params = list(), legend_params = list()) {
@@ -115,7 +117,7 @@ plot.tost = function(..., plot_params = list(), legend_params = list()) {
        !all(sapply(x, class) == "qtost") && !all(sapply(x, class) == "mqtost"))){
     stop("Input 'x' must be a list of the same 'tost', 'qtost', 'mtost'  or 'mqtost' objects.")
   }
-  qnt_plot = if (any(sapply(x, "[[", "method") %in% c("qTOST", "alpha-qTOST"))) T else F
+  qnt_plot = if (any(sapply(x, "[[", "method") %in% c("qTOST", "alpha-qTOST"))) TRUE else FALSE
   M = length(x)
   sapply(x, class)
   K = length(x[[1]]$decision)
@@ -150,7 +152,7 @@ plot.tost = function(..., plot_params = list(), legend_params = list()) {
     c0_lab = c(expression(-c[0]), expression(c[0])),
     eq_region_fill = grDevices::adjustcolor("#FF9900", alpha.f = 0.1),
     eq_region_lines = "#FF9900",
-    add_decision = T,
+    add_decision = TRUE,
     manage_par = TRUE,
     cex = 1.5,
     cex.axis = 1.5,
@@ -222,16 +224,24 @@ plot.tost = function(..., plot_params = list(), legend_params = list()) {
       points(mean_point, y_pos, col = p$col[i], pch = p$pch, cex = p$cex * 1.25)
       if (p$add_decision){
         is_accepted = obj$decision[j]
-        symbol_char = if (obj$decision[j]) "✓" else "✗"
+        # check mark / ballot x where the locale and device can render them,
+        # ASCII stand-ins otherwise (non-UTF-8 locale, pdf() and postscript() devices)
+        utf8_ok = isTRUE(l10n_info()[["UTF-8"]]) &&
+          !(names(dev.cur()) %in% c("pdf", "postscript", "xfig", "pictex"))
+        symbol_char = if (obj$decision[j]) {
+          if (utf8_ok) "\u2713" else "v"
+        } else {
+          if (utf8_ok) "\u2717" else "x"
+        }
         symbol_col = if (obj$decision[j]) "darkgreen" else "red"
-        par(xpd = T)
+        par(xpd = TRUE)
         text(x = symbol_x_pos*1.035, y = y_pos,
              labels = symbol_char,
              col = symbol_col,
              cex = p$cex * 1.4,
              font = 2,
              adj = c(0, 0.2))
-        par(xpd = F)
+        par(xpd = FALSE)
       }
     }
   }
@@ -255,12 +265,12 @@ plot.tost = function(..., plot_params = list(), legend_params = list()) {
       cex = p$cex,
       inset = -0.35,
       x.intersp = 1.5,
-      equal_spacing = T,
+      equal_spacing = TRUE,
       symbol_space = 1.8,
       spacing_vec = NULL,
       bar_width_ratio = 0.7,
       cap_length = 0.04,
-      horiz = T,
+      horiz = TRUE,
       xjust = 0.5,
       yjust = -0.7
     )
@@ -282,6 +292,18 @@ plot.tost = function(..., plot_params = list(), legend_params = list()) {
     par(xpd = FALSE)
   }
 }
+
+#' @rdname plot.tost
+#' @export
+plot.mtost = plot.tost
+
+#' @rdname plot.tost
+#' @export
+plot.qtost = plot.tost
+
+#' @rdname plot.tost
+#' @export
+plot.mqtost = plot.tost
 
 #' Generate ggplot2-like Colors
 #'
@@ -310,6 +332,7 @@ gg_color_hue = function(n) {
 #' @return The first non-NULL value from left to right.
 #'
 #' @keywords internal
+#' @noRd
 #'
 `%||%` = function(a, b) {
   if (is.null(a)) b else a

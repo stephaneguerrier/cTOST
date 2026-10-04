@@ -1,13 +1,11 @@
-library(cli)
-
-#' @title Print Results of (Bio)Equivalence testing in Single Quantile Setting.
+#' @title Print Results of (Bio)Equivalence testing in Single Quantile Setting
 #'
 #' @param x     A \code{qtost} object, which is the output of the function 'qtost'.
 #' @param ticks Number of ticks to print the confidence interval in the console.
 #' @param rn    Number of digits to consider when printing the results.
 #' @param ...   Further arguments to be passed to or from methods.
 #'
-#' @return      Prints object.
+#' @return      The object \code{x}, invisibly.
 #' @importFrom  cli cli_text col_green col_red
 #'
 #' @rdname print.qtost
@@ -20,29 +18,32 @@ print.qtost = function(x, ticks = 30, rn = 5, ...){
     if (!(x$method %in% c("qTOST", "alpha-qTOST"))){
       stop("This method is not compatible")
     }
+    # qtost_core() stores the interval as a 1 x 2 matrix and the limits in eq_region
+    ci = as.numeric(x$ci)
+    be = as.numeric(x$eq_region[1, c(1, 3)])
     if (x$decision){
       cli_text(col_green("{symbol$tick} Accept quantile (bio)equivalence"))
     }else{
       cli_text(col_red("{symbol$cross} Can't accept quantile (bio)equivalence"))
     }
     if (x$method == "qTOST"){
-      lower_be = x$ci[1] > x$delta[1]
-      upper_be = x$ci[2] < x$delta[2]
-      rg = range(c(x$ci, x$delta))
+      lower_be = ci[1] > be[1]
+      upper_be = ci[2] < be[2]
+      rg = range(c(ci, be))
       rg_delta = rg[2] - rg[1]
-      std_be_interval = round(ticks*(c(x$delta[1], x$delta[2]) - rg[1])/rg_delta) + 1
+      std_be_interval = round(ticks*(c(be[1], be[2]) - rg[1])/rg_delta) + 1
       std_zero = round(-ticks*rg[1]/rg_delta) + 1
-      std_fit_interval = round(ticks*(x$ci - rg[1])/rg_delta) + 1
-      std_fit_interval_center = round(ticks*(sum(x$ci)/2 - rg[1])/rg_delta) + 1
+      std_fit_interval = round(ticks*(ci - rg[1])/rg_delta) + 1
+      std_fit_interval_center = round(ticks*(sum(ci)/2 - rg[1])/rg_delta) + 1
     }else{
-      lower_be = x$ci[1] > x$delta[1]
-      upper_be = x$ci[2] < x$delta[2]
-      rg = range(c(x$ci, x$delta))
+      lower_be = ci[1] > be[1]
+      upper_be = ci[2] < be[2]
+      rg = range(c(ci, be))
       rg_delta = rg[2] - rg[1]
-      std_be_interval = round(ticks*(c(x$delta[1], x$delta[2]) - rg[1])/rg_delta) + 1
+      std_be_interval = round(ticks*(c(be[1], be[2]) - rg[1])/rg_delta) + 1
       std_zero = round(-ticks*rg[1]/rg_delta) + 1
-      std_fit_interval = round(ticks*(x$ci - rg[1])/rg_delta) + 1
-      std_fit_interval_center = round(ticks*(sum(x$ci)/2 - rg[1])/rg_delta) + 1
+      std_fit_interval = round(ticks*(ci - rg[1])/rg_delta) + 1
+      std_fit_interval_center = round(ticks*(sum(ci)/2 - rg[1])/rg_delta) + 1
     }
     if (x$method == "qTOST"){
       cat("Equiv. Region:  ")
@@ -119,9 +120,9 @@ print.qtost = function(x, ticks = 30, rn = 5, ...){
     }
     cat("\n")
     cat("CI =  (")
-    cat(format(round(x$ci[1], rn), nsmall = rn))
+    cat(format(round(ci[1], rn), nsmall = rn))
     cat(" ; ")
-    cat(format(round(x$ci[2], rn), nsmall = rn))
+    cat(format(round(ci[2], rn), nsmall = rn))
     cat(")\n\n")
     cat("Method: ")
     cat(x$method)
@@ -130,9 +131,9 @@ print.qtost = function(x, ticks = 30, rn = 5, ...){
     cat(x$alpha)
     cat("; ")
     cat("Equiv. lim. = (")
-    cat(format(round(x$delta[1], rn), nsmall = rn))
+    cat(format(round(be[1], rn), nsmall = rn))
     cat(" ; ")
-    cat(format(round(x$delta[2], rn), nsmall = rn))
+    cat(format(round(be[2], rn), nsmall = rn))
     cat(")")
     cat("\n")
     if (x$method == "alpha-qTOST"){
@@ -141,46 +142,51 @@ print.qtost = function(x, ticks = 30, rn = 5, ...){
       cat("\n")
     }
     cat("theta_hat = ")
-    cat(format(round(x$theta_hat, rn), nsmall = rn))
+    cat(format(round(x$theta, rn), nsmall = rn))
     cat("; ")
     cat("Stand. dev. = ")
-    cat(format(round(x$sigma_hat, rn), nsmall = rn))
+    cat(format(round(x$sigma, rn), nsmall = rn))
     cat("\n")
   }
+  invisible(x)
 }
 
-#' @title Print Results of (Bio)Equivalence testing in Two Quantiles Setting.
+#' @title Print Results of (Bio)Equivalence testing in Two Quantiles Setting
 #'
 #' @param x     A \code{qtost} object, which is the output of the function 'qtost'.
 #' @param ticks Number of ticks to print the confidence interval in the console.
 #' @param rn    Number of digits to consider when printing the results.
 #' @param ...   Further arguments to be passed to or from methods.
 #'
-#' @return      Prints object.
+#' @return      The object \code{x}, invisibly.
 #' @importFrom  cli cli_text col_green col_red
 #'
-#' @rdname print.m_qtost
+#' @rdname print.mqtost
 #'
 #' @export
-print.m_qtost = function(x, ticks = 60, rn = 5,...){
+print.mqtost = function(x, ticks = 60, rn = 5, ...){
   p = length(x$decision)
+  # qtost_core() stores ci as p x 2 and eq_region as p x 3 (lower, pi_x, upper);
+  # the display below works column-wise (2 x p)
+  ci = t(x$ci)
+  be = t(x$eq_region[, c(1, 3), drop = FALSE])
   if (all(x$decision)){
     cli_text(col_green("{symbol$tick} Accept quantile (bio)equivalence"))
   }else{
     cli_text(col_red("{symbol$cross} Can't accept quantile (bio)equivalence"))
   }
-  rg = range(c(x$ci, x$delta))
+  rg = range(c(ci, be))
   rg_delta = rg[2] - rg[1]
   std_zero= round(-ticks*rg[1] / rg_delta) + 1
   std_be_interval = std_fit_interval = matrix(NA,2,p)
   lower_be = upper_be = std_fit_interval_center = std_be_interval_center = rep(NA, p)
   for (i in 1:p) {
-    std_be_interval[,i] = round(ticks*(x$delta[,i]-rg[1])/rg_delta) + 1
-    std_fit_interval[,i] = round(ticks*(x$ci[,i] - rg[1])/rg_delta) + 1
-    std_fit_interval_center[i] = round(ticks*(sum(x$ci[,i])/2 - rg[1])/rg_delta) + 1
-    std_be_interval_center[i] = round(ticks*(sum(x$delta[,i])/2 - rg[1])/rg_delta) + 1
-    lower_be[i] = x$ci[1,i] > x$delta[1,i]
-    upper_be[i] = x$ci[2,i] < x$delta[2,i]
+    std_be_interval[,i] = round(ticks*(be[,i]-rg[1])/rg_delta) + 1
+    std_fit_interval[,i] = round(ticks*(ci[,i] - rg[1])/rg_delta) + 1
+    std_fit_interval_center[i] = round(ticks*(sum(ci[,i])/2 - rg[1])/rg_delta) + 1
+    std_be_interval_center[i] = round(ticks*(sum(be[,i])/2 - rg[1])/rg_delta) + 1
+    lower_be[i] = ci[1,i] > be[1,i]
+    upper_be[i] = ci[2,i] < be[2,i]
   }
   adj_center = round(mean(std_fit_interval_center))
   adj_std_be_interval = adj_std_fit_interval = matrix(NA,2,p)
@@ -372,9 +378,9 @@ print.m_qtost = function(x, ticks = 60, rn = 5,...){
   cat("\n")
   for (i in 1:p){
     cat(paste0("q",i," = ("))
-    cat(format(round(x$ci[1,i], rn), nsmall = rn))
+    cat(format(round(ci[1,i], rn), nsmall = rn))
     cat("; ")
-    cat(format(round(x$ci[2,i], rn), nsmall = rn))
+    cat(format(round(ci[2,i], rn), nsmall = rn))
     cat(") ")
     if (x$decision[i]) {
       cat(col_green(cli::symbol$tick))
@@ -388,9 +394,9 @@ print.m_qtost = function(x, ticks = 60, rn = 5,...){
   cat("\n")
   for (i in 1:p){
     cat(paste0("q",i," = ("))
-    cat(format(round(x$delta[1,i], rn), nsmall = rn))
+    cat(format(round(be[1,i], rn), nsmall = rn))
     cat("; ")
-    cat(format(round(x$delta[2,i], rn), nsmall = rn))
+    cat(format(round(be[2,i], rn), nsmall = rn))
     cat(")\n")
   }
   cat("\n")
@@ -405,6 +411,7 @@ print.m_qtost = function(x, ticks = 60, rn = 5,...){
     cat(format(round(x$corrected_alpha, rn), nsmall = rn))
     cat("\n")
   }
+  invisible(x)
 }
 
 #' @title Comparison of a Corrective Procedure to the Results of the Quantile Two One-Sided Tests (qTOST) in Single Quantile Setting
@@ -414,7 +421,7 @@ print.m_qtost = function(x, ticks = 60, rn = 5,...){
 #' @param x A \code{qtost} object, which is the output of one of the function: `qtost`.
 #' @param ticks an integer indicating the number of segments that will be printed to represent the confidence intervals.
 #' @param rn integer indicating the number of decimals places to be used (see function `round`) for the printed results.
-#' @return Prints a comparison between the qTOST results (i.e., output of `qtost`) and the alpha-qTOST results.
+#' @return Prints a comparison between the qTOST results (i.e., output of `qtost`) and the alpha-qTOST results; returns \code{x} invisibly.
 #'
 #' @examples
 #' # Using summary statistics from FDA label
@@ -438,71 +445,20 @@ print.m_qtost = function(x, ticks = 60, rn = 5,...){
 #' @importFrom cli cli_text col_green col_red
 #'
 #' @export
-compare_to_qtost = function(...) {
-  args = list(...)
-  if (!is.null(args)) {
-    if (!is.null(args$x_data) && !is.null(args$y_data)) {
-      x_data = args$x_data
-      y_data = args$y_data
-      x_bar = mean(x_data)
-      sd_x = sd(x_data)
-      n_x = length(x_data)
-      y_bar = mean(y_data)
-      sd_y = sd(y_data)
-      n_y = length(y_data)
-    } else {
-      if (any(sapply(list(args$x_bar, args$sd_x, args$n_x, args$y_bar, args$sd_y, args$n_y), is.null))) {
-        stop("Either provide raw data 'x' (x_data) and 'y' (y_data) or all summary statistics for x (x_bar, sd_x, n_x) and y (y_bar, sd_y, n_y).")
-      } else {
-        x_bar = args$x_bar
-        sd_x = args$sd_x
-        n_x = args$n_x
-        y_bar = args$y_bar
-        sd_y = args$sd_y
-        n_y = args$n_y
-      }
-    }
-    if (any(sapply(list(args$pi_x, args$delta_l, args$delta_u), is.null))) {
-      stop("Please provide the quantile(s) of interest (pi_x), the lower limit(s) (delta_l) and the upper limit(s) (delta_u).\n")
-    } else {
-      pi_x = args$pi_x
-      delta_l = args$delta_l
-      delta_u = args$delta_u
-      alpha = args$alpha
-      B = args$B
-      seed = args$seed
-      tol = args$tol
-      if (is.null(alpha)) alpha = 0.05
-      if (is.null(B)) B = 10^5
-      if (is.null(seed)) seed = 12345
-      if (is.null(tol)) tol = .Machine$double.eps^0.5
-      method = args$method
-      if (is.null(method)) method = "alpha-qTOST"
-      ticks = 30
-      rn = 5
-    }
+compare_to_qtost = function(x, ticks = 30, rn = 5) {
+  if (!inherits(x, "qtost")) {
+    stop("'x' must be a 'qtost' object, i.e. the output of 'qtost' for a single quantile.")
   }
-  if (exists("x_data") && exists("y_data")) {
-    x = qtost(x_data = x_data, y_data = y_data,
-              x_bar = x_bar, sd_x = sd_x, n_x = n_x,
-              y_bar = y_bar, sd_y = sd_y, n_y = n_y,
-              pi_x = pi_x, delta_l = delta_l, delta_u = delta_u,
-              alpha = alpha, method = "alpha-qTOST")
-    result_qtost = qtost(x_data = x_data, y_data = y_data,
-                         x_bar = x_bar, sd_x = sd_x, n_x = n_x,
-                         y_bar = y_bar, sd_y = sd_y, n_y = n_y,
-                         pi_x = pi_x, delta_l = delta_l, delta_u = delta_u,
-                         alpha = alpha, method = "unadjusted")
-  } else {
-    x = qtost(x_bar = x_bar, sd_x = sd_x, n_x = n_x,
-              y_bar = y_bar, sd_y = sd_y, n_y = n_y,
-              pi_x = pi_x, delta_l = delta_l, delta_u = delta_u,
-              alpha = alpha, method = "alpha-qTOST")
-    result_qtost = qtost(x_bar = x_bar, sd_x = sd_x, n_x = n_x,
-                         y_bar = y_bar, sd_y = sd_y, n_y = n_y,
-                         pi_x = pi_x, delta_l = delta_l, delta_u = delta_u,
-                         alpha = alpha, method = "unadjusted")
+  if (x$method != "alpha-qTOST") {
+    stop("This method is not compatible")
   }
+  # unadjusted qTOST on the same estimates, for comparison
+  result_qtost = qtost_core(theta = x$theta, sigma = x$sigma, pi_x = x$pi_x,
+                            delta_l = x$eq_region[, 1], delta_u = x$eq_region[, 3],
+                            alpha = x$alpha)
+  x_ci = as.numeric(x$ci)
+  q_ci = as.numeric(result_qtost$ci)
+  be = as.numeric(x$eq_region[1, c(1, 3)])
   name_q = "Equiv. Region: "
   name_len_q = nchar(name_q)
   name_s = "qTOST: "
@@ -514,10 +470,10 @@ compare_to_qtost = function(...) {
   if (!(x$method %in% c("qTOST", "alpha-qTOST"))) {
     stop("This method is not compatible")
   } else {
-    lower_be_pitost = x$ci[1] > x$delta[1]
-    upper_be_pitost = x$ci[2] < x$delta[2]
-    lower_be_qtost = result_qtost$ci[1] > x$delta[1]
-    upper_be_qtost = result_qtost$ci[2] < x$delta[2]
+    lower_be_pitost = x_ci[1] > be[1]
+    upper_be_pitost = x_ci[2] < be[2]
+    lower_be_qtost = q_ci[1] > be[1]
+    upper_be_qtost = q_ci[2] < be[2]
     if (x$method == "qTOST") {
       if (name_len_s < name_len_c) {
         # cat(name_s)
@@ -586,15 +542,15 @@ compare_to_qtost = function(...) {
     }
 
     cat("\n")
-    rg = range(c(x$ci, result_qtost$ci, x$delta))
+    rg = range(c(x_ci, q_ci, be))
     rg_delta = rg[2] - rg[1]
-    std_be_interval = round(ticks * (x$delta - rg[1]) / rg_delta) + 1
+    std_be_interval = round(ticks * (be - rg[1]) / rg_delta) + 1
     std_zero = round(-ticks * rg[1] / rg_delta) + 1
-    std_fit_interval_pitost = round(ticks * (x$ci - rg[1]) / rg_delta) + 1
-    std_fit_interval_center_pitost = round(ticks * (sum(x$ci) / 2 - rg[1]) / rg_delta) + 1
-    std_fit_interval_qtost = round(ticks * (result_qtost$ci - rg[1]) / rg_delta) + 1
-    # std_fit_interval_center_qtost = round(ticks * (sum(result_qtost$ci) / 2 - rg[1]) / rg_delta) + 1
-    std_fit_interval_center_qtost = round(ticks * (sum(result_qtost$ci) / 2 - rg[1]) / rg_delta)-1
+    std_fit_interval_pitost = round(ticks * (x_ci - rg[1]) / rg_delta) + 1
+    std_fit_interval_center_pitost = round(ticks * (sum(x_ci) / 2 - rg[1]) / rg_delta) + 1
+    std_fit_interval_qtost = round(ticks * (q_ci - rg[1]) / rg_delta) + 1
+    # std_fit_interval_center_qtost = round(ticks * (sum(q_ci) / 2 - rg[1]) / rg_delta) + 1
+    std_fit_interval_center_qtost = round(ticks * (sum(q_ci) / 2 - rg[1]) / rg_delta)-1
 
     if (name_len_q < max_names_len) {
       cat(name_q)
@@ -747,9 +703,9 @@ compare_to_qtost = function(...) {
     cat(name_s)
     cat(" ")
   }
-  cat(format(round(result_qtost$ci[1], rn), nsmall = rn))
+  cat(format(round(q_ci[1], rn), nsmall = rn))
   cat("       ")
-  cat(format(round(result_qtost$ci[2], rn), nsmall = rn))
+  cat(format(round(q_ci[2], rn), nsmall = rn))
   cat("\n")
   if (x$method == "alpha-qTOST") {
     if (name_len_c < nchar(name_low)) {
@@ -763,13 +719,14 @@ compare_to_qtost = function(...) {
   } else {
     cat("only one adjustment method available:          ")
   }
-  cat(format(round(x$ci[1], rn), nsmall = rn))
+  cat(format(round(x_ci[1], rn), nsmall = rn))
   cat("       ")
-  cat(format(round(x$ci[2], rn), nsmall = rn))
+  cat(format(round(x_ci[2], rn), nsmall = rn))
   cat("\n")
   cat("\n")
   cat("Equiv. lim. = dw/up ")
-  cat(format(round(x$delta, rn), nsmall = rn))
+  cat(format(round(be, rn), nsmall = rn))
   cat("\n")
+  invisible(x)
 }
 

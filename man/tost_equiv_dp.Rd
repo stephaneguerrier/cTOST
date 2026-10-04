@@ -55,11 +55,11 @@ is provided. Default is NULL.}
 
 \item{lower}{Lower equivalence bound. For one-sample tests, this is the lower bound
 for the mean. For two-sample tests, this is the lower bound for the difference
-(μ1 - μ2). Typical value: -delta.}
+(\eqn{\mu_1 - \mu_2}). Typical value: -delta.}
 
 \item{upper}{Upper equivalence bound. For one-sample tests, this is the upper bound
 for the mean. For two-sample tests, this is the upper bound for the difference
-(μ1 - μ2). Typical value: delta.}
+(\eqn{\mu_1 - \mu_2}). Typical value: delta.}
 
 \item{epsilon}{Privacy budget. Can be a single value (used for all samples) or a
 vector of length 2 (epsilon[1] for first group, epsilon[2] for second group).
@@ -76,6 +76,8 @@ Default is 10000.}
 
 \item{method}{Implementation to use: "cpp" (default, ultra-fast) or "r" (pure R).
 The C++ implementation is 15-250x faster depending on problem size.}
+
+\item{...}{Additional arguments (currently unused).}
 }
 \value{
 A list of class "tost_dp" containing:
@@ -105,7 +107,7 @@ to reconstruct the sampling distribution from privatized statistics.
 
 For the one-sample case, the test evaluates whether a mean is equivalent to a
 reference range [lower, upper]. For the two-sample case, it tests whether the
-difference between two means (μ1 - μ2) falls within the equivalence bounds
+difference between two means (\eqn{\mu_1 - \mu_2}) falls within the equivalence bounds
 [lower, upper].
 
 The privacy mechanism adds Laplace noise to both the observed mean and standard
@@ -113,7 +115,6 @@ deviation. The privacy budget epsilon controls the amount of noise: larger epsil
 values provide less privacy but more accurate inference.
 }
 \examples{
-\dontrun{
 # One-sample test: Is mean equivalent to range [1.5, 3.5]?
 set.seed(123)
 n <- 100
@@ -150,7 +151,7 @@ result <- tost_equiv_dp(
 )
 result
 
-# Two-sample test: Is difference (μ1 - μ2) equivalent to [-1, 1]?
+# Two-sample test: Is difference (mu1 - mu2) equivalent to [-1, 1]?
 set.seed(456)
 n1 <- 100
 n2 <- 100
@@ -194,7 +195,6 @@ result <- tost_equiv_dp(
   B = 1000
 )
 result
-}
 
 
 }

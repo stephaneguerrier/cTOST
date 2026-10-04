@@ -13,7 +13,7 @@ size_xTOST(sig_hat, delta, delta_star, ...)
 
 \item{delta_star}{A \code{numeric} value specifying the corrected (bio)equivalence margin(s).}
 
-\item{...}{description}
+\item{...}{Additional arguments (currently unused).}
 }
 \value{
 The function returns a \code{numeric} value that corresponds to a probability.

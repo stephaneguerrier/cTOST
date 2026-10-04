@@ -83,3 +83,23 @@ test_that("qtost() rejects a non-positive delta and an unknown method", {
   expect_error(qtost(i$x, i$y, pi_x = 0.8, delta = 0, method = "unadjusted"))
   expect_error(qtost(i$x, i$y, pi_x = 0.8, delta = 0.15, method = "nope"))
 })
+
+test_that("two-quantile alpha-qTOST with MC_sup = FALSE runs and agrees with the Monte Carlo sup", {
+  # audit F03: the analytic sup path called a shadowed function and always failed;
+  # the quantile power function is now power_qTOST_mv()
+  i = qtost_fda_inputs()
+  mc = qtost(i$x, i$y, pi_x = c(0.25, 0.75), delta = 0.15, method = "alpha")
+  an = qtost(i$x, i$y, pi_x = c(0.25, 0.75), delta = 0.15, method = "alpha", MC_sup = FALSE)
+  expect_s3_class(an, "mqtost")
+  expect_equal(an$method, "alpha-qTOST")
+  expect_equal(unname(an$decision), unname(mc$decision))
+  # the analytic sup uses a normal approximation, the default a Monte Carlo sup; on this
+  # example they differ by about 0.012 in the corrected alpha (0.1336 vs 0.1217)
+  expect_lt(abs(an$corrected_alpha - mc$corrected_alpha), 0.05)
+  expect_lt(max(abs(an$ci - mc$ci)), 0.05)
+  # locked from the PR 3 tree (first version in which this path runs)
+  expect_equal(unname(an$corrected_alpha), 0.133590470372, tolerance = tol_exact)
+  expect_equal(unname(an$ci),
+               matrix(c(0.134465731874, 0.513530651222, 0.342735228798, 0.750556060786), ncol = 2),
+               tolerance = tol_exact)
+})

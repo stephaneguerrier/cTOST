@@ -89,7 +89,7 @@ reference:
   - print.tost
   - print.mtost
   - print.qtost
-  - print.m_qtost
+  - print.mqtost
   - print.prop_test_dp
   - print.tost_dp
 
@@ -101,12 +101,6 @@ reference:
   - ticlopidine
   - skin_mvt
   - biodistribution
-
-- title: Internal/C++ Functions
-  desc: >
-    Low-level C++ implementations for differential privacy computations.
-  contents:
-  - tost_dp_one_sample_ultra_fast
 
 articles:
 - title: Getting Started

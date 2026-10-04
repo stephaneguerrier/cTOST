@@ -2,7 +2,7 @@
 % Please edit documentation in R/internal_average_univariate.R
 \name{obj_fun_alpha_TOST}
 \alias{obj_fun_alpha_TOST}
-\title{Objective Function of the delta-TOST Corrective Procedure}
+\title{Objective Function of the alpha-TOST Corrective Procedure}
 \usage{
 obj_fun_alpha_TOST(test, alpha, sigma, nu, delta, theta = NULL, ...)
 }
@@ -25,6 +25,6 @@ obj_fun_alpha_TOST(test, alpha, sigma, nu, delta, theta = NULL, ...)
 The function returns a \code{numeric} value for the objective function.
 }
 \description{
-Objective Function of the delta-TOST Corrective Procedure
+Objective Function of the alpha-TOST Corrective Procedure
 }
 \keyword{internal}

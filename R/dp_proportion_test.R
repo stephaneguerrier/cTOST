@@ -61,7 +61,6 @@
 #'   \item{B}{Number of Monte Carlo replications.}
 #'
 #' @examples
-#' \dontrun{
 #' # One-sample test: Is proportion equivalent to range [0.3, 0.5]?
 #' set.seed(123)
 #' n <- 500
@@ -122,7 +121,6 @@
 #'   B = 1000
 #' )
 #' result
-#' }
 #'
 #'
 #' @export

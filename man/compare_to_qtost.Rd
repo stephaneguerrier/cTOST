@@ -4,7 +4,7 @@
 \alias{compare_to_qtost}
 \title{Comparison of a Corrective Procedure to the Results of the Quantile Two One-Sided Tests (qTOST) in Single Quantile Setting}
 \usage{
-compare_to_qtost(...)
+compare_to_qtost(x, ticks = 30, rn = 5)
 }
 \arguments{
 \item{x}{A \code{qtost} object, which is the output of one of the function: `qtost`.}
@@ -14,7 +14,7 @@ compare_to_qtost(...)
 \item{rn}{integer indicating the number of decimals places to be used (see function `round`) for the printed results.}
 }
 \value{
-Prints a comparison between the qTOST results (i.e., output of `qtost`) and the alpha-qTOST results.
+Prints a comparison between the qTOST results (i.e., output of `qtost`) and the alpha-qTOST results; returns \code{x} invisibly.
 }
 \description{
 This function renders a comparison of the qTOST or the alpha-qTOST outputs obtained with the function `qtost`.

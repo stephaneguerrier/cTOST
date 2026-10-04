@@ -2,7 +2,7 @@
 % Please edit documentation in R/print_qnt.R
 \name{print.qtost}
 \alias{print.qtost}
-\title{Print Results of (Bio)Equivalence testing in Single Quantile Setting.}
+\title{Print Results of (Bio)Equivalence testing in Single Quantile Setting}
 \usage{
 \method{print}{qtost}(x, ticks = 30, rn = 5, ...)
 }
@@ -16,8 +16,8 @@
 \item{...}{Further arguments to be passed to or from methods.}
 }
 \value{
-Prints object.
+The object \code{x}, invisibly.
 }
 \description{
-Print Results of (Bio)Equivalence testing in Single Quantile Setting.
+Print Results of (Bio)Equivalence testing in Single Quantile Setting
 }

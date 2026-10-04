@@ -10,3 +10,4 @@
 ^README_files
 ^README\.html$
 ^build_site\.R$
+^dev$

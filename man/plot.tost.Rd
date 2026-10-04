@@ -103,7 +103,7 @@ plot.tost(
     cex.main=2,
     line.main=4,
     line.ylab=2,
-    eq_region_fill = scales::alpha("grey60", 0.15),
+    eq_region_fill = grDevices::adjustcolor("grey60", alpha.f = 0.15),
     eq_region_lines = "grey60",
     add_decision = F
   ),

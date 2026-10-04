@@ -95,7 +95,7 @@
 #'     cex.main=2,
 #'     line.main=4,
 #'     line.ylab=2,
-#'     eq_region_fill = scales::alpha("grey60", 0.15),
+#'     eq_region_fill = grDevices::adjustcolor("grey60", alpha.f = 0.15),
 #'     eq_region_lines = "grey60",
 #'     add_decision = F
 #'   ),
@@ -148,7 +148,7 @@ plot.tost = function(..., plot_params = list(), legend_params = list()) {
     mar_adj = if (K>1 && M>1) c(0, l_spac, 3, 1) else c(0, 3, 0, 1),
     var_names = var_names_def,
     c0_lab = c(expression(-c[0]), expression(c[0])),
-    eq_region_fill = scales::alpha("#FF9900", 0.1),
+    eq_region_fill = grDevices::adjustcolor("#FF9900", alpha.f = 0.1),
     eq_region_lines = "#FF9900",
     add_decision = T,
     manage_par = TRUE,

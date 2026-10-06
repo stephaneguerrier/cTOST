@@ -1,4 +1,7 @@
-# cTOST
+[![cTOST hex
+logo](reference/figures/logo.png)](https://stephaneguerrier.github.io/cTOST/)
+
+**Finite sample corrections for equivalence testing**
 
 ## Overview
 

@@ -1,21 +1,18 @@
-/* No rule under page headers, and a larger hex logo (pkgdown's default is 100 px) */
+/* No rule under page headers, and a larger hex logo (pkgdown's default is 100 px).
+   pkgdown's own min-height on .page-header is kept, so the logo overflows the
+   header and the first paragraphs wrap beside it, as on the GitHub README. */
 .page-header {
   border-bottom: none;
-  min-height: 170px;
 }
 img.logo {
   width: 150px;
   margin-left: 30px;
-}
-.template-home .page-header {
-  min-height: 190px;
 }
 .template-home img.logo {
   width: 170px;
 }
 @media (max-width: 575.98px) {
   img.logo, .template-home img.logo { width: 110px; }
-  .page-header, .template-home .page-header { min-height: 0; }
 }
 
 /* Console colours in article output. pkgdown converts cli's colour codes to inline

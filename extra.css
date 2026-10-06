@@ -1,0 +1,4 @@
+/* Home page: keep the logo beside the title but drop the rule under the header */
+.template-home .page-header {
+  border-bottom: none;
+}

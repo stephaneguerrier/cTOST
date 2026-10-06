@@ -1,15 +1,7 @@
 
 <!-- README.md is generated from README.Rmd. Please edit this file -->
 
-<p align="center">
-
-<a href="https://stephaneguerrier.github.io/cTOST/"><img src="man/figures/logo.png" width="180" alt="cTOST hex logo" /></a>
-</p>
-
-<p align="center">
-
-<strong>Finite sample corrections for equivalence testing</strong>
-</p>
+# cTOST <a href="https://stephaneguerrier.github.io/cTOST/"><img src="man/figures/logo.png" align="right" height="138" alt="cTOST website" /></a>
 
 <!-- badges: start -->
 

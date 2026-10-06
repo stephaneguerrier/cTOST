@@ -18,11 +18,7 @@ knitr::opts_chunk$set(
 ```
  
 
-<p align="center">
-  <a href="https://stephaneguerrier.github.io/cTOST/"><img src="man/figures/logo.png" width="180" alt="cTOST hex logo" /></a>
-</p>
-
-<p align="center"><strong>Finite sample corrections for equivalence testing</strong></p>
+# cTOST <a href="https://stephaneguerrier.github.io/cTOST/"><img src="man/figures/logo.png" align="right" height="138" alt="cTOST website" /></a>
 
 <!-- badges: start -->
 [![Licence](https://img.shields.io/badge/licence-AGPL--3.0-blue.svg)](https://opensource.org/licenses/AGPL-3.0)

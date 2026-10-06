@@ -18,12 +18,12 @@ knitr::opts_chunk$set(
 ```
  
 
-# `cTOST` Overview  <a href="https://stephaneguerrier.github.io/cTOST/"><img src="man/figures/hex-cTOST.png" alt="cTOST logo" align="right" height="138" width="125" /></a>
+# cTOST <a href="https://stephaneguerrier.github.io/cTOST/"><img src="man/figures/logo.png" align="right" height="138" alt="cTOST website" /></a>
 
 <!-- badges: start -->
 [![Licence](https://img.shields.io/badge/licence-AGPL--3.0-blue.svg)](https://opensource.org/licenses/AGPL-3.0)
-[![Last-changedate](https://img.shields.io/badge/last%20change-`r gsub('-', '--', Sys.Date())`-green.svg)](https://github.com/yboulag/cTOST)
-[![R-CMD-check](https://github.com/yboulag/cTOST/actions/workflows/R-CMD-check.yaml/badge.svg)](https://github.com/stephaneguerrier/cTOST/actions/workflows/R-CMD-check.yaml)
+[![CRAN status](https://www.r-pkg.org/badges/version/cTOST)](https://CRAN.R-project.org/package=cTOST)
+[![R-CMD-check](https://github.com/stephaneguerrier/cTOST/actions/workflows/R-CMD-check.yaml/badge.svg)](https://github.com/stephaneguerrier/cTOST/actions/workflows/R-CMD-check.yaml)
 [![CRAN RStudio mirror downloads](http://cranlogs.r-pkg.org/badges/cTOST)](https://www.r-pkg.org/pkg/cTOST)
 [![CRAN RStudio mirror downloads](https://cranlogs.r-pkg.org/badges/grand-total/cTOST)](https://www.r-pkg.org/pkg/cTOST)
 <!-- badges: end -->
@@ -152,7 +152,8 @@ mtost
 #### Multivariate Alpha-TOST
 
 ```{r}
-matost = ctost(theta = theta_hat, sigma = Sigma_hat, nu = nu, delta = log(1.25))
+matost = ctost(theta = theta_hat, sigma = Sigma_hat, nu = nu, delta = log(1.25),
+               method = "alpha")
 matost
 ```
 
@@ -160,14 +161,14 @@ matost
 
 For detailed guides and examples, see the package vignettes:
 
-- **[Getting Started](articles/getting-started.html)** - Quick introduction and basic usage
-- **[Average Equivalence: Univariate](articles/average-equivalence-univariate.html)** - In-depth guide to univariate testing
-- **[Average Equivalence: Multivariate](articles/average-equivalence-multivariate.html)** - Multivariate testing with examples
-- **[Quantile Equivalence Testing](articles/quantile-equivalence.html)** - Testing at specific quantiles
-- **[Differential Privacy Testing](articles/dp-equivalence.html)** - Equivalence testing for sensitive data
-- **[Mathematical Background](articles/mathematical-background.html)** - Theory and mathematical details
+- **[Getting Started](https://stephaneguerrier.github.io/cTOST/articles/getting-started.html)** - Quick introduction and basic usage
+- **[Average Equivalence: Univariate](https://stephaneguerrier.github.io/cTOST/articles/average-equivalence-univariate.html)** - In-depth guide to univariate testing
+- **[Average Equivalence: Multivariate](https://stephaneguerrier.github.io/cTOST/articles/average-equivalence-multivariate.html)** - Multivariate testing with examples
+- **[Quantile Equivalence Testing](https://stephaneguerrier.github.io/cTOST/articles/quantile-equivalence.html)** - Testing at specific quantiles
+- **[Differential Privacy Testing](https://stephaneguerrier.github.io/cTOST/articles/dp-equivalence.html)** - Equivalence testing for sensitive data
+- **[Mathematical Background](https://stephaneguerrier.github.io/cTOST/articles/mathematical-background.html)** - Theory and mathematical details
 
-Or browse the [full reference documentation](reference/index.html).
+Or browse the [full reference documentation](https://stephaneguerrier.github.io/cTOST/reference/index.html).
 
 ## 5. How to cite
 

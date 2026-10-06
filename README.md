@@ -1,13 +1,14 @@
 
 <!-- README.md is generated from README.Rmd. Please edit this file -->
 
-# `cTOST` Overview <a href="https://stephaneguerrier.github.io/cTOST/"><img src="man/figures/hex-cTOST.png" alt="cTOST logo" align="right" height="138" width="125" /></a>
+# cTOST <a href="https://stephaneguerrier.github.io/cTOST/"><img src="man/figures/logo.png" align="right" height="138" alt="cTOST website" /></a>
 
 <!-- badges: start -->
 
 [![Licence](https://img.shields.io/badge/licence-AGPL--3.0-blue.svg)](https://opensource.org/licenses/AGPL-3.0)
-[![Last-changedate](https://img.shields.io/badge/last%20change-2025--11--23-green.svg)](https://github.com/yboulag/cTOST)
-[![R-CMD-check](https://github.com/yboulag/cTOST/actions/workflows/R-CMD-check.yaml/badge.svg)](https://github.com/stephaneguerrier/cTOST/actions/workflows/R-CMD-check.yaml)
+[![CRAN
+status](https://www.r-pkg.org/badges/version/cTOST)](https://CRAN.R-project.org/package=cTOST)
+[![R-CMD-check](https://github.com/stephaneguerrier/cTOST/actions/workflows/R-CMD-check.yaml/badge.svg)](https://github.com/stephaneguerrier/cTOST/actions/workflows/R-CMD-check.yaml)
 [![CRAN RStudio mirror
 downloads](http://cranlogs.r-pkg.org/badges/cTOST)](https://www.r-pkg.org/pkg/cTOST)
 [![CRAN RStudio mirror
@@ -131,11 +132,11 @@ atost
 #> ✔ Accept (bio)equivalence
 #> Equiv. Region:  |----------------0----------------|
 #> Estim. Inter.:     (---------------x--------------)
-#> CI =  (-0.17655 ; 0.22195)
+#> CI =  (-0.17654 ; 0.22194)
 #> 
 #> Method: alpha-TOST
 #> alpha = 0.05; Equiv. lim. = +/- 0.22314
-#> Corrected alpha = 0.07865
+#> Corrected alpha = 0.07866
 #> Mean = 0.02270; Stand. dev. = 0.13428; df = 16
 ```
 
@@ -155,7 +156,7 @@ compare_to_tost(atost)
 #> 
 #>                  CI - low      CI - high
 #> TOST:            -0.21174       0.25715
-#> alpha-TOST:      -0.17655       0.22195
+#> alpha-TOST:      -0.17654       0.22194
 #> 
 #> Equiv. lim. = +/- 0.22314
 ```
@@ -175,7 +176,7 @@ dtost
 #> 
 #> Method: delta-TOST
 #> alpha = 0.05; Equiv. lim. = +/- 0.22314
-#> Corrected Equiv. lim. = +/- 0.25470
+#> Corrected Equiv. lim. = +/- 0.25473
 #> Mean = 0.02270; Stand. dev. = 0.13428; df = 16
 ```
 
@@ -220,53 +221,56 @@ mtost
 #### Multivariate Alpha-TOST
 
 ``` r
-matost = ctost(theta = theta_hat, sigma = Sigma_hat, nu = nu, delta = log(1.25))
-#> Warning in ctost(theta = theta_hat, sigma = Sigma_hat, nu = nu, delta =
-#> log(1.25)): Available correction method for the multivariate cTOST ('optimal')
-#> is only 'none' currently ('bootstrap' coming soon).
+matost = ctost(theta = theta_hat, sigma = Sigma_hat, nu = nu, delta = log(1.25),
+               method = "alpha")
 matost
 #> ✔ Accept (bio)equivalence
 #> Equiv. Region:   |----------------0----------------|
 #> t_half                (----------x----------)       
 #> AUC                 (-------x-------)               
-#> AUC_inf              (-------x-------)              
-#> C_max             (--------x---------)              
+#> AUC_inf             (--------x-------)              
+#> C_max            (---------x---------)              
 #> 
 #> CIs:
-#> t_half   (-0.14520 ; 0.11256)
+#> t_half   (-0.15010 ; 0.11746)
 #> ✔
-#> AUC      (-0.17694 ; 0.00132)
+#> AUC      (-0.18030 ; 0.00468)
 #> ✔
-#> AUC_inf  (-0.17055 ; 0.00761)
+#> AUC_inf  (-0.17391 ; 0.01096)
 #> ✔
-#> C_max    (-0.21300 ; 0.01075)
+#> C_max    (-0.21722 ; 0.01497)
 #> ✔
 #> 
-#> Method: cTOST
+#> Method: alpha-TOST
 #> alpha = 0.05; Equiv. lim. = +/- 0.22314
+#> Corrected alpha = 0.05909
 ```
 
 ## 4. Learn More
 
 For detailed guides and examples, see the package vignettes:
 
-- **[Getting Started](articles/getting-started.html)** - Quick
-  introduction and basic usage
+- **[Getting
+  Started](https://stephaneguerrier.github.io/cTOST/articles/getting-started.html)** -
+  Quick introduction and basic usage
 - **[Average Equivalence:
-  Univariate](articles/average-equivalence-univariate.html)** - In-depth
-  guide to univariate testing
+  Univariate](https://stephaneguerrier.github.io/cTOST/articles/average-equivalence-univariate.html)** -
+  In-depth guide to univariate testing
 - **[Average Equivalence:
-  Multivariate](articles/average-equivalence-multivariate.html)** -
+  Multivariate](https://stephaneguerrier.github.io/cTOST/articles/average-equivalence-multivariate.html)** -
   Multivariate testing with examples
 - **[Quantile Equivalence
-  Testing](articles/quantile-equivalence.html)** - Testing at specific
-  quantiles
-- **[Differential Privacy Testing](articles/dp-equivalence.html)** -
+  Testing](https://stephaneguerrier.github.io/cTOST/articles/quantile-equivalence.html)** -
+  Testing at specific quantiles
+- **[Differential Privacy
+  Testing](https://stephaneguerrier.github.io/cTOST/articles/dp-equivalence.html)** -
   Equivalence testing for sensitive data
-- **[Mathematical Background](articles/mathematical-background.html)** -
+- **[Mathematical
+  Background](https://stephaneguerrier.github.io/cTOST/articles/mathematical-background.html)** -
   Theory and mathematical details
 
-Or browse the [full reference documentation](reference/index.html).
+Or browse the [full reference
+documentation](https://stephaneguerrier.github.io/cTOST/reference/index.html).
 
 ## 5. How to cite
 

@@ -65,12 +65,12 @@ This function performs equivalence testing under differential privacy.
 **Method Selection:**
 - `"cpp"` (default): Ultra-fast C++ implementation using Nelder-Mead
   - 15-250x faster depending on problem size
-  - Uses native C++ RNG (different from R but statistically equivalent)
+  - Uses R's random number generator through Rcpp, so results are reproducible with `seed`
   - Recommended for production and large-scale simulations
 
 - `"r"`: Pure R implementation using L-BFGS-B
   - Uses R's optim() with gradient-based optimization
-  - Exact reproducibility with R workflows
+  - Same random draws as the C++ path, paired differently, so results differ slightly
   - Useful for validation and debugging
 
 **Performance Guide:**

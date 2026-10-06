@@ -427,7 +427,7 @@ Any function of privatized output maintains DP:
 
 ## Differential Privacy for Means
 
-The package includes an internal function `tost_equiv_dp()` for testing equivalence of means under DP (for bounded data). This function is currently under development and not exported.
+The function `tost_equiv_dp()` tests the equivalence of means under DP for bounded data in $[a, b]$. The data curator privatizes the sample mean and the sample standard deviation with Laplace noise of scales $(b-a)/(n\,\epsilon/2)$ and $(b-a)/(\sqrt{n-1}\,\epsilon/2)$ respectively, i.e. the privacy budget $\epsilon$ is split equally between the two statistics. The test reconstructs the sampling distribution of the privatized statistics by Monte Carlo moment matching. When the noise on the standard deviation is comparable to the standard deviation itself (small $\epsilon$, small $n$ or a wide $[a, b]$), the test is valid but conservative: its type I error is below the nominal level and its power is reduced.
 
 **Key differences from proportion testing:**
 

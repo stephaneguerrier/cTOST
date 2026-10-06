@@ -16,7 +16,7 @@ Description: Provides tools for (bio)equivalence assessment in univariate and
     one-sided tests (TOST), quantile equivalence tests and differentially private
     tests. It implements the adjustment procedures proposed in Boulaguiem et al.
     (2024) <doi:10.1002/sim.9993>, Boulaguiem et al. (2025)
-    <doi:10.48550/arXiv.2411.16429> and Insolia et al. (2025)
+    <doi:10.1002/sim.10258> and Insolia et al. (2025)
     <doi:10.48550/arXiv.2507.22756>.
 Depends:
     R (>= 4.0)
@@ -27,7 +27,6 @@ Imports:
     Rcpp
 LinkingTo: Rcpp
 Suggests:
-    asciicast,
     knitr,
     rmarkdown,
     testthat (>= 3.0.0)
@@ -35,7 +34,7 @@ License: AGPL-3
 Encoding: UTF-8
 LazyData: true
 VignetteBuilder: knitr
-URL: https://github.com/stephaneguerrier/cTOST
+URL: https://stephaneguerrier.github.io/cTOST/, https://github.com/stephaneguerrier/cTOST
 BugReports: https://github.com/stephaneguerrier/cTOST/issues
 Config/roxygen2/version: 8.0.0
 Config/testthat/edition: 3

@@ -35,7 +35,7 @@ qtost(
 
 \item{B}{A \code{numeric} value specifying the number of Monte Carlo replications, required for the `"alpha"` method (default: \code{B = NULL}, which uses \code{10^5} replications for a single quantile and \code{10^4} for two quantiles).}
 
-\item{seed}{A \code{numeric} value specifying a seed for reproducibility (default: \code{seed = 101010}).}
+\item{seed}{A \code{numeric} value specifying a seed for reproducibility of the Monte Carlo step (default: \code{seed = 101010}). The caller's random number stream is restored on exit.}
 
 \item{tol}{A \code{numeric} value specifying a tolerance level (default: \code{tol = 1e-6}).}
 

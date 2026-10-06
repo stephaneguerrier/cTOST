@@ -15,7 +15,7 @@ library(cTOST)
 
 # Introduction 
 
-Equivalence testing has first appeared in the field of pharmacokinetics @Metzler74, and find their most common application in the context of generic drug manufacturing @SennBook21 where the aim is to determine whether a parameter like the mean variation of treatment response between a reference and a generic drug falls within a predetermined equivalence range that we denote $(-c,c)$, indicating that drugs are equivalent.  Deviations within this region would be considered insignificant as they are too small to reflect the dissimilarity of the therapeutic effects between the compared treatments. In contrast to standard hypothesis testing for equality of means, where the null hypothesis assumes that both means are equal, and the alternative assumes they are not, equivalence testing reverses the roles of the hypothesis formulations and considers a region rather than a point. Specifically, it defines the alternative as the equivalence region within which the parameter of interest must lie for the treatments to be considered equivalent, and the null hypothesis as the opposite. This paradigm puts the burden of proof on equivalence, rather than non-equality, and emphasizes the importance of assessing the similarity of treatments in addition to their differences. 
+Equivalence testing first appeared in the field of pharmacokinetics @Metzler74, and finds its most common application in the context of generic drug manufacturing @SennBook21 where the aim is to determine whether a parameter like the mean variation of treatment response between a reference and a generic drug falls within a predetermined equivalence range that we denote $(-c,c)$, indicating that drugs are equivalent.  Deviations within this region would be considered insignificant as they are too small to reflect the dissimilarity of the therapeutic effects between the compared treatments. In contrast to standard hypothesis testing for equality of means, where the null hypothesis assumes that both means are equal, and the alternative assumes they are not, equivalence testing reverses the roles of the hypothesis formulations and considers a region rather than a point. Specifically, it defines the alternative as the equivalence region within which the parameter of interest must lie for the treatments to be considered equivalent, and the null hypothesis as the opposite. This paradigm puts the burden of proof on equivalence, rather than non-equality, and emphasizes the importance of assessing the similarity of treatments in addition to their differences. 
 
 # Mathematical setup
 
@@ -83,7 +83,7 @@ where $\Theta_0:=\mathbb{R}\setminus(-c,c)$ corresponds to parameter space under
 
 As $\omega_\nu(\gamma, \delta, \sigma_{\nu})$ is continuously differentiable and strictly increasing in $\gamma$ and $\delta$, solving the following matching paradigms represents a finite sample correction to the TOST and would ensure size-$\alpha$ tests: 
 $$\alpha^*:=\text{argzero}_{\gamma \in [\alpha, 0.5)} \;\big[ \omega_\nu(\gamma, c, \sigma_{\nu}) - \alpha\big],$$
-$$c^*:=\text{argzero}_{\delta \in [1, \infty)} \;\big[ \omega_\nu(\alpha, \delta, \sigma_{\nu}) - \alpha\big].$$
+$$c^*:=\text{argzero}_{\delta \in [c, \infty)} \;\big[ \omega_\nu(\alpha, \delta, \sigma_{\nu}) - \alpha\big].$$
 
 The conditions under which the solutions are singletons and provide a uniformly more powerful inference are studied in length in @boulaguiem2023finite and compared to existing methods.
 

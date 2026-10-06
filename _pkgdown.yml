@@ -15,9 +15,7 @@ template:
 home:
   title: "cTOST: Finite Sample Corrected TOST for Equivalence Testing"
   description: "Finite sample corrections for average and quantile equivalence testing in univariate and multivariate settings, with differential privacy support"
-  strip_header: true
-
-logo: man/figures/hex-cTOST.png
+  strip_header: false
 
 navbar:
   structure:
@@ -42,6 +40,9 @@ navbar:
       - text: "  Multivariate Testing"
         href: articles/average-equivalence-multivariate.html
       - text: -------
+      - text: "Quantile Equivalence"
+        href: articles/quantile-equivalence.html
+      - text: -------
       - text: "Differential Privacy Testing"
         href: articles/dp-equivalence.html
       - text: -------
@@ -54,9 +55,6 @@ navbar:
       - text: "Paper Reproductions"
       - text: "  Finite Sample Adjustments (2024)"
         href: articles/reproducibility.html
-      - text: -------
-      - text: "Future Papers"
-      - text: "  [Add new papers here]"
 
 reference:
 - title: Average Equivalence Testing
@@ -115,6 +113,7 @@ articles:
   contents:
   - average-equivalence-univariate
   - average-equivalence-multivariate
+  - quantile-equivalence
   - dp-equivalence
 
 - title: Advanced Topics

@@ -19,13 +19,16 @@ enough* to be considered equivalent.
 
 ### Methods Implemented
 
-| Method            | Reference                | Description                |
-|-------------------|--------------------------|----------------------------|
-| **alpha-TOST**    | Boulaguiem et al. (2024) | Adjusts significance level |
-| **delta-TOST**    | Boulaguiem et al. (2024) | Adjusts equivalence bounds |
-| **Optimal cTOST** | Insolia et al. (2025)    | Best power (recommended)   |
-| **alpha-qTOST**   | Wu et al. (2025)         | Quantile-based testing     |
-| **DP-TOST**       | Pareek et al. (2025)     | Differential privacy       |
+| Method | Reference | Description |
+|----|----|----|
+| **alpha-TOST** | Boulaguiem et al. (2024), [*Statistics in Medicine*](https://doi.org/10.1002/sim.9993) | Adjusts the significance level |
+| **delta-TOST** | Boulaguiem et al. (2024), [*Statistics in Medicine*](https://doi.org/10.1002/sim.9993) | Adjusts the equivalence bounds |
+| **Multivariate alpha-TOST and cTOST** | Boulaguiem et al. (2025), [*Statistics in Medicine*](https://doi.org/10.1002/sim.10258) | Several parameters tested jointly |
+| **Optimal cTOST** | Insolia et al. (2025), [arXiv](https://arxiv.org/abs/2507.22756) | Best power (recommended) |
+| **alpha-qTOST** | Wu et al. (2025), [arXiv](https://arxiv.org/abs/2510.17514) | Quantile-based testing |
+| **DP-TOST** | Pareek et al. (2026), [arXiv](https://arxiv.org/abs/2604.06499) | Differential privacy |
+
+Full references are given at the [end of this page](#id_7-references).
 
 ## Installation
 
@@ -276,7 +279,7 @@ documentation](https://stephaneguerrier.github.io/cTOST/reference/index.html).
   author = {Boulaguiem, Y. and Insolia, L. and Couturier, D.-L. and Guerrier, S.},
   year = {2024},
   note = {R package version 1.1.0},
-  url = {https://github.com/stephaneguerrier},
+  url = {https://github.com/stephaneguerrier/cTOST},
 }
 ```
 
@@ -291,13 +294,29 @@ a synopsis of the restrictions placed upon the code.
 ## 7. References
 
 Boulaguiem, Y., Quartier, J., Lapteva, M., Kalia, Y. N., Victoria-Feser,
-M. P., Guerrier, S. & Couturier, D. L., “*Finite Sample Adjustments for
-Average Equivalence Testing*”, Statistics in Medicine, 2024a,
-<https://doi.org/10.1002/sim.9993>.
+M.-P., Guerrier, S. & Couturier, D.-L. (2024). *Finite sample
+adjustments for average equivalence testing*. **Statistics in
+Medicine**, 43(5), 833–854.
+[doi:10.1002/sim.9993](https://doi.org/10.1002/sim.9993)
 
-Boulaguiem, Y., Insolia, L., Victoria-Feser, M. P., Couturier, D. L. &
-Guerrier, S., “*Multivariate Adjustments for Average Equivalence
-Testing*”, submitted manuscript, 2024b.
+Boulaguiem, Y., Insolia, L., Victoria-Feser, M.-P., Couturier, D.-L. &
+Guerrier, S. (2025). *Multivariate adjustments for average equivalence
+testing*. **Statistics in Medicine**, 44(15–17).
+[doi:10.1002/sim.10258](https://doi.org/10.1002/sim.10258)
+
+Insolia, L., Ma, Y., Boulaguiem, Y. & Guerrier, S. (2025).
+*Bioequivalence assessment for locally acting drugs: a framework for
+feasible and efficient evaluation*. **arXiv** preprint.
+[arXiv:2507.22756](https://arxiv.org/abs/2507.22756)
+
+Wu, J., Guerrier, S., Gou, S., Kalia, Y. N. & Insolia, L. (2025).
+*Bridging the gap between experimental burden and statistical power for
+quantiles equivalence testing*. **arXiv** preprint.
+[arXiv:2510.17514](https://arxiv.org/abs/2510.17514)
+
+Pareek, S., Insolia, L., Molinari, R. & Guerrier, S. (2026).
+*Equivalence testing under privacy constraints*. **arXiv** preprint.
+[arXiv:2604.06499](https://arxiv.org/abs/2604.06499)
 
 # Package index
 

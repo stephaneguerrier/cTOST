@@ -225,7 +225,8 @@ get_delta_TOST = function(alpha, sigma, nu, delta, l=100, tol = .Machine$double.
   if(obj_func_al<tol) return(list(root=l,f.root=obj_func_al))
 
   out = uniroot(obj_fun_delta_TOST, interval=c(delta,l),
-                alpha = alpha, sigma=sigma, nu=nu, delta = delta)
+                alpha = alpha, sigma=sigma, nu=nu, delta = delta,
+                tol = .Machine$double.eps^0.5)
   out
 }
 
@@ -279,7 +280,8 @@ get_alpha_TOST = function(alpha, sigma, nu, delta, l=0.5, tol = .Machine$double.
 
   out = uniroot(obj_fun_alpha_TOST, interval=c(alpha,l),
                 alpha = alpha, sigma=sigma,
-                nu = nu, delta = delta)
+                nu = nu, delta = delta,
+                tol = .Machine$double.eps^0.5)
   out
 }
 

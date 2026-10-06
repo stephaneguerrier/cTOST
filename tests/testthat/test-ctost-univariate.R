@@ -28,14 +28,14 @@ test_that("alpha-TOST on skin matches CRAN 1.0.1 (audit F27 tolerance) and is lo
   expect_equal(res$method, "alpha-TOST")
   expect_true(unname(res$decision))
   # CRAN 1.0.1: atost(theta_hat, sig_hat, nu, 0.05, log(1.25))
-  expect_equal(unname(res$corrected_alpha), 0.078657919501, tolerance = tol_cran101)
-  expect_equal(unname(res$ci), c(-0.176536587848, 0.221940894197), tolerance = tol_cran101)
-  # README: Corrected alpha = 0.07865; CI = (-0.17655 ; 0.22195)
-  expect_equal(round(unname(res$corrected_alpha), 5), 0.07865)
-  expect_equal(round(unname(res$ci), 5), c(-0.17655, 0.22195))
-  # cdd680d (differs from 1.0.1 in the 6th significant digit, audit F27)
-  expect_equal(unname(res$corrected_alpha), 0.0786485339274427, tolerance = tol_exact)
-  expect_equal(unname(res$ci), c(-0.176546187381565, 0.221950493730324), tolerance = tol_exact)
+  expect_equal(unname(res$corrected_alpha), 0.078657919501, tolerance = tol_cran101_alpha)
+  expect_equal(unname(res$ci), c(-0.176536587848, 0.221940894197), tolerance = tol_cran101_alpha)
+  # printed values (README.md re-knitted in PR 5): Corrected alpha = 0.07866; CI = (-0.17654 ; 0.22194)
+  expect_equal(round(unname(res$corrected_alpha), 5), 0.07866)
+  expect_equal(round(unname(res$ci), 5), c(-0.17654, 0.22194))
+  # PR 4b (audit F27: the solver tolerance is passed again; cdd680d gave 0.0786485339)
+  expect_equal(unname(res$corrected_alpha), 0.0786579350348, tolerance = tol_exact)
+  expect_equal(unname(res$ci), c(-0.17653657196, 0.221940878309), tolerance = tol_exact)
   # the interval uses the corrected level
   expect_equal(unname(res$ci),
                unname(s$theta) + c(-1, 1) * qt(1 - res$corrected_alpha, s$nu) * sqrt(s$sigma),
@@ -50,14 +50,14 @@ test_that("delta-TOST on skin matches CRAN 1.0.1, keeps the TOST interval and is
   expect_equal(res$method, "delta-TOST")
   expect_false(unname(res$decision))
   # CRAN 1.0.1: dtost(theta_hat, sig_hat, nu, 0.05, log(1.25))
-  expect_equal(unname(res$corrected_delta), 0.254730957152, tolerance = tol_cran101)
+  expect_equal(unname(res$corrected_delta), 0.254730957152, tolerance = tol_cran101_delta)
   # the interval is the plain TOST interval (identical in 1.0.1)
   expect_equal(unname(res$ci), c(-0.211741483133, 0.257145789481), tolerance = tol_exact)
-  # README: Corrected Equiv. lim. = +/- 0.25470
-  expect_equal(round(unname(res$corrected_delta), 5), 0.25470)
-  # cdd680d
-  expect_equal(unname(res$corrected_delta), 0.254700490986057, tolerance = tol_exact)
-  expect_equal(unname(res$corrected_ci), c(-0.180184543460833, 0.225588849809592),
+  # printed value (README.md re-knitted in PR 5): Corrected Equiv. lim. = +/- 0.25473
+  expect_equal(round(unname(res$corrected_delta), 5), 0.25473)
+  # PR 4b (audit F27; cdd680d gave 0.2547004910)
+  expect_equal(unname(res$corrected_delta), 0.254728015321, tolerance = tol_exact)
+  expect_equal(unname(res$corrected_ci), c(-0.180157019126, 0.225561325475),
                tolerance = tol_exact)
   # corrected_ci is the TOST interval re-expressed on the nominal +/- delta scale
   expect_equal(unname(res$corrected_ci),
@@ -70,11 +70,11 @@ test_that("alpha-TOST and delta-TOST match CRAN 1.0.1 on a synthetic cell", {
   # CRAN 1.0.1: atost(theta = 0.05, sigma = 0.08, nu = 10, alpha = 0.05, delta = log(1.25))
   # (sigma = SE there; variance 0.08^2 here)
   a = ctost(theta = 0.05, sigma = 0.08^2, nu = 10, delta = log(1.25), method = "alpha")
-  expect_equal(unname(a$corrected_alpha), 0.050193259564, tolerance = tol_cran101)
-  expect_equal(unname(a$ci), c(-0.094807707292, 0.194807707292), tolerance = tol_cran101)
+  expect_equal(unname(a$corrected_alpha), 0.050193259564, tolerance = tol_cran101_alpha)
+  expect_equal(unname(a$ci), c(-0.094807707292, 0.194807707292), tolerance = tol_cran101_alpha)
   d = ctost(theta = 0.05, sigma = 0.08^2, nu = 10, delta = log(1.25), method = "delta")
-  expect_equal(unname(d$corrected_delta), 0.223314094889, tolerance = tol_cran101)
-  expect_equal(unname(d$ci), c(-0.094996889825, 0.194996889825), tolerance = tol_cran101)
+  expect_equal(unname(d$corrected_delta), 0.223314094889, tolerance = tol_cran101_delta)
+  expect_equal(unname(d$ci), c(-0.094996889825, 0.194996889825), tolerance = tol_exact)
 })
 
 test_that("cTOST on skin (offline default, bootstrap, none) is locked to cdd680d", {

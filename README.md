@@ -3,7 +3,7 @@
 
 <p align="center">
 
-<a href="https://stephaneguerrier.github.io/cTOST/"><img src="man/figures/logo.png" height="180" alt="cTOST hex logo" /></a>
+<a href="https://stephaneguerrier.github.io/cTOST/"><img src="man/figures/logo.png" width="180" alt="cTOST hex logo" /></a>
 </p>
 
 <p align="center">

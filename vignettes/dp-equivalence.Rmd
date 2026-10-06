@@ -20,6 +20,8 @@ knitr::opts_chunk$set(
 )
 library(cTOST)
 set.seed(1337)
+# coloured console output in the rendered HTML (see _colours.R)
+source("_colours.R", local = TRUE)
 ```
 
 # Introduction

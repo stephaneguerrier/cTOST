@@ -16,6 +16,8 @@ knitr::opts_chunk$set(
   comment = "#>",
   out.width = "100%"
 )
+# coloured console output in the rendered HTML (see _colours.R)
+source("_colours.R", local = TRUE)
 ```
 
 # Case study: Evaluation of Bioequivalence for Econazole Nitrate Deposition in Porcine Skin

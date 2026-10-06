@@ -19,6 +19,8 @@ knitr::opts_chunk$set(
   fig.height = 5
 )
 library(cTOST)
+# coloured console output in the rendered HTML (see _colours.R)
+source("_colours.R", local = TRUE)
 ```
 
 # Introduction

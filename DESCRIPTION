@@ -27,6 +27,7 @@ Imports:
     Rcpp
 LinkingTo: Rcpp
 Suggests:
+    fansi,
     knitr,
     rmarkdown,
     testthat (>= 3.0.0)

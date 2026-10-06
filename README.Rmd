@@ -13,8 +13,22 @@ library(cTOST)
 knitr::opts_chunk$set(
   collapse = TRUE,
   comment = "#>",
+  fig.path = "man/figures/readme",
   out.width = "100%"
 )
+# The printed results are recorded with asciicast so that the coloured console
+# output appears on GitHub and on the website (the {asciicast} chunks below re-run
+# the displayed code in a separate R session and embed the result as an SVG).
+asciicast::init_knitr_engine(
+  startup = quote({
+    library(cTOST)
+    set.seed(1)
+  }),
+  echo = FALSE,
+  echo_input = FALSE)
+# light terminal theme (same green/red as the vignettes, see vignettes/_colours.R)
+options(asciicast_theme = "readme")
+knitr::opts_chunk$set(asciicast_theme = "readme")
 ```
  
 
@@ -91,7 +105,17 @@ sig_hat = var(apply(skin,1,diff))/nu
 
 The standard TOST can be used as follows:
 
-```{r}
+```{r, eval = FALSE}
+stost = ctost(theta = theta_hat, sigma = sig_hat, nu = nu,
+              delta = log(1.25), method = "unadjusted")
+stost
+```
+
+```{asciicast tost}
+data(skin)
+theta_hat = diff(apply(skin,2,mean))
+nu = nrow(skin) - 1
+sig_hat = var(apply(skin,1,diff))/nu
 stost = ctost(theta = theta_hat, sigma = sig_hat, nu = nu,
               delta = log(1.25), method = "unadjusted")
 stost
@@ -101,7 +125,17 @@ stost
 
 The cTOST can be used through the function `ctost` as follows:
 
-```{r}
+```{r, eval = FALSE}
+opt_tost = ctost(theta = theta_hat, sigma = sig_hat, nu = nu,
+              delta = log(1.25), method = "optimal")
+opt_tost
+```
+
+```{asciicast ctost}
+data(skin)
+theta_hat = diff(apply(skin,2,mean))
+nu = nrow(skin) - 1
+sig_hat = var(apply(skin,1,diff))/nu
 opt_tost = ctost(theta = theta_hat, sigma = sig_hat, nu = nu,
               delta = log(1.25), method = "optimal")
 opt_tost
@@ -111,7 +145,17 @@ opt_tost
 
 The $\alpha$-TOST can be used through the function `ctost` as follows:
 
-```{r}
+```{r, eval = FALSE}
+atost = ctost(theta = theta_hat, sigma = sig_hat, nu = nu,
+              delta = log(1.25), method = "alpha")
+atost
+```
+
+```{asciicast atost}
+data(skin)
+theta_hat = diff(apply(skin,2,mean))
+nu = nrow(skin) - 1
+sig_hat = var(apply(skin,1,diff))/nu
 atost = ctost(theta = theta_hat, sigma = sig_hat, nu = nu,
               delta = log(1.25), method = "alpha")
 atost
@@ -119,7 +163,17 @@ atost
 
 It is possible to compare the results of the $\alpha$-TOST (or $\delta$-TOST, see below) with the standard TOST as follows:
 
-```{r}
+```{r, eval = FALSE}
+compare_to_tost(atost)
+```
+
+```{asciicast compare-atost}
+data(skin)
+theta_hat = diff(apply(skin,2,mean))
+nu = nrow(skin) - 1
+sig_hat = var(apply(skin,1,diff))/nu
+atost = ctost(theta = theta_hat, sigma = sig_hat, nu = nu,
+              delta = log(1.25), method = "alpha")
 compare_to_tost(atost)
 ```
 
@@ -127,7 +181,17 @@ compare_to_tost(atost)
 
 The $\delta$-TOST can be used through the function `ctost` as follows:
 
-```{r}
+```{r, eval = FALSE}
+dtost = ctost(theta = theta_hat, sigma = sig_hat, nu = nu,
+              delta = log(1.25), method = "delta")
+dtost
+```
+
+```{asciicast dtost}
+data(skin)
+theta_hat = diff(apply(skin,2,mean))
+nu = nrow(skin) - 1
+sig_hat = var(apply(skin,1,diff))/nu
 dtost = ctost(theta = theta_hat, sigma = sig_hat, nu = nu,
               delta = log(1.25), method = "delta")
 dtost
@@ -146,7 +210,18 @@ Sigma_hat = cov(ticlopidine)/n
 
 #### Standard Multivariate TOST
 
-```{r}
+```{r, eval = FALSE}
+mtost = ctost(theta = theta_hat, sigma = Sigma_hat, nu = nu,
+              delta = log(1.25), method = "unadjusted")
+mtost
+```
+
+```{asciicast mtost}
+data(ticlopidine)
+n = nrow(ticlopidine)
+nu = n-1
+theta_hat = colMeans(ticlopidine)
+Sigma_hat = cov(ticlopidine)/n
 mtost = ctost(theta = theta_hat, sigma = Sigma_hat, nu = nu,
               delta = log(1.25), method = "unadjusted")
 mtost
@@ -154,7 +229,18 @@ mtost
 
 #### Multivariate Alpha-TOST
 
-```{r}
+```{r, eval = FALSE}
+matost = ctost(theta = theta_hat, sigma = Sigma_hat, nu = nu, delta = log(1.25),
+               method = "alpha")
+matost
+```
+
+```{asciicast matost}
+data(ticlopidine)
+n = nrow(ticlopidine)
+nu = n-1
+theta_hat = colMeans(ticlopidine)
+Sigma_hat = cov(ticlopidine)/n
 matost = ctost(theta = theta_hat, sigma = Sigma_hat, nu = nu, delta = log(1.25),
                method = "alpha")
 matost

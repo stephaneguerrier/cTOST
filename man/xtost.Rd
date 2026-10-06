@@ -10,7 +10,7 @@ xtost(
   nu,
   alpha,
   delta,
-  correction = "no",
+  correction = "none",
   B = 10^4,
   seed = 85
 )
@@ -18,7 +18,7 @@ xtost(
 \arguments{
 \item{theta_hat}{A \code{numeric} value or vector representing the estimated difference(s) (e.g., between a generic and reference product).}
 
-\item{sig_hat}{A \code{matrix} (multivariate) corresponding to the estimated standard deviation of estimated \code{theta}.}
+\item{sig_hat}{A \code{numeric} value corresponding to the estimated standard error of \code{theta_hat}.}
 
 \item{nu}{A \code{numeric} value specifying the degrees of freedom. In the multivariate case, it is assumed to be the same across all dimensions.}
 
@@ -26,7 +26,7 @@ xtost(
 
 \item{delta}{A \code{numeric} value or vector defining the (bio)equivalence margin(s). The procedure assumes symmetry, i.e., the (bio)equivalence region is \eqn{(-\delta, \delta)}.}
 
-\item{correction}{A \code{character} value corresponding to the considered correction method, see Details below for more information (default: correction = \code{"no"}).}
+\item{correction}{A \code{character} value corresponding to the considered correction method, see Details below for more information (default: correction = \code{"none"}).}
 
 \item{B}{A \code{numeric} value specifying the number of Monte Carlo replication (default: B = \code{10^4}).}
 
@@ -52,17 +52,22 @@ An object of class \code{tost} with the structure:
 This function is used to compute finite sample corrected version of the multivariate xTOST.
 }
 \details{
-#' The correction method = "no" refers to ...., the "bootstrap" refers to ... and the "offline" refers to ...
+The significance level used to compute the critical value is corrected additively,
+\eqn{2\alpha - \mathrm{TIER}}, where TIER is the type I error rate of the uncorrected
+procedure at the equivalence boundary. With \code{correction = "none"} no correction
+is applied; with \code{correction = "bootstrap"} the TIER is estimated by parametric
+bootstrap with \code{B} replications; with \code{correction = "offline"} it is read
+from a precomputed table shipped with the package.
 }
 \examples{
 data(skin)
 
 theta_hat = diff(apply(skin,2,mean))
 nu = nrow(skin) - 1
-sig_hat = var(apply(skin,1,diff))/nu
+sig_hat = sd(apply(skin,1,diff))/sqrt(nu)
 
 # x-TOST
-x_tost = xtost(theta_hat = theta_hat, sig_hat = sig_hat, nu = nu,
+x_tost = cTOST:::xtost(theta_hat = theta_hat, sig_hat = sig_hat, nu = nu,
               alpha = 0.05, delta = log(1.25))
 x_tost
 }

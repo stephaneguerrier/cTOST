@@ -2,24 +2,24 @@
 #'
 #' @description
 #' Performs a Two One-Sided Test (TOST) to assess the equivalence of a quantile
-#' from a test population ($Y$) with the corresponding quantile from a reference
-#' population ($X$), assuming the data are normally distributed. The test evaluates
-#' if the true quantile $\pi_y$ is within a pre-specified equivalence margin $\delta$
-#' around the reference quantile $\pi_x$.
+#' from a test population (\eqn{Y}) with the corresponding quantile from a reference
+#' population (\eqn{X}), assuming the data are normally distributed. The test evaluates
+#' if the true quantile \eqn{\pi_y} is within a pre-specified equivalence margin \eqn{\delta}
+#' around the reference quantile \eqn{\pi_x}.
 #'
 #' The null hypotheses for the two one-sided tests are:
-#' $H_{01}: \pi_y \ge \pi_x - \delta$ and $H_{02}: \pi_y \le \pi_x + \delta$.
+#' \eqn{H_{01}: \pi_y \ge \pi_x - \delta} and \eqn{H_{02}: \pi_y \le \pi_x + \delta}.
 #' Equivalence is concluded if both null hypotheses are rejected.
 #'
-#' @param x A \code{numeric} vector of data for the reference group ($X$), or a  \code{list} containing `mean`, `sd`, and `n`.
-#' @param y A  \code{numeric} vector of data for the test group ($Y$), or a  \code{list} containing `mean`, `sd`, and `n`.
-#' @param pi_x A  \code{numeric} scalar or vector specifying the quantile(s) of interest in the reference group $X$ (e.g., 0.9 for the 90th percentile).
+#' @param x A \code{numeric} vector of data for the reference group (\eqn{X}), or a  \code{list} containing `mean`, `sd`, and `n`.
+#' @param y A  \code{numeric} vector of data for the test group (\eqn{Y}), or a  \code{list} containing `mean`, `sd`, and `n`.
+#' @param pi_x A  \code{numeric} scalar or vector specifying the quantile(s) of interest in the reference group \eqn{X} (e.g., 0.9 for the 90th percentile).
 #' @param delta A \code{numeric} value or vector defining the (bio)equivalence margin(s). The procedure assumes symmetry, i.e., the (bio)equivalence region is \eqn{(\pi_x-\delta, \pi_x+\delta)}. In the multivariate case, it is assumed to be the same across all dimensions.
 #' @param alpha A \code{numeric} value specifying the significance level, which must be between 0 and 0.5 (default: \code{alpha = 0.05}).
 #' @param method A \code{character} string specifying the finite sample adjustment method. Available methods are: \code{"unadjusted"} (standard unadjusted qTOST), \code{"alpha"} (alpha-qTOST). Default: \code{method = "alpha"}.
-#' @param B A \code{numeric} value specifying the number of Monte Carlo replications, required for the `"alpha"` method (default: \code{B = 10^4}).
-#' @param seed A \code{numeric} value specifying a seed for reproducibility (default: \code{seed = 12345}).
-#' @param tol A \code{numeric} value specifying a tolerance level (default: \code{tol = .Machine$double.eps}).
+#' @param B A \code{numeric} value specifying the number of Monte Carlo replications, required for the `"alpha"` method (default: \code{B = NULL}, which uses \code{10^5} replications for a single quantile and \code{10^4} for two quantiles).
+#' @param seed A \code{numeric} value specifying a seed for reproducibility (default: \code{seed = 101010}).
+#' @param tol A \code{numeric} value specifying a tolerance level (default: \code{tol = 1e-6}).
 #' @param max_iter A \code{numeric} value specifying a maximum number of iteration to compute the supremum at which the size is assessed (default: \code{max_iter = 10}).
 #' @param tolpower A \code{numeric} value specifying the tolerance for power convergence when computing corrected alpha (default: \code{tolpower = 1e-3}).
 #' @param MC_sup A \code{logical} value indicating whether to use Monte Carlo simulation to find the supremum when computing corrected alpha (default: \code{MC_sup = TRUE}).
@@ -30,9 +30,9 @@
 #' \itemize{
 #'   \item `decision`: The (component-wise) equivalence decision (`TRUE` or `FALSE`).
 #'   \item `method`: The method used (`"qTOST"` or `"alpha-qTOST"`).
-#'   \item `ci`: The $(1 - 2\alpha)$ confidence interval for the estimated quantile $\hat{\pi}_y$.
+#'   \item `ci`: The \eqn{(1 - 2\alpha)} confidence interval for the estimated quantile \eqn{\hat{\pi}_y}.
 #'   \item `pi_y_hat`: The point estimate for the quantile in group Y.
-#'   \item `eq_region`: The defined equivalence region $[\pi_x - \delta, \pi_x + \delta]$.
+#'   \item `eq_region`: The defined equivalence region \eqn{[\pi_x - \delta, \pi_x + \delta]}.
 #'   \item `alpha`: The nominal significance level.
 #'   \item `corrected_alpha`: The adjusted alpha level used (for `alpha-qTOST` method).
 #' }
@@ -81,7 +81,7 @@
 #'                         method = "unadjusted")
 #' print(result_summary)
 #'
-qtost <- function(x, y, pi_x, delta, alpha = 0.05, method = "alpha", B = NULL, seed = 101010, tol = 1e-6, max_iter=10, tolpower = 1e-3, MC_sup = T, ...) {
+qtost <- function(x, y, pi_x, delta, alpha = 0.05, method = "alpha", B = NULL, seed = 101010, tol = 1e-6, max_iter=10, tolpower = 1e-3, MC_sup = TRUE, ...) {
   if (is.null(B)) {
    B = if (length(pi_x)==1) 1e5 else 1e4
   }

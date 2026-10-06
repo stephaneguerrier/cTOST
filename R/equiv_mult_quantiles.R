@@ -55,7 +55,7 @@ power_qTOST_MC_biv = function(sol_1, sol_2, delta_l, delta_u, alpha){
   res
 }
 
-find_sup_qTOST = function(gamma,n_x,n_y,pi_x,delta_l,delta_u,alpha,B=10^5,seed=12345,side="upper",MC_sup=T){
+find_sup_qTOST = function(gamma,n_x,n_y,pi_x,delta_l,delta_u,alpha,B=10^5,seed=12345,side="upper",MC_sup=TRUE){
   p=length(delta_l)
   if(p<=2){
     method="Brent"
@@ -91,13 +91,13 @@ find_sup_qTOST = function(gamma,n_x,n_y,pi_x,delta_l,delta_u,alpha,B=10^5,seed=1
   return(thetas)
 }
 
-argsup_qTOST = function(theta,inds,gamma,n_x,n_y,pi_x,delta_l,delta_u,alpha,B=1e4,seed=12345,side="upper",MC_sup=T){
+argsup_qTOST = function(theta,inds,gamma,n_x,n_y,pi_x,delta_l,delta_u,alpha,B=1e4,seed=12345,side="upper",MC_sup=TRUE){
   if (side=="upper"){ # we try the argsup on both delta_l and delta_u for the element at the boundary
     thetas = qnorm(delta_u)
   } else if (side=="lower") {
     thetas = qnorm(delta_l)
   } else {
-    error("side must be 'upper' or 'lower'")
+    stop("side must be 'upper' or 'lower'")
   }
   thetas[inds] = theta
   l = n_y/n_x
@@ -107,13 +107,13 @@ argsup_qTOST = function(theta,inds,gamma,n_x,n_y,pi_x,delta_l,delta_u,alpha,B=1e
     sol_2 = get_qTOST_rvs(thetas[2], gamma, n_x, n_y, pi_x[2], B=B, seed=seed)
     res = -power_qTOST_MC_biv(sol_1, sol_2, delta_l, delta_u, alpha)
   } else {
-    res = -power_cTOST_mv(theta = thetas, Sigma = Sigma,
+    res = -power_qTOST_mv(theta = thetas, Sigma = Sigma,
                           delta_l=delta_l, delta_u=delta_u, alpha=alpha, seed=seed)[1]
   }
   res
 }
 
-tost_sup = function(gamma, n_x, n_y, pi_x, delta_l, delta_u, alpha, B=1e5, seed=12345,MC_sup=T){
+tost_sup = function(gamma, n_x, n_y, pi_x, delta_l, delta_u, alpha, B=1e5, seed=12345,MC_sup=TRUE){
   tost_lambda_1 = find_sup_qTOST(gamma,n_x,n_y,pi_x,delta_l,delta_u,alpha,B,seed,side="upper",MC_sup)
   sol_1 = get_qTOST_rvs(tost_lambda_1[1], gamma, n_x, n_y, pi_x[1], B=B, seed=seed)
   sol_2 = get_qTOST_rvs(tost_lambda_1[2], gamma, n_x, n_y, pi_x[2], B=B, seed=seed)
@@ -129,7 +129,7 @@ tost_sup = function(gamma, n_x, n_y, pi_x, delta_l, delta_u, alpha, B=1e5, seed=
   }
 }
 
-power_cTOST_mv = function(theta, Sigma, delta_l, delta_u, alpha=1/2, seed=12345){
+power_qTOST_mv = function(theta, Sigma, delta_l, delta_u, alpha=1/2, seed=12345){
   set.seed(seed)
   Sig_diag = sqrt(diag(Sigma))
   lb = qnorm(delta_l)/Sig_diag-theta/Sig_diag + qnorm(1-alpha)
@@ -147,7 +147,7 @@ power_cTOST_mv = function(theta, Sigma, delta_l, delta_u, alpha=1/2, seed=12345)
 }
 
 get_mult_alpha_qTOST_MC = function(gamma, n_x, n_y, pi_x, delta_l, delta_u, alpha=0.05, B=10^3,
-                          tol = .Machine$double.eps^0.5, seed=12345, max_iter=10, tolpower=1e-3, MC_sup=T, ...){
+                          tol = .Machine$double.eps^0.5, seed=12345, max_iter=10, tolpower=1e-3, MC_sup=TRUE, ...){
   l = n_y/n_x
   out = list()
   for (side in c("upper", "lower")){ # see argsup_qTOST: we try the argsup on both delta_l and delta_u

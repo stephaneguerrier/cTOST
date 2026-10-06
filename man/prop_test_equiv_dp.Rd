@@ -93,7 +93,6 @@ budget epsilon controls the amount of noise: larger epsilon values provide less
 privacy but more accurate inference.
 }
 \examples{
-\dontrun{
 # One-sample test: Is proportion equivalent to range [0.3, 0.5]?
 set.seed(123)
 n <- 500
@@ -154,7 +153,6 @@ result <- prop_test_equiv_dp(
   B = 1000
 )
 result
-}
 
 
 }

@@ -22,7 +22,7 @@ A list containing the estimated mean and estimated standard deviation of the sim
 Simulate data from the canonical form of the univariate average equivalence problem
 }
 \examples{
-simulate_data(mu = 10, sigma = 2, nu = 10)
+cTOST:::simulate_data(mu = 10, sigma = 2, nu = 10)
 
 }
 \keyword{internal}

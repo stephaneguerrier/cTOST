@@ -249,7 +249,7 @@ tost_dp_one_sample <- function(a, b, n, epsilon, mean_private_obs, sd_private_ob
 #'
 #' For the one-sample case, the test evaluates whether a mean is equivalent to a
 #' reference range [lower, upper]. For the two-sample case, it tests whether the
-#' difference between two means (μ1 - μ2) falls within the equivalence bounds
+#' difference between two means (\eqn{\mu_1 - \mu_2}) falls within the equivalence bounds
 #' [lower, upper].
 #'
 #' The privacy mechanism adds Laplace noise to both the observed mean and standard
@@ -275,10 +275,10 @@ tost_dp_one_sample <- function(a, b, n, epsilon, mean_private_obs, sd_private_ob
 #'   is provided. Default is NULL.
 #' @param lower Lower equivalence bound. For one-sample tests, this is the lower bound
 #'   for the mean. For two-sample tests, this is the lower bound for the difference
-#'   (μ1 - μ2). Typical value: -delta.
+#'   (\eqn{\mu_1 - \mu_2}). Typical value: -delta.
 #' @param upper Upper equivalence bound. For one-sample tests, this is the upper bound
 #'   for the mean. For two-sample tests, this is the upper bound for the difference
-#'   (μ1 - μ2). Typical value: delta.
+#'   (\eqn{\mu_1 - \mu_2}). Typical value: delta.
 #' @param epsilon Privacy budget. Can be a single value (used for all samples) or a
 #'   vector of length 2 (epsilon[1] for first group, epsilon[2] for second group).
 #'   Larger values provide less privacy but more statistical power.
@@ -290,6 +290,7 @@ tost_dp_one_sample <- function(a, b, n, epsilon, mean_private_obs, sd_private_ob
 #' @param seed Random seed for reproducibility. Default is 1337.
 #' @param method Implementation to use: "cpp" (default, ultra-fast) or "r" (pure R).
 #'   The C++ implementation is 15-250x faster depending on problem size.
+#' @param ... Additional arguments (currently unused).
 #'
 #' @return A list of class "tost_dp" containing:
 #'   \item{decision}{Logical. TRUE if equivalence is established, FALSE otherwise.}
@@ -307,7 +308,6 @@ tost_dp_one_sample <- function(a, b, n, epsilon, mean_private_obs, sd_private_ob
 #'   \item{B}{Number of Monte Carlo replications.}
 #'
 #' @examples
-#' \dontrun{
 #' # One-sample test: Is mean equivalent to range [1.5, 3.5]?
 #' set.seed(123)
 #' n <- 100
@@ -344,7 +344,7 @@ tost_dp_one_sample <- function(a, b, n, epsilon, mean_private_obs, sd_private_ob
 #' )
 #' result
 #'
-#' # Two-sample test: Is difference (μ1 - μ2) equivalent to [-1, 1]?
+#' # Two-sample test: Is difference (mu1 - mu2) equivalent to [-1, 1]?
 #' set.seed(456)
 #' n1 <- 100
 #' n2 <- 100
@@ -388,7 +388,6 @@ tost_dp_one_sample <- function(a, b, n, epsilon, mean_private_obs, sd_private_ob
 #'   B = 1000
 #' )
 #' result
-#' }
 #'
 #'
 #' @export

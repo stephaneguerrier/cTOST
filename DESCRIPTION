@@ -11,19 +11,25 @@ Authors@R: c(
     person("Yogeshvar N.", "Kalia", role = "ctb")
     )
 Maintainer: Stéphane Guerrier <stef.guerrier@gmail.com>
-Description: Provides tools for bioequivalence assessment in univariate and multivariate settings. It implements the adjustement procedures proposed Boulaguiem et al. (2024, <https://doi.org/10.1002/sim.9993>), Boulaguiem et al. (2025, <https://arxiv.org/abs/2411.16429>) and Insolia et al. (2025).
+Description: Provides tools for (bio)equivalence assessment in univariate and
+    multivariate settings, including finite sample adjustments of the two
+    one-sided tests (TOST), quantile equivalence tests and differentially private
+    tests. It implements the adjustment procedures proposed in Boulaguiem et al.
+    (2024) <doi:10.1002/sim.9993>, Boulaguiem et al. (2025)
+    <doi:10.48550/arXiv.2411.16429> and Insolia et al. (2025)
+    <doi:10.48550/arXiv.2507.22756>.
 Depends:
-    PowerTOST,
-    mvtnorm,
-    cli,
-    knitr,
     R (>= 4.0)
 Imports:
-    rmarkdown,
+    cli,
+    mvtnorm,
+    PowerTOST,
     Rcpp
 LinkingTo: Rcpp
 Suggests:
     asciicast,
+    knitr,
+    rmarkdown,
     testthat (>= 3.0.0)
 License: AGPL-3
 Encoding: UTF-8

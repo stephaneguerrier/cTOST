@@ -10,7 +10,7 @@
 #' @keywords internal
 #'
 #' @examples
-#' simulate_data(mu = 10, sigma = 2, nu = 10)
+#' cTOST:::simulate_data(mu = 10, sigma = 2, nu = 10)
 #'
 #' @importFrom stats rnorm rchisq
 simulate_data = function(mu, sigma, nu, seed = 18){

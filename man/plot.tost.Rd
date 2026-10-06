@@ -2,12 +2,21 @@
 % Please edit documentation in R/plot.R
 \name{plot.tost}
 \alias{plot.tost}
-\title{Plot confidence intervals for one or more `tost` or `mtost` objects}
+\alias{plot.mtost}
+\alias{plot.qtost}
+\alias{plot.mqtost}
+\title{Plot confidence intervals for one or more `tost`, `mtost`, `qtost` or `mqtost` objects}
 \usage{
 \method{plot}{tost}(..., plot_params = list(), legend_params = list())
+
+\method{plot}{mtost}(..., plot_params = list(), legend_params = list())
+
+\method{plot}{qtost}(..., plot_params = list(), legend_params = list())
+
+\method{plot}{mqtost}(..., plot_params = list(), legend_params = list())
 }
 \arguments{
-\item{...}{One or more `tost` or `mtost` objects to be plotted, passed as
+\item{...}{One or more `tost`, `mtost`, `qtost` or `mqtost` objects to be plotted, passed as
 separate arguments.}
 
 \item{plot_params}{A named list of parameters to customize the plot's appearance.
@@ -43,7 +52,9 @@ The function's appearance is controlled by passing named lists to the
   its own graphical parameters (`par`) and resets them upon exiting. Set to
   `FALSE` when arranging multiple plots in a grid (e.g., with `par(mfrow=...))`.
 - `add_decision`: A logical value. If `TRUE` (the default), ticks showing the
-   decisions for equivalence assessment are added next to confidence intervals.
+   decisions for equivalence assessment are added next to confidence intervals
+   (a check mark or a cross; on PDF/PostScript devices and in non-UTF-8 locales,
+   which cannot render these glyphs, `v` and `x` are used instead).
 
 ### Key `legend_params` options:
 - `x`, `title`, `cex`: Standard `legend()` arguments for position, title, and size.
@@ -67,7 +78,7 @@ atost = ctost(theta = theta_hat, sigma = sig_hat, nu = nu,
               alpha = alpha0, delta = c0, method = "alpha")
 otost = ctost(theta = theta_hat, sigma = sig_hat,
               nu = nu, alpha = alpha0, delta = c0, method = "optimal")
-plot.tost(stost, atost, otost)
+plot(stost, atost, otost)
 # Multivariate assessment
 data(skin_mvt)
 n = nrow(skin_mvt)
@@ -79,15 +90,15 @@ c0 = log(1.25)
 # Multivariate assessment of a single method with default inputs
 (mvt_stost = ctost(theta = theta_hat, sigma = Sigma_hat, nu = nu,
                    alpha = alpha0, delta = c0, method = "unadjusted"))
-plot.tost(mvt_stost)
+plot(mvt_stost)
 # Multivariate comparison with default inputs
 (mvt_atost = ctost(theta = theta_hat, sigma = Sigma_hat, nu = nu,
                    alpha = alpha0, delta = c0, method = "alpha", B=1e3))
 (mvt_ctost = ctost(theta = theta_hat, sigma = Sigma_hat, nu = nu,
                    alpha = alpha0, delta = c0, method = "optimal"))
-plot.tost(mvt_stost, mvt_atost, mvt_ctost)
+plot(mvt_stost, mvt_atost, mvt_ctost)
 # Multivariate comparison with custom inputs
-plot.tost(
+plot(
   mvt_stost, mvt_atost, mvt_ctost,
   plot_params = list(
     main = "Bioequivalence Assessment",
@@ -105,7 +116,7 @@ plot.tost(
     line.ylab=2,
     eq_region_fill = grDevices::adjustcolor("grey60", alpha.f = 0.15),
     eq_region_lines = "grey60",
-    add_decision = F
+    add_decision = FALSE
   ),
   legend_params = list(
     legend = c("TOST", bquote(alpha*"-TOST"), "cTOST"),
@@ -114,7 +125,7 @@ plot.tost(
     inset = -0.7,
     title = "Method:",
     bty = "o",
-    horiz = F
+    horiz = FALSE
   )
 )
 }

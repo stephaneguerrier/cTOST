@@ -7,10 +7,10 @@
 #' equivalence. This is a low-level function; users should typically use the
 #' main `qtost` wrapper function.
 #'
-#' @param theta The calculated test statistic, $\theta$.
-#' @param sigma The standard error of the test statistic, $\sigma_\theta$.
+#' @param theta The calculated test statistic, \eqn{\theta}.
+#' @param sigma The standard error of the test statistic, \eqn{\sigma_\theta}.
 #' @param pi_x A numeric scalar or vector representing the quantile(s) of interest
-#'   in the reference population ($X$).
+#'   in the reference population (\eqn{X}).
 #' @param delta_l A numeric scalar or vector for the lower equivalence margin(s).
 #' @param delta_u A numeric scalar or vector for the upper equivalence margin(s).
 #' @param alpha The nominal significance level for the test (e.g., 0.05).
@@ -21,11 +21,11 @@
 #' This list includes:
 #' \itemize{
 #'   \item `decision`: A boolean value (`TRUE` for equivalence, `FALSE` otherwise).
-#'   \item `ci`: The confidence interval for the estimated quantile in population Y, $\hat{\pi}_y$.
-#'   \item `pi_y_hat`: The point estimate of the quantile in population Y, calculated as $\Phi(\theta)$.
-#'   \item `theta`: The value of the test statistic $\theta$.
-#'   \item `sigma`: The standard error of $\theta$.
-#'   \item `ci_theta`: The confidence interval for $\theta$.
+#'   \item `ci`: The confidence interval for the estimated quantile in population Y, \eqn{\hat{\pi}_y}.
+#'   \item `pi_y_hat`: The point estimate of the quantile in population Y, calculated as \eqn{\Phi(\theta)}.
+#'   \item `theta`: The value of the test statistic \eqn{\theta}.
+#'   \item `sigma`: The standard error of \eqn{\theta}.
+#'   \item `ci_theta`: The confidence interval for \eqn{\theta}.
 #'   \item `alpha`: The significance level used for the test.
 #'   \item `pi_x`: The reference quantile(s).
 #'   \item `delta`: The original equivalence margin.

@@ -1,0 +1,66 @@
+# Print, compare and plot methods (repaired in PR 3; audit F01, F04, F05, F06, F37).
+
+test_that("print() works for single-quantile objects and returns them invisibly", {
+  i = qtost_fda_inputs()
+  q = qtost(i$x, i$y, pi_x = 0.8, delta = 0.15, method = "unadjusted")
+  out = capture.output(r <- suppressMessages(print(q)))
+  expect_identical(r, q)
+  expect_true(any(grepl("Method: qTOST", out, fixed = TRUE)))
+  expect_true(any(grepl("Equiv. lim. = (0.65000 ; 0.95000)", out, fixed = TRUE)))
+  expect_true(any(grepl("CI =  (0.50105 ; 0.83712)", out, fixed = TRUE)))
+  a = qtost(i$x, i$y, pi_x = 0.8, delta = 0.15, method = "alpha")
+  out = capture.output(suppressMessages(print(a)))
+  expect_true(any(grepl("Method: alpha-qTOST", out, fixed = TRUE)))
+  expect_true(any(grepl("Corrected alpha = 0.06167", out, fixed = TRUE)))
+})
+
+test_that("print() dispatches for two-quantile ('mqtost') objects", {
+  expect_type(getS3method("print", "mqtost"), "closure")
+  i = qtost_fda_inputs()
+  a = qtost(i$x, i$y, pi_x = c(0.25, 0.75), delta = 0.15, method = "alpha")
+  out = capture.output(r <- suppressMessages(print(a)))
+  expect_identical(r, a)
+  expect_true(any(grepl("Equiv. Region for q1:", out, fixed = TRUE)))
+  expect_true(any(grepl("alpha-qTOST for q2:", out, fixed = TRUE)))
+  expect_true(any(grepl("q1 = (0.13060; 0.34939)", out, fixed = TRUE)))
+  expect_true(any(grepl("q1 = (0.10000; 0.40000)", out, fixed = TRUE)))
+  expect_true(any(grepl("Corrected alpha = 0.12166", out, fixed = TRUE)))
+})
+
+test_that("compare_to_qtost() takes an alpha-qTOST object and compares it with the unadjusted qTOST", {
+  i = qtost_fda_inputs()
+  a = qtost(i$x, i$y, pi_x = 0.8, delta = 0.15, method = "alpha")
+  q = qtost(i$x, i$y, pi_x = 0.8, delta = 0.15, method = "unadjusted")
+  out = capture.output(r <- suppressMessages(compare_to_qtost(a)))
+  expect_identical(r, a)
+  # the two interval rows show the unadjusted and the corrected intervals
+  expect_true(any(grepl("qTOST:\\s+0\\.50105\\s+0\\.83712", out)))
+  expect_true(any(grepl("alpha-qTOST:\\s+0\\.51340\\s+0\\.82937", out)))
+  expect_error(compare_to_qtost(q), "not compatible")
+  expect_error(compare_to_qtost(list(a = 1)), "qtost")
+})
+
+test_that("plot() dispatches for tost, mtost, qtost and mqtost objects", {
+  s = skin_stats(); t = ticlopidine_stats(); i = qtost_fda_inputs()
+  u = ctost(theta = s$theta, sigma = s$sigma, nu = s$nu, delta = log(1.25), method = "unadjusted")
+  m = ctost(theta = t$theta, sigma = t$sigma, nu = t$nu, delta = log(1.25), method = "unadjusted")
+  q = qtost(i$x, i$y, pi_x = 0.8, delta = 0.15, method = "unadjusted")
+  mq = qtost(i$x, i$y, pi_x = c(0.25, 0.75), delta = 0.15, method = "unadjusted")
+  pdf(NULL)
+  on.exit(dev.off())
+  expect_no_error(plot(u))
+  expect_no_error(plot(m))
+  expect_no_error(plot(q))
+  expect_no_error(plot(mq))
+  expect_no_error(plot(u, ctost(theta = s$theta, sigma = s$sigma, nu = s$nu, delta = log(1.25), method = "alpha")))
+})
+
+test_that("print() of univariate and multivariate tost objects returns the object", {
+  s = skin_stats(); t = ticlopidine_stats()
+  u = ctost(theta = s$theta, sigma = s$sigma, nu = s$nu, delta = log(1.25), method = "alpha")
+  out = capture.output(suppressMessages(print(u)))
+  expect_true(any(grepl("Corrected alpha = 0.07865", out, fixed = TRUE)))
+  m = ctost(theta = t$theta, sigma = t$sigma, nu = t$nu, delta = log(1.25), method = "unadjusted")
+  out = capture.output(suppressMessages(print(m)))
+  expect_true(any(grepl("Method: TOST", out, fixed = TRUE)))
+})

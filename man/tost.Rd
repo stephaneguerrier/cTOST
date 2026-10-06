@@ -42,7 +42,7 @@ data(skin)
 theta_hat = diff(colMeans(skin))
 nu = nrow(skin) - 1
 sig_hat = sd(apply(skin, 1, diff)) / sqrt(nu)
-tost(theta = theta_hat, sigma = sig_hat, nu = nu,
+cTOST:::tost(theta = theta_hat, sigma = sig_hat, nu = nu,
      alpha = 0.05, delta = log(1.25))
 
 # Multivariate case
@@ -51,6 +51,6 @@ n = nrow(ticlopidine)
 nu = n - 1
 theta_hat = colMeans(ticlopidine)
 Sigma_hat = cov(ticlopidine) / n
-tost(theta = theta_hat, sigma = Sigma_hat, nu = nu, delta = log(1.25))
+cTOST:::tost(theta = theta_hat, sigma = Sigma_hat, nu = nu, delta = log(1.25))
 }
 \keyword{internal}

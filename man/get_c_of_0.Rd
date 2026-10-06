@@ -26,7 +26,7 @@ The function returns a \code{list} value with the structure:
 \itemize{
  \item \code{c}:        A numerical variable that corresponds to the estimated critical value.
  \item \code{size}:     A numerical variable that corresponds to the size when using the estimated critical value.
- \item \code{coverged}: A boolean variable that corresponds to whether Newton-Raphson coverged (only returned if \code{optim = "NR"}).
+ \item \code{converged}: A boolean variable that corresponds to whether Newton-Raphson converged (only returned if \code{optim = "NR"}).
  \item \code{iter}:     A numerical variable that corresponds to the actual iterations used (only returned if \code{optim = "NR"}).
 }
 }

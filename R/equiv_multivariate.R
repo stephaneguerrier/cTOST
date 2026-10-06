@@ -1,4 +1,3 @@
-require(mvtnorm)
 
 #' @title Power function of univariate or multivariate TOST using Monte Carlo integration
 #'

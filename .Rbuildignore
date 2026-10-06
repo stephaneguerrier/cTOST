@@ -9,3 +9,4 @@
 ^cran-comments\.md$
 ^README\.html$
 ^dev$
+^vignettes/articles$

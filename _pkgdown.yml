@@ -55,6 +55,10 @@ navbar:
       - text: "Paper Reproductions"
       - text: "  Finite Sample Adjustments (2024)"
         href: articles/reproducibility.html
+      - text: "  Quantiles Equivalence Testing (2025)"
+        href: articles/reproducibility-quantile.html
+      - text: "  Equivalence Testing under Privacy Constraints (2026)"
+        href: articles/reproducibility-dp.html
 
 reference:
 - title: Average Equivalence Testing
@@ -129,6 +133,8 @@ articles:
   navbar: Reproducibility
   contents:
   - reproducibility
+  - articles/reproducibility-quantile
+  - articles/reproducibility-dp
 
 authors:
   Stéphane Guerrier:

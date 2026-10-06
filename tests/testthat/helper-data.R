@@ -42,6 +42,9 @@ tol_mc = 1e-3       # Monte Carlo quantities that go through LAPACK (mvtnorm::rm
                     # the same seed gives 0.0590946 on macOS (Accelerate) and 0.0590800 on
                     # Linux/Windows (reference BLAS) for the ticlopidine alpha-TOST, i.e.
                     # last-digit differences in the draws flip a few of the 10^4 decisions.
-tol_cran101 = 1e-3  # alpha-/delta-TOST versus CRAN 1.0.1: 1.1.0 solves the corrected
-                    # level/margin only to uniroot's default tolerance (audit F27).
-                    # Tighten to 1e-7 once the tolerance is passed to uniroot again.
+tol_cran101_alpha = 1e-6  # alpha-TOST versus CRAN 1.0.1: since PR 4b the root is solved to
+                          # .Machine$double.eps^0.5 (audit F27); 1.0.1 used a fixed-point
+                          # iteration stopped at 1e-7, so the two agree to about 2e-7.
+tol_cran101_delta = 1e-4  # delta-TOST versus CRAN 1.0.1: 1.0.1 located the corrected margin
+                          # with optimize() and a 1e-4 stopping rule, so its own value is only
+                          # that accurate; the current root satisfies size = alpha to 1e-11.

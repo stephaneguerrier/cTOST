@@ -59,7 +59,7 @@ test_that("print() of univariate and multivariate tost objects returns the objec
   s = skin_stats(); t = ticlopidine_stats()
   u = ctost(theta = s$theta, sigma = s$sigma, nu = s$nu, delta = log(1.25), method = "alpha")
   out = capture.output(suppressMessages(print(u)))
-  expect_true(any(grepl("Corrected alpha = 0.07865", out, fixed = TRUE)))
+  expect_true(any(grepl("Corrected alpha = 0.07866", out, fixed = TRUE)))
   m = ctost(theta = t$theta, sigma = t$sigma, nu = t$nu, delta = log(1.25), method = "unadjusted")
   out = capture.output(suppressMessages(print(m)))
   expect_true(any(grepl("Method: TOST", out, fixed = TRUE)))

@@ -8,5 +8,8 @@ docs
 local
 Simulation
 CLAUDE.md
-tests
 claude
+README.html
+src/*.o
+src/*.so
+src/*.dll

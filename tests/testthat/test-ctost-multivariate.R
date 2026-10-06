@@ -46,11 +46,11 @@ test_that("multivariate alpha-TOST on ticlopidine is locked (Monte Carlo, fixed 
 
 test_that("multivariate cTOST on ticlopidine is locked and warns about the default correction", {
   t = ticlopidine_stats()
-  # audit F09: the default correction resolves to 'offline', which the multivariate
-  # branch rejects with a warning. Flip to expect_no_warning() when F09 is fixed.
-  expect_warning(
-    res <- ctost(theta = t$theta, sigma = t$sigma, nu = t$nu, delta = log(1.25)),
-    "none")
+  # audit F09 (fixed in PR 4a): the default correction is 'none' in multivariate settings
+  expect_no_warning(res <- ctost(theta = t$theta, sigma = t$sigma, nu = t$nu, delta = log(1.25)))
+  expect_equal(res$correction, "none")
+  expect_warning(ctost(theta = t$theta, sigma = t$sigma, nu = t$nu, delta = log(1.25),
+                       correction = "bootstrap"), "none")
   expect_s3_class(res, "mtost")
   expect_equal(res$method, "cTOST")
   expect_true(all(res$decision))

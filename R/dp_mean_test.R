@@ -58,11 +58,6 @@ dp_mean_test <- function(a, b, n, epsilon, mean_private_obs, sd_private_obs,
 
   # Dispatch to appropriate implementation
   if (method == "cpp") {
-    # Load C++ implementation if not already loaded
-    if (!exists("tost_dp_one_sample_ultra_fast")) {
-      stop("C++ implementation not loaded. Please run: sourceCpp('src/dp_mean_ultra_fast.cpp')")
-    }
-
     result <- tost_dp_one_sample_ultra_fast(
       a = a, b = b, n = n, epsilon = epsilon,
       mean_private_obs = mean_private_obs,
@@ -135,7 +130,7 @@ obj_fun_one_sample <- function(theta, a, b, n, scale_mean, scale_sd, z, u1, u2,
 
   # Compute privatized statistics for given theta = c(mu, sigma)
   if (use_cpp) {
-    stat_private <- compute_tx_private_cpp(a, b, theta[1], theta[2], n, scale_mean, scale_sd, z, u1, u2)
+    stop("use_cpp = TRUE is not available: the C++ path is the complete routine used by method = 'cpp'.")
   } else {
     stat_private <- compute_tx_private(a, b, theta[1], theta[2], n, scale_mean, scale_sd, z, u1, u2)
   }
@@ -428,6 +423,39 @@ tost_equiv_dp <- function(mean_private_obs, sd_private_obs, a, b, n,
   } else {
     stop("epsilon must be a single value or a vector of length 2")
   }
+
+  # Validate the remaining inputs
+  .check_scalar(mean_private_obs, "mean_private_obs")
+  .check_scalar(sd_private_obs, "sd_private_obs")
+  .check_scalar(a, "a"); .check_scalar(b, "b")
+  if (a >= b) stop("'a' must be smaller than 'b'.")
+  .check_scalar(n, "n", min = 2, integer = TRUE)
+  .check_scalar(lower, "lower"); .check_scalar(upper, "upper")
+  if (lower >= upper) stop("'lower' must be smaller than 'upper'.")
+  .check_scalar(alpha, "alpha", min = 0, max = 0.5, strict_min = TRUE, strict_max = TRUE)
+  .check_scalar(B, "B", min = 1, integer = TRUE)
+  if (!is.numeric(epsilon_vec) || any(!is.finite(epsilon_vec)) || any(epsilon_vec <= 0)) {
+    stop("'epsilon' must be positive and finite.")
+  }
+  if (mean_private_obs < a || mean_private_obs > b) {
+    warning("'mean_private_obs' lies outside [a, b].")
+  }
+  if (sd_private_obs <= 0) {
+    warning("'sd_private_obs' is not positive.")
+  }
+  if (two_sample) {
+    .check_scalar(mean_private_obs2, "mean_private_obs2")
+    .check_scalar(sd_private_obs2, "sd_private_obs2")
+    .check_scalar(a2, "a2"); .check_scalar(b2, "b2")
+    if (a2 >= b2) stop("'a2' must be smaller than 'b2'.")
+    .check_scalar(n2, "n2", min = 2, integer = TRUE)
+  }
+  if (method == "cpp" && B * max(n, if (two_sample) n2 else 0) > .Machine$integer.max) {
+    stop("'B' * 'n' is too large for method = 'cpp'; reduce B or use method = 'r'.")
+  }
+  # Seed: NULL draws one from the caller's stream; otherwise the caller's stream is restored on exit
+  if (!is.null(seed)) .restore_rng_on_exit()
+  seed <- .resolve_seed(seed)
 
   # Perform the appropriate test
   if (two_sample) {

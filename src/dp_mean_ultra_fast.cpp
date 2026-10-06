@@ -180,6 +180,11 @@ List tost_dp_one_sample_ultra_fast(double a, double b, int n, double epsilon,
                                     double lower, double upper, int B, double alpha,
                                     int seed) {
 
+  if (B < 1) Rcpp::stop("'B' must be a positive integer.");
+  if (n < 2) Rcpp::stop("'n' must be at least 2.");
+  if (static_cast<double>(B) * static_cast<double>(n) > 2147483647.0)
+    Rcpp::stop("'B' * 'n' must not exceed 2^31 - 1.");
+
   // Set seed
   Rcpp::Environment base_env("package:base");
   Rcpp::Function set_seed_r = base_env["set.seed"];

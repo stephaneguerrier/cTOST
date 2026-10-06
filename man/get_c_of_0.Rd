@@ -35,7 +35,6 @@ This function is used to calculate the critical value such that the size of the 
 matches the nominal significance level.
 }
 \details{
-There are two methods available for optimization: Newton-Raphson (using \code{optim} = "NR") and minimization without
-derivatives (using \code{optim} = "uniroot").
+Only the Newton-Raphson method (\code{optim = "NR"}) is implemented.
 }
 \keyword{internal}

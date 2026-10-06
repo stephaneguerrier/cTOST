@@ -1,20 +1,27 @@
-# Local check on Mac OS-latest
+## cTOST 1.1.0
 
-── R CMD check results ────── cTOST 1.0.0 ────
-Duration: 32.1s
+This release adds multivariate, quantile and differentially private equivalence
+tests, compiled (Rcpp) code and a test suite, and changes the maintainer.
 
-0 errors ✔ | 0 warnings ✔ | 0 notes ✔
+### Maintainer change
 
-## R-CMD-check on GitHub actions
+The maintainer changes from Younes Boulaguiem <younes.boulaguiem@gmail.com>
+to Stéphane Guerrier <stef.guerrier@gmail.com>. The previous maintainer has
+confirmed the change by e-mail to CRAN.
 
-All jobs pass on
+### Test environments
 
-- macOS-latest (release)
-- ubuntu-latest (devel)
-- ubuntu-latest (oldrel-1)
-- ubuntu-latest (release)
-- windows-latest (release)
+* local macOS (arm64), R 4.6.0
+* GitHub Actions: macOS (R release), Windows (R release), Ubuntu (R devel,
+  release, oldrel-1)
 
-# Downstream dependencies
+### R CMD check results
+
+0 errors | 0 warnings | 1 note
+
+* checking CRAN incoming feasibility ... NOTE
+  New maintainer (see above).
+
+### Downstream dependencies
 
 There are currently no downstream dependencies for this package.

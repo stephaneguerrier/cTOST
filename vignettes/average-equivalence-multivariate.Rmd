@@ -175,8 +175,7 @@ print(mv_optimal)
 
 The `plot()` function creates a forest plot showing confidence intervals for each parameter. For multivariate tests, plot each method separately:
 
-```{r, eval=FALSE}
-# Plotting functionality for multivariate TOST is under development
+```{r, fig.width=7, fig.height=4}
 plot(mv_optimal)
 ```
 
@@ -237,8 +236,7 @@ print(skin_optimal)
 
 ## Visualize by Layer
 
-```{r, eval=FALSE}
-# Plotting functionality for multivariate TOST is under development
+```{r, fig.width=7, fig.height=4}
 plot(skin_optimal,
      plot_params = list(var_names = colnames(skin_mvt)))
 ```
@@ -255,25 +253,7 @@ Testing multiple parameters simultaneously is inherently more conservative becau
 
 ## Correction Methods
 
-### Bootstrap Correction (Default for Multivariate)
-
-For multivariate settings with small samples ($\nu < 100$), bootstrap correction is used by default:
-
-```{r}
-mv_bootstrap <- ctost(
-  theta = theta_hat,
-  sigma = Sigma_hat,
-  nu = nu,
-  delta = log(1.25),
-  method = "optimal",
-  correction = "bootstrap",
-  B = 10000  # Number of bootstrap replications
-)
-```
-
-### No Correction
-
-For large samples, corrections may not be necessary:
+The finite sample corrections of the significance level (`correction = "offline"` or `"bootstrap"`) are available for the univariate cTOST only. In multivariate settings `ctost()` uses `correction = "none"`; asking for another value produces a warning and no correction:
 
 ```{r}
 mv_none <- ctost(
@@ -284,9 +264,7 @@ mv_none <- ctost(
   method = "optimal",
   correction = "none"
 )
-
-cat("With bootstrap:", mv_bootstrap$decision, "\n")
-cat("Without correction:", mv_none$decision, "\n")
+cat("Decision:", mv_none$decision, "\n")
 ```
 
 # Practical Guidelines
@@ -412,7 +390,7 @@ points(theta_12[1], theta_12[2], pch = 16, cex = 1.5)
 # Summary
 
 - **Multivariate equivalence testing** tests all parameters simultaneously
-- Use `method = "optimal"` with `correction = "bootstrap"` for best performance
+- Use `method = "optimal"` (the cTOST) for best performance
 - The test accounts for **correlations** between parameters
 - Larger sample sizes are needed compared to univariate testing
 - All parameters must satisfy equivalence for overall acceptance

@@ -10,28 +10,21 @@ vignette: >
   %\VignetteEncoding{UTF-8}
 ---
 
-```{r, include = FALSE, cache = FALSE, eval=FALSE}
+```{r, include = FALSE}
 knitr::opts_chunk$set(
   collapse = TRUE,
   comment = "#>",
   out.width = "100%"
 )
-# Turn on ANSI colors
-asciicast::init_knitr_engine(
-  startup = quote({
-    library(cli)
-    set.seed(1) }),
-  echo = FALSE,
-  echo_input = FALSE)
 ```
 
 # Case study: Evaluation of Bioequivalence for Econazole Nitrate Deposition in Porcine Skin
 
-In the following we use the methodology developed in this paper for the evaluation of the bioequivalence of two cream products. The dataset was provided by the authors of @quartier2019cutaneous, who use the cutaneous bioequivalence method detailed in their paper. It contains $17$ pairs of comparable porcine skin samples on which measurements of econazole nitrate deposition (an antifungal medication used to treat skin infections) were collected using two bioequivalent products. These measurements were then considered on the logarithmic scale and saved as an RData file called `skin`. 
+In the following we use the methodology developed in @boulaguiem2023finite for the evaluation of the bioequivalence of two cream products. The dataset was provided by the authors of @quartier2019cutaneous, who use the cutaneous bioequivalence method detailed in their paper. It contains $17$ pairs of comparable porcine skin samples on which measurements of econazole nitrate deposition (an antifungal medication used to treat skin infections) were collected using two bioequivalent products. These measurements were then considered on the logarithmic scale and saved as an RData file called `skin`. 
 
 The results presented in Figure 4 of @boulaguiem2023finite can be reproduced as follows:
 
-```{r, eval=FALSE}
+```{r, fig.width=6, fig.height=5}
 library(cTOST)
 data(skin)
 
@@ -52,36 +45,29 @@ axis(2, at = mean(c(min(unlist(skin)),log(4000))), expression(paste("ECZ deposit
 
 ## Bioequivalence assessment
 
-In order to assess bioequivalence, we extract each of means between the two groups, the number of degrees of freedom, and the standard error:
+In order to assess bioequivalence, we extract the difference in means between the two groups, the number of degrees of freedom, and the standard error of the difference. Note that `ctost()` takes the **variance** of the estimate (the squared standard error) as its `sigma` argument:
 
-```{r, eval=FALSE}
+```{r}
 # Difference in means between the two groups
-theta_hat = diff(apply(skin,2,mean)) 
+theta_hat = diff(apply(skin, 2, mean))
 
 # Number of degrees of freedom
-nu = nrow(skin)-1 
+nu = nrow(skin) - 1
 
-# Standard error
-sig_hat = sd(apply(skin,1,diff))/sqrt(nu)
+# Standard error and variance of the difference
+se_hat = sd(apply(skin, 1, diff)) / sqrt(nu)
+sig_hat = se_hat^2
 ```
 
-We consider in the paper a significance level of $5\%$ and an equivalence limit at $\text{delta}=log(1.25)$. 
+We consider in the paper a significance level of $5\%$ and an equivalence limit at $\delta = \log(1.25)$. 
 
 ### Standard TOST
 
 Considering these parameters, the standard TOST does not accept bioequivalence:
-```{r, eval = F}
-res_tost = tost(theta = theta_hat, sigma = sig_hat, nu = nu, alpha = 0.05, delta = log(1.25))
-res_tost
-```
 
-```{asciicast, eval=FALSE}
-library(cTOST)
-data(skin)
-theta_hat = diff(apply(skin,2,mean))
-nu = nrow(skin) - 1
-sig_hat = sd(apply(skin,1,diff))/sqrt(nu)
-res_tost = tost(theta = theta_hat, sigma = sig_hat, nu = nu, alpha = 0.05, delta = log(1.25))
+```{r}
+res_tost = ctost(theta = theta_hat, sigma = sig_hat, nu = nu, alpha = 0.05,
+                 delta = log(1.25), method = "unadjusted")
 res_tost
 ```
 
@@ -89,93 +75,52 @@ res_tost
 
 Using the $\delta$-TOST, we still cannot accept bioequivalence, even though the corrected region is larger:
 
-```{r, eval = F}
-res_dtost = dtost(theta = theta_hat, sigma = sig_hat, nu = nu, alpha = 0.05, delta = log(1.25))
+```{r}
+res_dtost = ctost(theta = theta_hat, sigma = sig_hat, nu = nu, alpha = 0.05,
+                  delta = log(1.25), method = "delta")
 res_dtost
 ```
 
-```{asciicast, eval=FALSE}
-library(cTOST)
-data(skin)
-theta_hat = diff(apply(skin,2,mean))
-nu = nrow(skin) - 1
-sig_hat = sd(apply(skin,1,diff))/sqrt(nu)
-res_dtost = dtost(theta = theta_hat, sigma = sig_hat, nu = nu, alpha = 0.05, delta = log(1.25))
-res_dtost
-```
-
-```{r, eval=FALSE}
-compare_to_tost(res_dtost)
-```
-
-```{asciicast, eval=FALSE}
-library(cTOST)
-data(skin)
-theta_hat = diff(apply(skin,2,mean))
-nu = nrow(skin) - 1
-sig_hat = sd(apply(skin,1,diff))/sqrt(nu)
-res_dtost = dtost(theta = theta_hat, sigma = sig_hat, nu = nu, alpha = 0.05, delta = log(1.25))
+```{r}
 compare_to_tost(res_dtost)
 ```
 
 ### $\alpha$-TOST
 
 However, the $\alpha$-TOST allows us to accept bioequivalence:
-```{r, eval = F}
-res_atost = atost(theta = theta_hat, sigma = sig_hat, nu = nu, alpha = 0.05, delta = log(1.25))
+
+```{r}
+res_atost = ctost(theta = theta_hat, sigma = sig_hat, nu = nu, alpha = 0.05,
+                  delta = log(1.25), method = "alpha")
 res_atost
 ```
 
-```{asciicast, eval=FALSE}
-library(cTOST)
-data(skin)
-theta_hat = diff(apply(skin,2,mean))
-nu = nrow(skin) - 1
-sig_hat = sd(apply(skin,1,diff))/sqrt(nu)
-res_atost = atost(theta = theta_hat, sigma = sig_hat, nu = nu, alpha = 0.05, delta = log(1.25))
-res_atost
-```
-
-```{r, eval=FALSE}
+```{r}
 compare_to_tost(res_atost)
 ```
 
-```{asciicast, eval=FALSE}
-library(cTOST)
-data(skin)
-theta_hat = diff(apply(skin,2,mean))
-nu = nrow(skin) - 1
-sig_hat = sd(apply(skin,1,diff))/sqrt(nu)
-res_atost = atost(theta = theta_hat, sigma = sig_hat, nu = nu, alpha = 0.05, delta = log(1.25))
-compare_to_tost(res_atost)
-```
+## Interval Inclusion Principle with the $\alpha$-TOST
 
-## Interval Inclusion Principal with the $\alpha$-TOST
+To visually assess bioequivalence with the interval inclusion principle, we reproduce Figure 5 of @boulaguiem2023finite with the following code: 
 
-To visually assess bioequivalence with the interval inclusion principal, we reproduce Figure 5 of @boulaguiem2023finite with the following code: 
-
-```{r include=FALSE, eval=FALSE}
-res_atost = atost(theta = theta_hat, sigma = sig_hat, nu = nu, alpha = 0.05, delta = log(1.25))
-```
-
-```{r, eval=FALSE}
-# Nominal level and zquivalence bounds
+```{r, fig.width=7, fig.height=4}
+# Nominal level and equivalence bounds
 alpha = 0.05
 delta = log(1.25)
 
 # Empty plot
-plot(NA, axes = F, xlim = c(-0.25, 0.25), ylim = c(0.5, 2.5), xlab = " ", ylab = " ")
+plot(NA, axes = FALSE, xlim = c(-0.25, 0.25), ylim = c(0.5, 2.5), xlab = " ", ylab = " ")
 
-# Corrected level used by aTOST
+# Corrected level used by the alpha-TOST
 alpha_star = res_atost$corrected_alpha
 
 # TOST's CI upper and lower bound
-a1 = theta_hat + sig_hat*qt(alpha, df = nu)
-a2 = theta_hat - sig_hat*qt(alpha, df = nu)
+a1 = theta_hat + se_hat*qt(alpha, df = nu)
+a2 = theta_hat - se_hat*qt(alpha, df = nu)
 
-# aTOST's CI upper and lower bound 
-b1 = theta_hat + sig_hat*qt(alpha_star, df = nu)
-b2 = theta_hat - sig_hat*qt(alpha_star, df = nu)
+# alpha-TOST's CI upper and lower bound
+b1 = theta_hat + se_hat*qt(alpha_star, df = nu)
+b2 = theta_hat - se_hat*qt(alpha_star, df = nu)
 
 # Set the colors and their transparent counterpart
 cols=c("coral","palegreen2")
@@ -186,7 +131,7 @@ t.cols=sapply(c("coral","palegreen2"),function(x){
       alpha = 127.5)
 })
 
-# Plotting the TOST and aTOST CIs
+# Plotting the TOST and alpha-TOST CIs
 d = 0.1
 polygon(c(a1, a2, a2, a1), c(1-d, 1-d, 1+d, 1+d) + 1, border = NA,
         col = t.cols[1])
@@ -212,8 +157,6 @@ axis(1, at = c(-0.3, -log(1.25), -0.1, 0, 0.1, log(1.25), 0.3),
      labels = c("-0.3", expression(paste("-",delta)), "-0.1", "0", "0.1",
                 expression(delta), "0.3"),padj=-0.15,cex.axis=1.3)
 mtext(expression(theta), side = 1, line = 2.35, cex = 1.4)
-
-``` 
+```
 
 # References
-

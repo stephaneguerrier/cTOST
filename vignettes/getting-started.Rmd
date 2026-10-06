@@ -212,8 +212,7 @@ The test evaluates whether **all** parameters simultaneously fall within the equ
 
 ## Visualize Multivariate Results
 
-```{r, eval=FALSE}
-# Plotting functionality for multivariate TOST is under development
+```{r, fig.width=7, fig.height=4}
 plot(mv_tost)
 ```
 

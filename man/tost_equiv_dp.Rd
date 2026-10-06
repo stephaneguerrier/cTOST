@@ -111,18 +111,26 @@ difference between two means (\eqn{\mu_1 - \mu_2}) falls within the equivalence 
 [lower, upper].
 
 The privacy mechanism adds Laplace noise to both the observed mean and standard
-deviation. The privacy budget epsilon controls the amount of noise: larger epsilon
-values provide less privacy but more accurate inference.
+deviation, with scales \eqn{(b-a)/(n\,\epsilon/2)} and \eqn{(b-a)/(\sqrt{n-1}\,\epsilon/2)}
+respectively: the privacy budget epsilon is split equally between the two statistics.
+Larger epsilon values provide less privacy but more accurate inference. When the
+noise on the standard deviation is comparable to the standard deviation itself
+(small epsilon, small n or a wide interval [a, b]), the test is valid but
+conservative: its type I error is below the nominal level and its power is reduced.
+
+The function fixes the random seed internally and restores the caller's random
+number stream on exit; with \code{seed = NULL} a seed is drawn from the caller's
+stream instead.
 }
 \examples{
 # One-sample test: Is mean equivalent to range [1.5, 3.5]?
 set.seed(123)
-n <- 100
+n <- 500
 a <- 0
 b <- 5
 mu_true <- 2.5
 sigma_true <- 1.0
-epsilon <- 1
+epsilon <- 2
 
 # Generate truncated normal data
 z <- rnorm(n)
@@ -146,7 +154,7 @@ result <- tost_equiv_dp(
   a = a, b = b, n = n,
   lower = 1.5,
   upper = 3.5,
-  epsilon = 1,
+  epsilon = 2,
   B = 1000
 )
 result

@@ -4,7 +4,7 @@
 # lock their output on the documented examples and on one informative setting.
 
 dp_one_sample_inputs = function() {
-  # ?tost_equiv_dp, one-sample example: privatized mean and sd
+  # the former ?tost_equiv_dp one-sample example (n = 100, epsilon = 1): privatized mean and sd
   set.seed(123)
   n = 100; a = 0; b = 5
   z = rnorm(n)
@@ -17,7 +17,7 @@ dp_one_sample_inputs = function() {
        n = n, a = a, b = b)
 }
 
-test_that("tost_equiv_dp(): the documented one-sample example is locked (degenerate interval, audit F71)", {
+test_that("tost_equiv_dp(): the former help example (n = 100, epsilon = 1) is locked (degenerate interval, audit F71)", {
   i = dp_one_sample_inputs()
   expect_equal(i$mean, 2.51647675511, tolerance = tol_exact)
   expect_equal(i$sd, 3.51235877981, tolerance = tol_exact)

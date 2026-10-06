@@ -1,6 +1,6 @@
 #' @title Finite Sample Adjustment for Average (Bio)Equivalence Assessment
 #'
-#' @description Computes finite sample corrected versions of the standard (univariate or multivariate) TOST, as developed in Boulaguiem et al. (2024, https://doi.org/10.1002/sim.9993), Boulaguiem et al. (2024, https://doi.org/10.1002/sim.10258), and Insolia et al. (2025).
+#' @description Computes finite sample corrected versions of the standard (univariate or multivariate) TOST, as developed in Boulaguiem et al. (2024, https://doi.org/10.1002/sim.9993), Boulaguiem et al. (2025, https://doi.org/10.1002/sim.10258), and Insolia et al. (2025, https://doi.org/10.48550/arXiv.2507.22756).
 #'
 #' @param theta A \code{numeric} value or vector representing the estimated difference(s) (e.g., between a generic and reference product).
 #' @param sigma A \code{numeric} value (univariate) or \code{matrix} (multivariate) corresponding to the estimated variance of \code{theta}.
@@ -10,7 +10,7 @@
 #' @param alpha A \code{numeric} value specifying the significance level, which must be between 0 and 0.5 (default: \code{alpha = 0.05}).
 #' @param B A \code{numeric} value specifying the number of Monte Carlo replications, required for some methods (default: \code{B = 10^4}).
 #' @param correction A \code{character} string specifying the finite sample correction of the significance level used by the cTOST (\code{method = "optimal"}) in univariate settings: \code{"offline"} (default; precomputed table), \code{"bootstrap"} or \code{"none"}. No correction is available in multivariate settings, where \code{"none"} is used.
-#' @param seed A \code{numeric} value specifying a seed for reproducibility (default: \code{seed = 101010}).
+#' @param seed A \code{numeric} value specifying a seed for reproducibility of the Monte Carlo and bootstrap steps (default: \code{seed = 101010}). The caller's random number stream is restored on exit.
 #' @param ... Additional parameters.
 #'
 #' @details
@@ -19,6 +19,8 @@
 #' The cTOST, alpha-TOST, and delta-TOST methods apply different finite sample adjustments. Alpha-TOST corrects the significance level, while delta-TOST adjusts the equivalence limits. The cTOST method is based on a more complex approach, and in small samples (typically less than 30), additional corrections may be beneficial. The \code{correction} argument further adjusts the test level to prevent liberal inference; see Insolia et al. (2025) for details.
 #'
 #' Generally, cTOST outperforms other methods, with alpha-TOST performing better than delta-TOST. For this reason, delta-TOST is not implemented for multivariate settings and is not recommended.
+#'
+#' In multivariate settings, the alpha-TOST calibrates the corrected level by Monte Carlo with \code{B} replications and a fixed internal seed; the achieved size is accurate to roughly \eqn{\pm 2.3\sqrt{\alpha(1-\alpha)/B}} (about 0.005 at \code{B = 10^4}) and can differ in the fourth decimal between platforms. The multivariate cTOST computes its critical values under a normal approximation that does not depend on \code{nu}, and no finite sample correction of the level is available for it yet.
 #'
 #' @return An object of class \code{tost} (univariate) or \code{mtost} (multivariate) with the following components:
 #' \itemize{

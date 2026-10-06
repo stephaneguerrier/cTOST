@@ -135,7 +135,7 @@ cat("Standard error:", round(sqrt(sig_hat), 4), "\n")
 cat("Variance:", round(sig_hat, 4), "\n")
 ```
 
-The negative difference suggests the Generic product delivers slightly less econazole than the Reference on average.
+The positive difference suggests the Generic product delivers slightly more econazole than the Reference on average.
 
 ## Define Equivalence Margin
 
@@ -186,7 +186,7 @@ cat("\nCorrected alpha:", round(alpha_tost$corrected_alpha, 4), "\n")
 
 ## 3. Delta-TOST
 
-The delta-TOST narrows the equivalence bounds:
+The delta-TOST enlarges the equivalence bounds (the TOST is conservative, so the corrected margin is always at least as large as the nominal one):
 
 ```{r}
 delta_tost <- ctost(
@@ -227,8 +227,8 @@ plot(standard_tost, alpha_tost, delta_tost, optimal_tost)
 
 **Interpretation:**
 
-- All methods **accept equivalence** in this example
-- The corrected methods produce **narrower confidence intervals**
+- The alpha-TOST and the cTOST **accept equivalence**, while the standard TOST and the delta-TOST do not
+- The alpha-TOST and the cTOST produce **narrower confidence intervals**; the delta-TOST keeps the TOST interval and widens the equivalence region instead
 - The optimal cTOST provides the most efficient inference
 
 ## Compare to Standard TOST

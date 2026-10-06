@@ -18,7 +18,7 @@
 #' @param alpha A \code{numeric} value specifying the significance level, which must be between 0 and 0.5 (default: \code{alpha = 0.05}).
 #' @param method A \code{character} string specifying the finite sample adjustment method. Available methods are: \code{"unadjusted"} (standard unadjusted qTOST), \code{"alpha"} (alpha-qTOST). Default: \code{method = "alpha"}.
 #' @param B A \code{numeric} value specifying the number of Monte Carlo replications, required for the `"alpha"` method (default: \code{B = NULL}, which uses \code{10^5} replications for a single quantile and \code{10^4} for two quantiles).
-#' @param seed A \code{numeric} value specifying a seed for reproducibility (default: \code{seed = 101010}).
+#' @param seed A \code{numeric} value specifying a seed for reproducibility of the Monte Carlo step (default: \code{seed = 101010}). The caller's random number stream is restored on exit.
 #' @param tol A \code{numeric} value specifying a tolerance level (default: \code{tol = 1e-6}).
 #' @param max_iter A \code{numeric} value specifying a maximum number of iteration to compute the supremum at which the size is assessed (default: \code{max_iter = 10}).
 #' @param tolpower A \code{numeric} value specifying the tolerance for power convergence when computing corrected alpha (default: \code{tolpower = 1e-3}).

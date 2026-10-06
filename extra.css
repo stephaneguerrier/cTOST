@@ -1,4 +1,25 @@
-/* Home page: keep the logo beside the title but drop the rule under the header */
-.template-home .page-header {
+/* No rule under page headers, and a larger hex logo (pkgdown's default is 100 px) */
+.page-header {
   border-bottom: none;
+  min-height: 170px;
 }
+img.logo {
+  width: 150px;
+  margin-left: 30px;
+}
+.template-home .page-header {
+  min-height: 190px;
+}
+.template-home img.logo {
+  width: 170px;
+}
+@media (max-width: 575.98px) {
+  img.logo, .template-home img.logo { width: 110px; }
+  .page-header, .template-home .page-header { min-height: 0; }
+}
+
+/* Console colours in article output. pkgdown converts cli's colour codes to inline
+   styles with a bright palette; soften them to the same green and red as the
+   README recordings (asciicast "readme" theme). */
+main span[style*="color: #00BB00"] { color: #859900 !important; }
+main span[style*="color: #BB0000"] { color: #DC322F !important; }

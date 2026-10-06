@@ -197,15 +197,8 @@
 <div class="sourceCode" id="cb4"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">stost</span> <span class="op">=</span> <span class="fu"><a href="reference/ctost.html">ctost</a></span><span class="op">(</span>theta <span class="op">=</span> <span class="va">theta_hat</span>, sigma <span class="op">=</span> <span class="va">sig_hat</span>, nu <span class="op">=</span> <span class="va">nu</span>,</span>
 <span>              delta <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/Log.html" class="external-link">log</a></span><span class="op">(</span><span class="fl">1.25</span><span class="op">)</span>, method <span class="op">=</span> <span class="st">"unadjusted"</span><span class="op">)</span></span>
-<span><span class="va">stost</span></span>
-<span><span class="co">#&gt; ✖ Can't accept (bio)equivalence</span></span>
-<span><span class="co">#&gt; Equiv. Region:  |---------------0---------------|  </span></span>
-<span><span class="co">#&gt; Estim. Inter.:   (---------------x----------------)</span></span>
-<span><span class="co">#&gt; CI =  (-0.21174 ; 0.25715)</span></span>
-<span><span class="co">#&gt; </span></span>
-<span><span class="co">#&gt; Method: TOST</span></span>
-<span><span class="co">#&gt; alpha = 0.05; Equiv. lim. = +/- 0.22314</span></span>
-<span><span class="co">#&gt; Mean = 0.02270; Stand. dev. = 0.13428; df = 16</span></span></code></pre></div>
+<span><span class="va">stost</span></span></code></pre></div>
+<p><picture><source media="(prefers-color-scheme: dark)" srcset="reference/figures/readme/tost-dark.svg"><img src="reference/figures/readme/tost.svg" alt="" width="100%"></source></picture></p>
 </div>
 <div class="section level4">
 <h4 id="optimal-ctost">Optimal cTOST<a class="anchor" aria-label="anchor" href="#optimal-ctost"></a>
@@ -214,18 +207,8 @@
 <div class="sourceCode" id="cb5"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">opt_tost</span> <span class="op">=</span> <span class="fu"><a href="reference/ctost.html">ctost</a></span><span class="op">(</span>theta <span class="op">=</span> <span class="va">theta_hat</span>, sigma <span class="op">=</span> <span class="va">sig_hat</span>, nu <span class="op">=</span> <span class="va">nu</span>,</span>
 <span>              delta <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/Log.html" class="external-link">log</a></span><span class="op">(</span><span class="fl">1.25</span><span class="op">)</span>, method <span class="op">=</span> <span class="st">"optimal"</span><span class="op">)</span></span>
-<span><span class="va">opt_tost</span></span>
-<span><span class="co">#&gt; ✔ Accept (bio)equivalence</span></span>
-<span><span class="co">#&gt; Equiv. Region:  |----------------0----------------|</span></span>
-<span><span class="co">#&gt; Estim. Inter.:     (---------------x--------------)</span></span>
-<span><span class="co">#&gt; CI =  (-0.17492 ; 0.22032)</span></span>
-<span><span class="co">#&gt; </span></span>
-<span><span class="co">#&gt; Method: cTOST</span></span>
-<span><span class="co">#&gt; alpha = 0.05; Equiv. lim. = +/- 0.22314</span></span>
-<span><span class="co">#&gt; Estimated c(0) = 0.02553</span></span>
-<span><span class="co">#&gt; Finite sample correction: offline</span></span>
-<span><span class="co">#&gt; Corrected alpha = 0.03853</span></span>
-<span><span class="co">#&gt; Mean = 0.02270; Stand. dev. = 0.13428; df = 16</span></span></code></pre></div>
+<span><span class="va">opt_tost</span></span></code></pre></div>
+<p><picture><source media="(prefers-color-scheme: dark)" srcset="reference/figures/readme/ctost-dark.svg"><img src="reference/figures/readme/ctost.svg" alt="" width="100%"></source></picture></p>
 </div>
 <div class="section level4">
 <h4 id="alpha-tost">Alpha-TOST<a class="anchor" aria-label="anchor" href="#alpha-tost"></a>
@@ -234,33 +217,12 @@
 <div class="sourceCode" id="cb6"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">atost</span> <span class="op">=</span> <span class="fu"><a href="reference/ctost.html">ctost</a></span><span class="op">(</span>theta <span class="op">=</span> <span class="va">theta_hat</span>, sigma <span class="op">=</span> <span class="va">sig_hat</span>, nu <span class="op">=</span> <span class="va">nu</span>,</span>
 <span>              delta <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/Log.html" class="external-link">log</a></span><span class="op">(</span><span class="fl">1.25</span><span class="op">)</span>, method <span class="op">=</span> <span class="st">"alpha"</span><span class="op">)</span></span>
-<span><span class="va">atost</span></span>
-<span><span class="co">#&gt; ✔ Accept (bio)equivalence</span></span>
-<span><span class="co">#&gt; Equiv. Region:  |----------------0----------------|</span></span>
-<span><span class="co">#&gt; Estim. Inter.:     (---------------x--------------)</span></span>
-<span><span class="co">#&gt; CI =  (-0.17654 ; 0.22194)</span></span>
-<span><span class="co">#&gt; </span></span>
-<span><span class="co">#&gt; Method: alpha-TOST</span></span>
-<span><span class="co">#&gt; alpha = 0.05; Equiv. lim. = +/- 0.22314</span></span>
-<span><span class="co">#&gt; Corrected alpha = 0.07866</span></span>
-<span><span class="co">#&gt; Mean = 0.02270; Stand. dev. = 0.13428; df = 16</span></span></code></pre></div>
+<span><span class="va">atost</span></span></code></pre></div>
+<p><picture><source media="(prefers-color-scheme: dark)" srcset="reference/figures/readme/atost-dark.svg"><img src="reference/figures/readme/atost.svg" alt="" width="100%"></source></picture></p>
 <p>It is possible to compare the results of the <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mi>α</mi><annotation encoding="application/x-tex">\alpha</annotation></semantics></math>-TOST (or <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mi>δ</mi><annotation encoding="application/x-tex">\delta</annotation></semantics></math>-TOST, see below) with the standard TOST as follows:</p>
 <div class="sourceCode" id="cb7"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="fu"><a href="reference/compare_to_tost.html">compare_to_tost</a></span><span class="op">(</span><span class="va">atost</span><span class="op">)</span></span>
-<span><span class="co">#&gt; TOST:</span></span>
-<span><span class="co">#&gt; ✖ Can't accept (bio)equivalence</span></span>
-<span><span class="co">#&gt; alpha-TOST:</span></span>
-<span><span class="co">#&gt; ✔ Accept (bio)equivalence</span></span>
-<span><span class="co">#&gt; </span></span>
-<span><span class="co">#&gt; Equiv. Region:  |---------------0---------------|  </span></span>
-<span><span class="co">#&gt; TOST:            (---------------x----------------)</span></span>
-<span><span class="co">#&gt; alpha-TOST:        (-------------x--------------)  </span></span>
-<span><span class="co">#&gt; </span></span>
-<span><span class="co">#&gt;                  CI - low      CI - high</span></span>
-<span><span class="co">#&gt; TOST:            -0.21174       0.25715</span></span>
-<span><span class="co">#&gt; alpha-TOST:      -0.17654       0.22194</span></span>
-<span><span class="co">#&gt; </span></span>
-<span><span class="co">#&gt; Equiv. lim. = +/- 0.22314</span></span></code></pre></div>
+<code class="sourceCode R"><span><span class="fu"><a href="reference/compare_to_tost.html">compare_to_tost</a></span><span class="op">(</span><span class="va">atost</span><span class="op">)</span></span></code></pre></div>
+<p><picture><source media="(prefers-color-scheme: dark)" srcset="reference/figures/readme/compare-atost-dark.svg"><img src="reference/figures/readme/compare-atost.svg" alt="" width="100%"></source></picture></p>
 </div>
 <div class="section level4">
 <h4 id="delta-tost">Delta-TOST<a class="anchor" aria-label="anchor" href="#delta-tost"></a>
@@ -269,16 +231,8 @@
 <div class="sourceCode" id="cb8"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">dtost</span> <span class="op">=</span> <span class="fu"><a href="reference/ctost.html">ctost</a></span><span class="op">(</span>theta <span class="op">=</span> <span class="va">theta_hat</span>, sigma <span class="op">=</span> <span class="va">sig_hat</span>, nu <span class="op">=</span> <span class="va">nu</span>,</span>
 <span>              delta <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/Log.html" class="external-link">log</a></span><span class="op">(</span><span class="fl">1.25</span><span class="op">)</span>, method <span class="op">=</span> <span class="st">"delta"</span><span class="op">)</span></span>
-<span><span class="va">dtost</span></span>
-<span><span class="co">#&gt; ✖ Can't accept (bio)equivalence</span></span>
-<span><span class="co">#&gt; Corr. Equiv. Region:  |----------------0----------------|</span></span>
-<span><span class="co">#&gt;       Estim. Inter.:     (--------------x---------------)</span></span>
-<span><span class="co">#&gt; CI =  (-0.21174 ; 0.25715)</span></span>
-<span><span class="co">#&gt; </span></span>
-<span><span class="co">#&gt; Method: delta-TOST</span></span>
-<span><span class="co">#&gt; alpha = 0.05; Equiv. lim. = +/- 0.22314</span></span>
-<span><span class="co">#&gt; Corrected Equiv. lim. = +/- 0.25473</span></span>
-<span><span class="co">#&gt; Mean = 0.02270; Stand. dev. = 0.13428; df = 16</span></span></code></pre></div>
+<span><span class="va">dtost</span></span></code></pre></div>
+<p><picture><source media="(prefers-color-scheme: dark)" srcset="reference/figures/readme/dtost-dark.svg"><img src="reference/figures/readme/dtost.svg" alt="" width="100%"></source></picture></p>
 </div>
 </div>
 <div class="section level3">
@@ -297,26 +251,8 @@
 <div class="sourceCode" id="cb10"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">mtost</span> <span class="op">=</span> <span class="fu"><a href="reference/ctost.html">ctost</a></span><span class="op">(</span>theta <span class="op">=</span> <span class="va">theta_hat</span>, sigma <span class="op">=</span> <span class="va">Sigma_hat</span>, nu <span class="op">=</span> <span class="va">nu</span>,</span>
 <span>              delta <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/Log.html" class="external-link">log</a></span><span class="op">(</span><span class="fl">1.25</span><span class="op">)</span>, method <span class="op">=</span> <span class="st">"unadjusted"</span><span class="op">)</span></span>
-<span><span class="va">mtost</span></span>
-<span><span class="co">#&gt; ✖ Can't accept (bio)equivalence</span></span>
-<span><span class="co">#&gt; Equiv. Region:   |----------------0----------------|</span></span>
-<span><span class="co">#&gt; t_half               (-----------x----------)       </span></span>
-<span><span class="co">#&gt; AUC                 (-------x--------)              </span></span>
-<span><span class="co">#&gt; AUC_inf             (--------x-------)              </span></span>
-<span><span class="co">#&gt; C_max            (---------x---------)              </span></span>
-<span><span class="co">#&gt; </span></span>
-<span><span class="co">#&gt; CIs:</span></span>
-<span><span class="co">#&gt; t_half   (-0.15767 ; 0.12503)</span></span>
-<span><span class="co">#&gt; ✔</span></span>
-<span><span class="co">#&gt; AUC      (-0.18553 ; 0.00992)</span></span>
-<span><span class="co">#&gt; ✔</span></span>
-<span><span class="co">#&gt; AUC_inf  (-0.17914 ; 0.01620)</span></span>
-<span><span class="co">#&gt; ✔</span></span>
-<span><span class="co">#&gt; C_max    (-0.22379 ; 0.02154)</span></span>
-<span><span class="co">#&gt; ✖</span></span>
-<span><span class="co">#&gt; </span></span>
-<span><span class="co">#&gt; Method: TOST</span></span>
-<span><span class="co">#&gt; alpha = 0.05; Equiv. lim. = +/- 0.22314</span></span></code></pre></div>
+<span><span class="va">mtost</span></span></code></pre></div>
+<p><picture><source media="(prefers-color-scheme: dark)" srcset="reference/figures/readme/mtost-dark.svg"><img src="reference/figures/readme/mtost.svg" alt="" width="100%"></source></picture></p>
 </div>
 <div class="section level4">
 <h4 id="multivariate-alpha-tost">Multivariate Alpha-TOST<a class="anchor" aria-label="anchor" href="#multivariate-alpha-tost"></a>
@@ -324,27 +260,8 @@
 <div class="sourceCode" id="cb11"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">matost</span> <span class="op">=</span> <span class="fu"><a href="reference/ctost.html">ctost</a></span><span class="op">(</span>theta <span class="op">=</span> <span class="va">theta_hat</span>, sigma <span class="op">=</span> <span class="va">Sigma_hat</span>, nu <span class="op">=</span> <span class="va">nu</span>, delta <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/Log.html" class="external-link">log</a></span><span class="op">(</span><span class="fl">1.25</span><span class="op">)</span>,</span>
 <span>               method <span class="op">=</span> <span class="st">"alpha"</span><span class="op">)</span></span>
-<span><span class="va">matost</span></span>
-<span><span class="co">#&gt; ✔ Accept (bio)equivalence</span></span>
-<span><span class="co">#&gt; Equiv. Region:   |----------------0----------------|</span></span>
-<span><span class="co">#&gt; t_half                (----------x----------)       </span></span>
-<span><span class="co">#&gt; AUC                 (-------x-------)               </span></span>
-<span><span class="co">#&gt; AUC_inf             (--------x-------)              </span></span>
-<span><span class="co">#&gt; C_max            (---------x---------)              </span></span>
-<span><span class="co">#&gt; </span></span>
-<span><span class="co">#&gt; CIs:</span></span>
-<span><span class="co">#&gt; t_half   (-0.15010 ; 0.11746)</span></span>
-<span><span class="co">#&gt; ✔</span></span>
-<span><span class="co">#&gt; AUC      (-0.18030 ; 0.00468)</span></span>
-<span><span class="co">#&gt; ✔</span></span>
-<span><span class="co">#&gt; AUC_inf  (-0.17391 ; 0.01096)</span></span>
-<span><span class="co">#&gt; ✔</span></span>
-<span><span class="co">#&gt; C_max    (-0.21722 ; 0.01497)</span></span>
-<span><span class="co">#&gt; ✔</span></span>
-<span><span class="co">#&gt; </span></span>
-<span><span class="co">#&gt; Method: alpha-TOST</span></span>
-<span><span class="co">#&gt; alpha = 0.05; Equiv. lim. = +/- 0.22314</span></span>
-<span><span class="co">#&gt; Corrected alpha = 0.05909</span></span></code></pre></div>
+<span><span class="va">matost</span></span></code></pre></div>
+<p><picture><source media="(prefers-color-scheme: dark)" srcset="reference/figures/readme/matost-dark.svg"><img src="reference/figures/readme/matost.svg" alt="" width="100%"></source></picture></p>
 </div>
 </div>
 </div>

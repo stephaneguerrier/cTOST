@@ -82,15 +82,9 @@ The standard TOST can be used as follows:
 stost = ctost(theta = theta_hat, sigma = sig_hat, nu = nu,
               delta = log(1.25), method = "unadjusted")
 stost
-#> ✖ Can't accept (bio)equivalence
-#> Equiv. Region:  |---------------0---------------|  
-#> Estim. Inter.:   (---------------x----------------)
-#> CI =  (-0.21174 ; 0.25715)
-#> 
-#> Method: TOST
-#> alpha = 0.05; Equiv. lim. = +/- 0.22314
-#> Mean = 0.02270; Stand. dev. = 0.13428; df = 16
 ```
+
+![](reference/figures/readme/tost.svg)
 
 #### Optimal cTOST
 
@@ -101,18 +95,9 @@ The cTOST can be used through the function `ctost` as follows:
 opt_tost = ctost(theta = theta_hat, sigma = sig_hat, nu = nu,
               delta = log(1.25), method = "optimal")
 opt_tost
-#> ✔ Accept (bio)equivalence
-#> Equiv. Region:  |----------------0----------------|
-#> Estim. Inter.:     (---------------x--------------)
-#> CI =  (-0.17492 ; 0.22032)
-#> 
-#> Method: cTOST
-#> alpha = 0.05; Equiv. lim. = +/- 0.22314
-#> Estimated c(0) = 0.02553
-#> Finite sample correction: offline
-#> Corrected alpha = 0.03853
-#> Mean = 0.02270; Stand. dev. = 0.13428; df = 16
 ```
+
+![](reference/figures/readme/ctost.svg)
 
 #### Alpha-TOST
 
@@ -123,16 +108,9 @@ The $`\alpha`$-TOST can be used through the function `ctost` as follows:
 atost = ctost(theta = theta_hat, sigma = sig_hat, nu = nu,
               delta = log(1.25), method = "alpha")
 atost
-#> ✔ Accept (bio)equivalence
-#> Equiv. Region:  |----------------0----------------|
-#> Estim. Inter.:     (---------------x--------------)
-#> CI =  (-0.17654 ; 0.22194)
-#> 
-#> Method: alpha-TOST
-#> alpha = 0.05; Equiv. lim. = +/- 0.22314
-#> Corrected alpha = 0.07866
-#> Mean = 0.02270; Stand. dev. = 0.13428; df = 16
 ```
+
+![](reference/figures/readme/atost.svg)
 
 It is possible to compare the results of the $`\alpha`$-TOST (or
 $`\delta`$-TOST, see below) with the standard TOST as follows:
@@ -140,21 +118,9 @@ $`\delta`$-TOST, see below) with the standard TOST as follows:
 ``` r
 
 compare_to_tost(atost)
-#> TOST:
-#> ✖ Can't accept (bio)equivalence
-#> alpha-TOST:
-#> ✔ Accept (bio)equivalence
-#> 
-#> Equiv. Region:  |---------------0---------------|  
-#> TOST:            (---------------x----------------)
-#> alpha-TOST:        (-------------x--------------)  
-#> 
-#>                  CI - low      CI - high
-#> TOST:            -0.21174       0.25715
-#> alpha-TOST:      -0.17654       0.22194
-#> 
-#> Equiv. lim. = +/- 0.22314
 ```
+
+![](reference/figures/readme/compare-atost.svg)
 
 #### Delta-TOST
 
@@ -165,16 +131,9 @@ The $`\delta`$-TOST can be used through the function `ctost` as follows:
 dtost = ctost(theta = theta_hat, sigma = sig_hat, nu = nu,
               delta = log(1.25), method = "delta")
 dtost
-#> ✖ Can't accept (bio)equivalence
-#> Corr. Equiv. Region:  |----------------0----------------|
-#>       Estim. Inter.:     (--------------x---------------)
-#> CI =  (-0.21174 ; 0.25715)
-#> 
-#> Method: delta-TOST
-#> alpha = 0.05; Equiv. lim. = +/- 0.22314
-#> Corrected Equiv. lim. = +/- 0.25473
-#> Mean = 0.02270; Stand. dev. = 0.13428; df = 16
 ```
+
+![](reference/figures/readme/dtost.svg)
 
 ### Multivariate Equivalence Testing
 
@@ -195,26 +154,9 @@ Sigma_hat = cov(ticlopidine)/n
 mtost = ctost(theta = theta_hat, sigma = Sigma_hat, nu = nu,
               delta = log(1.25), method = "unadjusted")
 mtost
-#> ✖ Can't accept (bio)equivalence
-#> Equiv. Region:   |----------------0----------------|
-#> t_half               (-----------x----------)       
-#> AUC                 (-------x--------)              
-#> AUC_inf             (--------x-------)              
-#> C_max            (---------x---------)              
-#> 
-#> CIs:
-#> t_half   (-0.15767 ; 0.12503)
-#> ✔
-#> AUC      (-0.18553 ; 0.00992)
-#> ✔
-#> AUC_inf  (-0.17914 ; 0.01620)
-#> ✔
-#> C_max    (-0.22379 ; 0.02154)
-#> ✖
-#> 
-#> Method: TOST
-#> alpha = 0.05; Equiv. lim. = +/- 0.22314
 ```
+
+![](reference/figures/readme/mtost.svg)
 
 #### Multivariate Alpha-TOST
 
@@ -223,27 +165,9 @@ mtost
 matost = ctost(theta = theta_hat, sigma = Sigma_hat, nu = nu, delta = log(1.25),
                method = "alpha")
 matost
-#> ✔ Accept (bio)equivalence
-#> Equiv. Region:   |----------------0----------------|
-#> t_half                (----------x----------)       
-#> AUC                 (-------x-------)               
-#> AUC_inf             (--------x-------)              
-#> C_max            (---------x---------)              
-#> 
-#> CIs:
-#> t_half   (-0.15010 ; 0.11746)
-#> ✔
-#> AUC      (-0.18030 ; 0.00468)
-#> ✔
-#> AUC_inf  (-0.17391 ; 0.01096)
-#> ✔
-#> C_max    (-0.21722 ; 0.01497)
-#> ✔
-#> 
-#> Method: alpha-TOST
-#> alpha = 0.05; Equiv. lim. = +/- 0.22314
-#> Corrected alpha = 0.05909
 ```
+
+![](reference/figures/readme/matost.svg)
 
 ## 4. Learn More
 

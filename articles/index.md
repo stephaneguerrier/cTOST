@@ -32,6 +32,6 @@ Reproduce results from published papers.
 - [Results
   Reproducibility](https://stephaneguerrier.github.io/cTOST/articles/reproducibility.md):
 - [Quantiles Equivalence Testing
-  (2025)](https://stephaneguerrier.github.io/cTOST/articles/reproducibility-quantile.md):
+  (2026)](https://stephaneguerrier.github.io/cTOST/articles/reproducibility-quantile.md):
 - [Equivalence Testing under Privacy Constraints
   (2026)](https://stephaneguerrier.github.io/cTOST/articles/reproducibility-dp.md):

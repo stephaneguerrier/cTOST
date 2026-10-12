@@ -5,7 +5,7 @@
 <meta charset="utf-8">
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-<title>Quantiles Equivalence Testing (2025) • cTOST</title>
+<title>Quantiles Equivalence Testing (2026) • cTOST</title>
 <!-- favicons --><link rel="icon" type="image/png" sizes="96x96" href="../favicon-96x96.png">
 <link rel="icon" type="”image/svg+xml”" href="../favicon.svg">
 <link rel="apple-touch-icon" sizes="180x180" href="../apple-touch-icon.png">
@@ -17,7 +17,7 @@
 <link href="../deps/font-awesome-6.5.2/css/all.min.css" rel="stylesheet">
 <link href="../deps/font-awesome-6.5.2/css/v4-shims.min.css" rel="stylesheet">
 <script src="../deps/headroom-0.11.0/headroom.min.js"></script><script src="../deps/headroom-0.11.0/jQuery.headroom.min.js"></script><script src="../deps/bootstrap-toc-1.0.1/bootstrap-toc.min.js"></script><script src="../deps/clipboard.js-2.0.11/clipboard.min.js"></script><script src="../deps/search-1.0.0/autocomplete.jquery.min.js"></script><script src="../deps/search-1.0.0/fuse.min.js"></script><script src="../deps/search-1.0.0/mark.min.js"></script><!-- pkgdown --><script src="../pkgdown.js"></script><link href="../extra.css" rel="stylesheet">
-<meta property="og:title" content="Quantiles Equivalence Testing (2025)">
+<meta property="og:title" content="Quantiles Equivalence Testing (2026)">
 </head>
 <body>
     <a href="#main" class="visually-hidden-focusable">Skip to contents</a>
@@ -83,7 +83,7 @@
 
 <div class="row">
   <main id="main" class="col-md-9"><div class="page-header">
-      <img src="../logo.png" class="logo" alt=""><h1>Quantiles Equivalence Testing (2025)</h1>
+      <img src="../logo.png" class="logo" alt=""><h1>Quantiles Equivalence Testing (2026)</h1>
             
       
       <small class="dont-index">Source: <a href="https://github.com/stephaneguerrier/cTOST/blob/main/vignettes/articles/reproducibility-quantile.Rmd" class="external-link"><code>vignettes/articles/reproducibility-quantile.Rmd</code></a></small>
@@ -92,17 +92,512 @@
 
     
     
-<p>This page will host the code that reproduces the results of</p>
-<blockquote>
-<p>Wu, J., Guerrier, S., Gou, S., Kalia, Y. N. &amp; Insolia, L. (2025).
-<em>Bridging the gap between experimental burden and statistical power
-for quantiles equivalence testing</em>. arXiv preprint <a href="https://arxiv.org/abs/2510.17514" class="external-link">arXiv:2510.17514</a>.</p>
-</blockquote>
-<p>The methods of this paper are available in the package through
+<p>This document describes how to reproduce the simulations and case
+studies in Wu, J., Guerrier, S., Gou, S., Kalia, Y. N., and Insolia, L.
+(2026), <em>Bridging the gap between experimental burden and statistical
+power for quantiles equivalence testing</em>. The methods are
+implemented in the <code>cTOST</code> R package through
 <code><a href="../reference/qtost.html">qtost()</a></code> and <code><a href="../reference/compare_to_qtost.html">compare_to_qtost()</a></code>; see the <a href="quantile-equivalence.html">Quantile Equivalence Testing</a>
-article for their use.</p>
-<p><em>Reproduction code: coming soon.</em></p>
-  </main>
+article for an introduction.</p>
+<p>The reproducibility material is provided in <a href="https://github.com/stephaneguerrier/cTOST/tree/main/reproducibility/quantile" class="external-link">reproducibility/quantile/</a>,
+and all paths below are relative to this path. The analyses used
+<code>cTOST</code> version 1.1.0.</p>
+<div class="section level2">
+<h2 id="simulation-studies">Simulation studies<a class="anchor" aria-label="anchor" href="#simulation-studies"></a>
+</h2>
+<p>The simulation studies were run on the University of Geneva’s HPC
+infrastructure. Each study used 50,000 Monte Carlo replications, split
+across 5,000 single-CPU array tasks, with 10 replications per task. The
+submission scripts use Bash and Slurm. Before running them on another
+cluster, adapt the module-loading commands, partition and resource
+requests (see <code>launch.sh</code> and <code>recomb.sh</code> below).
+Also ensure that <code>cTOST</code> and <code>tictoc</code> are
+installed in the cluster’s R environment.</p>
+<div class="section level3">
+<h3 id="single-quantile">Single quantile<a class="anchor" aria-label="anchor" href="#single-quantile"></a>
+</h3>
+<p>The single-quantile simulation study compares the rejection rates of
+qTOST and
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mi>α</mi><annotation encoding="application/x-tex">\alpha</annotation></semantics></math>-qTOST
+across reference quantiles, equivalence margins, sample sizes and
+variance ratios. The source code is in
+<code>simulations/HPC/sim_univ/</code>. Namely:</p>
+<table class="table">
+<colgroup>
+<col width="50%">
+<col width="50%">
+</colgroup>
+<thead><tr class="header">
+<th align="left">File</th>
+<th align="left">Purpose</th>
+</tr></thead>
+<tbody>
+<tr class="odd">
+<td align="left"><code>sim_options.R</code></td>
+<td align="left">Defines the statistical design and calibration
+controls.</td>
+</tr>
+<tr class="even">
+<td align="left"><code>sim_HPC_main.R</code></td>
+<td align="left">Runs assigned replications and saves test
+decisions.</td>
+</tr>
+<tr class="odd">
+<td align="left"><code>out_HPC_combine.R</code></td>
+<td align="left">Validates results and computes rejection
+probabilities.</td>
+</tr>
+<tr class="even">
+<td align="left"><code>setting.sh</code></td>
+<td align="left">Sets study, replication/task counts and output
+paths.</td>
+</tr>
+<tr class="odd">
+<td align="left"><code>all.sh</code></td>
+<td align="left">Submits the array and schedules aggregation on
+success.</td>
+</tr>
+<tr class="even">
+<td align="left"><code>launch.sh</code></td>
+<td align="left">Loads the cluster R environment and starts an array
+task.</td>
+</tr>
+<tr class="odd">
+<td align="left"><code>recomb.sh</code></td>
+<td align="left">Runs the R aggregation script and then cleanup.</td>
+</tr>
+<tr class="even">
+<td align="left"><code>clean.sh</code></td>
+<td align="left">Removes chunks and logs after verifying
+aggregation.</td>
+</tr>
+</tbody>
+</table>
+<div class="section level4">
+<h4 id="simulation-setting-1-size">Simulation setting 1: size<a class="anchor" aria-label="anchor" href="#simulation-setting-1-size"></a>
+</h4>
+<p>Setting 1 evaluates rejection rates at the two equivalence
+boundaries,
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mi>π</mi><mi>y</mi></msub><mo>=</mo><msub><mi>π</mi><mi>x</mi></msub><mo>−</mo><mi>δ</mi></mrow><annotation encoding="application/x-tex">\pi_y = \pi_x - \delta</annotation></semantics></math>
+and
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mi>π</mi><mi>x</mi></msub><mo>+</mo><mi>δ</mi></mrow><annotation encoding="application/x-tex">\pi_x + \delta</annotation></semantics></math>,
+to compare the test size for the two procedures and reproduce Figure 3.
+The results can be reproduced as follows:</p>
+<div class="sourceCode" id="cb1"><pre class="sourceCode sh"><code class="sourceCode bash"><span id="cb1-1"><a href="#cb1-1" tabindex="-1"></a><span class="bu">export</span> <span class="va">n_simu</span><span class="op">=</span>50000 <span class="va">n_array</span><span class="op">=</span>5000</span>
+<span id="cb1-2"><a href="#cb1-2" tabindex="-1"></a><span class="va">sim_setting</span><span class="op">=</span>1 <span class="fu">bash</span> simulations/HPC/sim_univ/all.sh</span></code></pre></div>
+<p>The inline <code>sim_setting=1</code> selects the study without
+editing <code>setting.sh</code>. The <code>all.sh</code> script submits
+the aggregation job, <code>recomb.sh</code>, with a dependency on
+successful completion of the simulation array. After aggregation
+succeeds, <code>clean.sh</code> removes the temporary replication chunks
+and individual task logs, while retaining the combined results. The
+submission scripts refuse to reuse a nonempty output directory (so keep
+previous outputs separately before rerunning the same setting).</p>
+<p>Once the job is completed, the combined results are saved in:</p>
+<pre class="text"><code><span><span class="va">simulations</span><span class="op">/</span><span class="va">HPC</span><span class="op">/</span><span class="va">sim_univ</span><span class="op">/</span><span class="va">sim_HPC_out</span><span class="op">/</span><span class="va">sim_setting_1</span><span class="op">/</span></span>
+<span>  <span class="va">results_sim_setting_size_1_n_simu_50000_n_array_5000.rdata</span></span></code></pre>
+<p>This file contains <code>sol_TOST_avg</code> and
+<code>sol_alphaTOST_avg</code>, the estimated rejection probabilities
+(expressed as percentages) for qTOST and
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mi>α</mi><annotation encoding="application/x-tex">\alpha</annotation></semantics></math>-qTOST,
+respectively. Both are <code>4 x 3 x 4 x 2 x 2</code> arrays, indexed by
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><msub><mi>n</mi><mi>y</mi></msub><annotation encoding="application/x-tex">n_y</annotation></semantics></math>,
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mi>n</mi><mi>x</mi></msub><mi>/</mi><msub><mi>n</mi><mi>y</mi></msub></mrow><annotation encoding="application/x-tex">n_x/n_y</annotation></semantics></math>,
+quantile/margin pair, variance ratio and equivalence boundary. For
+example, inspect the results with:</p>
+<div class="sourceCode" id="cb3"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/base/load.html" class="external-link">load</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/paste.html" class="external-link">paste0</a></span><span class="op">(</span><span class="st">"simulations/HPC/sim_univ/sim_HPC_out/sim_setting_1/"</span>,</span>
+<span>            <span class="st">"results_sim_setting_size_1_n_simu_50000_n_array_5000.rdata"</span><span class="op">)</span><span class="op">)</span></span>
+<span><span class="fu"><a href="https://rdrr.io/r/base/dim.html" class="external-link">dim</a></span><span class="op">(</span><span class="va">sol_TOST_avg</span><span class="op">)</span></span>
+<span><span class="fu"><a href="https://rdrr.io/r/base/dimnames.html" class="external-link">dimnames</a></span><span class="op">(</span><span class="va">sol_TOST_avg</span><span class="op">)</span></span>
+<span><span class="fu"><a href="https://rdrr.io/r/base/range.html" class="external-link">range</a></span><span class="op">(</span><span class="va">sol_alphaTOST_avg</span> <span class="op">-</span> <span class="va">sol_TOST_avg</span><span class="op">)</span></span></code></pre></div>
+<p>The last command gives the range of differences in rejection rates,
+in percentage points. The aggregation report,
+<code>report_recomb_HPC.Rout</code>, is retained in the same
+<code>sim_setting_1/</code> output directory.</p>
+<p>Then, to reproduce Figure 3, run:</p>
+<div class="sourceCode" id="cb4"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/source.html" class="external-link">source</a></span><span class="op">(</span><span class="st">"simulations/fig_3_heatmap_diff_size.R"</span><span class="op">)</span></span></code></pre></div>
+<p>For each design and procedure, the figure displays the larger
+rejection percentage at the two simulated boundaries, with a Monte Carlo
+tolerance band around the nominal level of 5%.</p>
+<p>By default, <code>tikzPlot = 0</code> generates figures on the active
+R graphics device. To regenerate the publication-style files, set
+<code>tikzPlot = 1</code> inside each plotting script before sourcing
+it, and install <code>tikzDevice</code> plus a working LaTeX
+distribution. Create the <code>tex/</code> subfolder if needed, so that
+each generated <code>.tex</code> file can then be compiled to PDF. For
+instance:</p>
+<div class="sourceCode" id="cb5"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/utils/install.packages.html" class="external-link">install.packages</a></span><span class="op">(</span><span class="st">"tikzDevice"</span><span class="op">)</span></span>
+<span><span class="fu"><a href="https://rdrr.io/r/base/files2.html" class="external-link">dir.create</a></span><span class="op">(</span><span class="st">"tex"</span>, showWarnings <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span></span></code></pre></div>
+<div class="sourceCode" id="cb6"><pre class="sourceCode sh"><code class="sourceCode bash"><span id="cb6-1"><a href="#cb6-1" tabindex="-1"></a><span class="ex">latexmk</span> <span class="at">-pdf</span> <span class="at">-outdir</span><span class="op">=</span>tex tex/fig3.tex</span></code></pre></div>
+</div>
+<div class="section level4">
+<h4 id="simulation-setting-2-power-and-type-i-error">Simulation setting 2: power and type-I error<a class="anchor" aria-label="anchor" href="#simulation-setting-2-power-and-type-i-error"></a>
+</h4>
+<p>Setting 2 uses the same job submission, aggregation and cleanup
+workflow. It evaluates rejection probabilities over 50 equally spaced
+values of
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>θ</mi><mo>=</mo><msup><mi mathvariant="normal">Φ</mi><mrow><mi>−</mi><mn>1</mn></mrow></msup><mo stretchy="false" form="prefix">(</mo><msub><mi>π</mi><mi>y</mi></msub><mo stretchy="false" form="postfix">)</mo></mrow><annotation encoding="application/x-tex">\theta = \Phi^{-1}(\pi_y)</annotation></semantics></math>,
+from
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msup><mi mathvariant="normal">Φ</mi><mrow><mi>−</mi><mn>1</mn></mrow></msup><mo stretchy="false" form="prefix">(</mo><msub><mi>π</mi><mi>x</mi></msub><mo>−</mo><mn>1.2</mn><mi>δ</mi><mo stretchy="false" form="postfix">)</mo></mrow><annotation encoding="application/x-tex">\Phi^{-1}(\pi_x - 1.2\delta)</annotation></semantics></math>
+to
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msup><mi mathvariant="normal">Φ</mi><mrow><mi>−</mi><mn>1</mn></mrow></msup><mo stretchy="false" form="prefix">(</mo><msub><mi>π</mi><mi>x</mi></msub><mo>+</mo><mn>1.2</mn><mi>δ</mi><mo stretchy="false" form="postfix">)</mo></mrow><annotation encoding="application/x-tex">\Phi^{-1}(\pi_x + 1.2\delta)</annotation></semantics></math>,
+covering the equivalence region and nearby null values. In this case,
+keep the same <code>n_simu</code> and <code>n_array</code> values and
+change the Bash variable <code>sim_setting</code>:</p>
+<div class="sourceCode" id="cb7"><pre class="sourceCode sh"><code class="sourceCode bash"><span id="cb7-1"><a href="#cb7-1" tabindex="-1"></a><span class="bu">export</span> <span class="va">n_simu</span><span class="op">=</span>50000 <span class="va">n_array</span><span class="op">=</span>5000</span>
+<span id="cb7-2"><a href="#cb7-2" tabindex="-1"></a><span class="va">sim_setting</span><span class="op">=</span>2 <span class="fu">bash</span> simulations/HPC/sim_univ/all.sh</span></code></pre></div>
+<p>After aggregation, the output file is:</p>
+<pre class="text"><code><span><span class="va">simulations</span><span class="op">/</span><span class="va">HPC</span><span class="op">/</span><span class="va">sim_univ</span><span class="op">/</span><span class="va">sim_HPC_out</span><span class="op">/</span><span class="va">sim_setting_2</span><span class="op">/</span></span>
+<span>  <span class="va">results_sim_setting_2_n_simu_50000_n_array_5000.rdata</span></span></code></pre>
+<p>It contains the same two objects, <code>sol_TOST_avg</code> and
+<code>sol_alphaTOST_avg</code>, with the same units and dimension order.
+The last dimension now indexes 50 grid positions, giving
+<code>4 x 3 x 4 x 2 x 50</code> arrays. To reproduce the original
+Figures 1–2 and S1–S6, run:</p>
+<div class="sourceCode" id="cb9"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/source.html" class="external-link">source</a></span><span class="op">(</span><span class="st">"simulations/fig_1_heatmap_diff_pow.R"</span><span class="op">)</span>  <span class="co"># Figures 1 and S1</span></span>
+<span><span class="kw"><a href="https://rdrr.io/r/base/source.html" class="external-link">source</a></span><span class="op">(</span><span class="st">"simulations/fig_2_power_curves.R"</span><span class="op">)</span>      <span class="co"># Figures 2 and S2-S6</span></span></code></pre></div>
+<p>Figures 1 and S1 show the gain of
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mi>α</mi><annotation encoding="application/x-tex">\alpha</annotation></semantics></math>-qTOST
+over qTOST in percentage points. Figures 2 and S2–S6 show the curves
+against
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><msub><mi>π</mi><mi>y</mi></msub><annotation encoding="application/x-tex">\pi_y</annotation></semantics></math>,
+with the nominal level and equivalence limits as reference lines.</p>
+</div>
+</div>
+<div class="section level3">
+<h3 id="multiple-quantiles">Multiple quantiles<a class="anchor" aria-label="anchor" href="#multiple-quantiles"></a>
+</h3>
+<p>The multiple-quantile simulation study compares the rejection rates
+of qTOST and
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mi>α</mi><annotation encoding="application/x-tex">\alpha</annotation></semantics></math>-qTOST
+when assessing two reference quantiles jointly. The source code is in
+<code>simulations/HPC/sim_mvt/</code>. This follows the same workflow
+and code structure as the single-quantile setup presented above.</p>
+<p>Here, the two reference quantile levels
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mi>π</mi><mi>x</mi></msub><mo>=</mo><mo stretchy="false" form="prefix">(</mo><mn>0.20</mn><mo>,</mo><mn>0.80</mn><mo stretchy="false" form="postfix">)</mo></mrow><annotation encoding="application/x-tex">\pi_x = (0.20, 0.80)</annotation></semantics></math>
+are assessed jointly, with margin
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>δ</mi><mo>=</mo><mn>0.15</mn></mrow><annotation encoding="application/x-tex">\delta = 0.15</annotation></semantics></math>,
+and the overall declaration of equivalence requires both quantile
+assessments to be satisfied. Variance ratio
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>γ</mi><mo>=</mo><mn>1</mn></mrow><annotation encoding="application/x-tex">\gamma=1</annotation></semantics></math>
+and nominal level
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>α</mi><mo>=</mo><mn>0.05</mn></mrow><annotation encoding="application/x-tex">\alpha=0.05</annotation></semantics></math>
+were considered in this study, which evaluates a
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mn>50</mn><mo>×</mo><mn>50</mn></mrow><annotation encoding="application/x-tex">50
+\times 50</annotation></semantics></math> grid of transformed parameter
+pairs
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><msub><mi>θ</mi><mn>1</mn></msub><annotation encoding="application/x-tex">\theta_1</annotation></semantics></math>
+and
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><msub><mi>θ</mi><mn>2</mn></msub><annotation encoding="application/x-tex">\theta_2</annotation></semantics></math>.
+The design and calibration settings are defined in this directory’s
+<code>sim_options.R</code>.</p>
+<p>The variable <code>sim_setting</code> determines the sample size:</p>
+<table class="table">
+<thead><tr class="header">
+<th align="left"><code>sim_setting</code></th>
+<th align="left">Observations per group</th>
+<th align="left">Figure</th>
+</tr></thead>
+<tbody>
+<tr class="odd">
+<td align="left"><code>1</code></td>
+<td align="left">30</td>
+<td align="left">4</td>
+</tr>
+<tr class="even">
+<td align="left"><code>2</code></td>
+<td align="left">10</td>
+<td align="left">S7</td>
+</tr>
+<tr class="odd">
+<td align="left"><code>3</code></td>
+<td align="left">50</td>
+<td align="left">S8</td>
+</tr>
+</tbody>
+</table>
+<p>To reproduce the simulation results, run:</p>
+<div class="sourceCode" id="cb10"><pre class="sourceCode sh"><code class="sourceCode bash"><span id="cb10-1"><a href="#cb10-1" tabindex="-1"></a><span class="bu">export</span> <span class="va">n_simu</span><span class="op">=</span>50000 <span class="va">n_array</span><span class="op">=</span>5000</span>
+<span id="cb10-2"><a href="#cb10-2" tabindex="-1"></a><span class="va">sim_setting</span><span class="op">=</span>1 <span class="fu">bash</span> simulations/HPC/sim_mvt/all.sh</span>
+<span id="cb10-3"><a href="#cb10-3" tabindex="-1"></a><span class="va">sim_setting</span><span class="op">=</span>2 <span class="fu">bash</span> simulations/HPC/sim_mvt/all.sh</span>
+<span id="cb10-4"><a href="#cb10-4" tabindex="-1"></a><span class="va">sim_setting</span><span class="op">=</span>3 <span class="fu">bash</span> simulations/HPC/sim_mvt/all.sh</span></code></pre></div>
+<p>The combined results are saved separately for each setting,
+namely:</p>
+<pre class="text"><code><span><span class="va">simulations</span><span class="op">/</span><span class="va">HPC</span><span class="op">/</span><span class="va">sim_mvt</span><span class="op">/</span><span class="va">sim_HPC_out</span><span class="op">/</span><span class="va">sim_setting_1</span><span class="op">/</span></span>
+<span>  <span class="va">results_mvt_sim_setting_1_n_simu_50000_n_array_5000.rdata</span></span>
+<span>  </span>
+<span><span class="va">simulations</span><span class="op">/</span><span class="va">HPC</span><span class="op">/</span><span class="va">sim_mvt</span><span class="op">/</span><span class="va">sim_HPC_out</span><span class="op">/</span><span class="va">sim_setting_2</span><span class="op">/</span></span>
+<span>  <span class="va">results_mvt_sim_setting_2_n_simu_50000_n_array_5000.rdata</span></span>
+<span></span>
+<span><span class="va">simulations</span><span class="op">/</span><span class="va">HPC</span><span class="op">/</span><span class="va">sim_mvt</span><span class="op">/</span><span class="va">sim_HPC_out</span><span class="op">/</span><span class="va">sim_setting_3</span><span class="op">/</span></span>
+<span>  <span class="va">results_mvt_sim_setting_3_n_simu_50000_n_array_5000.rdata</span></span></code></pre>
+<p>Each file contains <code>sol_TOST_avg</code> and
+<code>sol_piTOST_avg</code>, the rejection probabilities for qTOST and
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mi>α</mi><annotation encoding="application/x-tex">\alpha</annotation></semantics></math>-qTOST,
+respectively. These are <code>50 x 50</code> matrices, with rows
+indexing the second transformed parameter and columns indexing the
+first.</p>
+<p>Once all three combined results are available, Figures 4, S7 and S8
+can be obtained by running:</p>
+<div class="sourceCode" id="cb12"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/source.html" class="external-link">source</a></span><span class="op">(</span><span class="st">"simulations/fig_4_pow_heatmap_mvt.R"</span><span class="op">)</span></span></code></pre></div>
+<p>Each figure displays the rejection probabilities of the two
+procedures across the parameter grid, their difference, and histograms
+of rejection rates on the equivalence-region boundary.</p>
+</div>
+</div>
+<div class="section level2">
+<h2 id="case-studies">Case studies<a class="anchor" aria-label="anchor" href="#case-studies"></a>
+</h2>
+<p>The source code to reproduce the two case studies is provided in
+<code>case_study/</code>. The full analyses were run locally using R
+version 4.4.3, and took around 2 minutes in total on a standard
+laptop.</p>
+<div class="section level3">
+<h3 id="case-study-1-a-bridging-clinical-trial-across-gender-populations">Case study 1: A bridging clinical trial across gender
+populations<a class="anchor" aria-label="anchor" href="#case-study-1-a-bridging-clinical-trial-across-gender-populations"></a>
+</h3>
+<p>The first case study compares plasma trough concentrations of
+tipranavir between male and female patients using summary statistics
+from <a href="https://www.accessdata.fda.gov/drugsatfda_docs/label/2024/021814s030lbl.pdf" class="external-link">Table
+5 of the FDA drug label</a>. The reference group comprises 106 male
+patients, and the test group comprises 14 female patients.</p>
+<p>Assuming lognormal concentrations, the log-scale means and standard
+deviations were reconstructed by moment matching. The complete analysis
+is in <code>case_study/case_study_hiv.R</code>. It evaluates 191
+reference quantile levels from 0.11 to 0.30 in steps of 0.001, at
+nominal level 0.05 and margin 0.10.</p>
+<p>To reproduce the original analysis, run:</p>
+<div class="sourceCode" id="cb13"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/source.html" class="external-link">source</a></span><span class="op">(</span><span class="st">"case_study/case_study_hiv.R"</span><span class="op">)</span>  <span class="co"># Figures 5 and 6</span></span></code></pre></div>
+<p>The results are stored in the <code>191 x 3</code> matrices
+<code>res</code> and <code>res_star</code> for qTOST and
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mi>α</mi><annotation encoding="application/x-tex">\alpha</annotation></semantics></math>-qTOST,
+respectively. Rows index reference quantile levels, and columns give the
+lower interval endpoint, estimated probability and upper endpoint.
+Figure 5 displays the results at two (separately assessed) quantile
+reference levels
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mi>π</mi><mi>x</mi></msub><mo>=</mo><mn>0.15</mn></mrow><annotation encoding="application/x-tex">\pi_x=0.15</annotation></semantics></math>
+and
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mi>π</mi><mi>x</mi></msub><mo>=</mo><mn>0.20</mn></mrow><annotation encoding="application/x-tex">\pi_x=0.20</annotation></semantics></math>.
+Figure 6 shows intervals across a larger range. Also in this case, set
+<code>tikzPlot = 1</code> inside the script to write
+<code>tex/fig5.tex</code> and <code>tex/fig6.tex</code>, then compile
+them as described above.</p>
+<p>As an illustration, Figure 5 can be reproduced as follows.</p>
+<p>First load and transform the data:</p>
+<div class="sourceCode" id="cb14"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="co"># Original-scale means, standard deviations and sample sizes</span></span>
+<span><span class="va">mu_x</span> <span class="op">=</span> <span class="fl">35.6</span></span>
+<span><span class="va">sd_x</span> <span class="op">=</span> <span class="fl">16.7</span></span>
+<span><span class="va">n_x</span> <span class="op">=</span> <span class="fl">106</span></span>
+<span><span class="va">mu_y</span> <span class="op">=</span> <span class="fl">41.6</span></span>
+<span><span class="va">sd_y</span> <span class="op">=</span> <span class="fl">24.3</span></span>
+<span><span class="va">n_y</span> <span class="op">=</span> <span class="fl">14</span></span>
+<span></span>
+<span><span class="co"># Log-scale summaries</span></span>
+<span><span class="va">x</span> <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span>mean <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/Log.html" class="external-link">log</a></span><span class="op">(</span><span class="va">mu_x</span><span class="op">^</span><span class="fl">2</span> <span class="op">/</span> <span class="fu"><a href="https://rdrr.io/r/base/MathFun.html" class="external-link">sqrt</a></span><span class="op">(</span><span class="va">mu_x</span><span class="op">^</span><span class="fl">2</span> <span class="op">+</span> <span class="va">sd_x</span><span class="op">^</span><span class="fl">2</span><span class="op">)</span><span class="op">)</span>,</span>
+<span>         sd <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/MathFun.html" class="external-link">sqrt</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/Log.html" class="external-link">log</a></span><span class="op">(</span><span class="fl">1</span> <span class="op">+</span> <span class="va">sd_x</span><span class="op">^</span><span class="fl">2</span> <span class="op">/</span> <span class="va">mu_x</span><span class="op">^</span><span class="fl">2</span><span class="op">)</span><span class="op">)</span>, n <span class="op">=</span> <span class="va">n_x</span><span class="op">)</span></span>
+<span><span class="va">y</span> <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span>mean <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/Log.html" class="external-link">log</a></span><span class="op">(</span><span class="va">mu_y</span><span class="op">^</span><span class="fl">2</span> <span class="op">/</span> <span class="fu"><a href="https://rdrr.io/r/base/MathFun.html" class="external-link">sqrt</a></span><span class="op">(</span><span class="va">mu_y</span><span class="op">^</span><span class="fl">2</span> <span class="op">+</span> <span class="va">sd_y</span><span class="op">^</span><span class="fl">2</span><span class="op">)</span><span class="op">)</span>,</span>
+<span>         sd <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/MathFun.html" class="external-link">sqrt</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/Log.html" class="external-link">log</a></span><span class="op">(</span><span class="fl">1</span> <span class="op">+</span> <span class="va">sd_y</span><span class="op">^</span><span class="fl">2</span> <span class="op">/</span> <span class="va">mu_y</span><span class="op">^</span><span class="fl">2</span><span class="op">)</span><span class="op">)</span>, n <span class="op">=</span> <span class="va">n_y</span><span class="op">)</span></span></code></pre></div>
+<p>Then specify the designs and obtain the qTOST and the
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mi>α</mi><annotation encoding="application/x-tex">\alpha</annotation></semantics></math>-qTOST
+assessments:</p>
+<div class="sourceCode" id="cb15"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://stephaneguerrier.github.io/cTOST/">cTOST</a></span><span class="op">)</span></span>
+<span></span>
+<span><span class="va">pi_x</span> <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">0.15</span>, <span class="fl">0.20</span><span class="op">)</span></span>
+<span><span class="va">alpha</span> <span class="op">=</span> <span class="fl">0.05</span></span>
+<span><span class="va">delta</span> <span class="op">=</span> <span class="fl">0.10</span></span>
+<span></span>
+<span><span class="va">hiv_qtost</span> <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/lapply.html" class="external-link">lapply</a></span><span class="op">(</span><span class="va">pi_x</span>, <span class="kw">function</span><span class="op">(</span><span class="va">p</span><span class="op">)</span> <span class="op">{</span></span>
+<span>  <span class="fu"><a href="../reference/qtost.html">qtost</a></span><span class="op">(</span><span class="va">x</span>, <span class="va">y</span>, pi_x <span class="op">=</span> <span class="va">p</span>, delta <span class="op">=</span> <span class="va">delta</span>, alpha <span class="op">=</span> <span class="va">alpha</span>,</span>
+<span>        method <span class="op">=</span> <span class="st">"unadjusted"</span><span class="op">)</span></span>
+<span><span class="op">}</span><span class="op">)</span></span>
+<span></span>
+<span><span class="va">hiv_alpha_qtost</span> <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/lapply.html" class="external-link">lapply</a></span><span class="op">(</span><span class="va">pi_x</span>, <span class="kw">function</span><span class="op">(</span><span class="va">p</span><span class="op">)</span> <span class="op">{</span></span>
+<span>  <span class="fu"><a href="../reference/qtost.html">qtost</a></span><span class="op">(</span><span class="va">x</span>, <span class="va">y</span>, pi_x <span class="op">=</span> <span class="va">p</span>, delta <span class="op">=</span> <span class="va">delta</span>, alpha <span class="op">=</span> <span class="va">alpha</span>,</span>
+<span>        method <span class="op">=</span> <span class="st">"alpha"</span>, B <span class="op">=</span> <span class="fl">100000</span>, seed <span class="op">=</span> <span class="fl">12345</span>,</span>
+<span>        tol <span class="op">=</span> <span class="va">.Machine</span><span class="op">$</span><span class="va">double.eps</span><span class="op">)</span></span>
+<span><span class="op">}</span><span class="op">)</span></span></code></pre></div>
+<p>The results at each reference quantile can also be compared
+directly:</p>
+<div class="sourceCode" id="cb16"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="fu"><a href="../reference/compare_to_qtost.html">compare_to_qtost</a></span><span class="op">(</span><span class="va">hiv_alpha_qtost</span><span class="op">[[</span><span class="fl">1</span><span class="op">]</span><span class="op">]</span><span class="op">)</span>  <span class="co"># 15th percentile</span></span>
+<span><span class="co">#&gt; qTOST: <span style="color: #BB0000;">✖ Can't accept quantile (bio)equivalence</span></span></span>
+<span><span class="co">#&gt; alpha-qTOST: <span style="color: #BB0000;">✖ Can't accept quantile (bio)equivalence</span></span></span>
+<span><span class="co">#&gt; </span></span>
+<span><span class="co">#&gt; Equiv. Region:   |------------------------|       </span></span>
+<span><span class="co">#&gt; qTOST:          <span style="color: #00BB00;">(--------------x-----------</span><span style="color: #BB0000;">-------)</span></span></span>
+<span><span class="co">#&gt; alpha-qTOST:      <span style="color: #00BB00;">(------------x-----------</span><span style="color: #BB0000;">-)</span>      </span></span>
+<span><span class="co">#&gt; </span></span>
+<span><span class="co">#&gt;                CI - low      CI - high</span></span>
+<span><span class="co">#&gt; qTOST:         0.05208       0.31514</span></span>
+<span><span class="co">#&gt; alpha-qTOST:   0.07011       0.26390</span></span>
+<span><span class="co">#&gt; </span></span>
+<span><span class="co">#&gt; Equiv. lim. = dw/up 0.05000 0.25000</span></span>
+<span><span class="fu"><a href="../reference/compare_to_qtost.html">compare_to_qtost</a></span><span class="op">(</span><span class="va">hiv_alpha_qtost</span><span class="op">[[</span><span class="fl">2</span><span class="op">]</span><span class="op">]</span><span class="op">)</span>  <span class="co"># 20th percentile</span></span>
+<span><span class="co">#&gt; qTOST: <span style="color: #BB0000;">✖ Can't accept quantile (bio)equivalence</span></span></span>
+<span><span class="co">#&gt; alpha-qTOST: <span style="color: #00BB00;">✔ Accept quantile (bio)equivalence</span></span></span>
+<span><span class="co">#&gt; </span></span>
+<span><span class="co">#&gt; Equiv. Region:      |---------------------|       </span></span>
+<span><span class="co">#&gt; qTOST:          <span style="color: #BB0000;">(---</span><span style="color: #00BB00;">-----------x-----------</span><span style="color: #BB0000;">-------)</span></span></span>
+<span><span class="co">#&gt; alpha-qTOST:       <span style="color: #00BB00;">(-----------x----------)</span>        </span></span>
+<span><span class="co">#&gt; </span></span>
+<span><span class="co">#&gt;                CI - low      CI - high</span></span>
+<span><span class="co">#&gt; qTOST:         0.07568       0.36283</span></span>
+<span><span class="co">#&gt; alpha-qTOST:   0.10857       0.29065</span></span>
+<span><span class="co">#&gt; </span></span>
+<span><span class="co">#&gt; Equiv. lim. = dw/up 0.10000 0.30000</span></span></code></pre></div>
+<p>Finally, display the confidence intervals and equivalence
+margins:</p>
+<div class="sourceCode" id="cb17"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="va">plot_intervals</span> <span class="op">=</span> <span class="kw">function</span><span class="op">(</span><span class="va">qtost_fit</span>, <span class="va">alpha_qtost_fit</span>, <span class="va">pi_x</span>, <span class="va">delta</span>,</span>
+<span>                          <span class="va">k</span> <span class="op">=</span> <span class="fl">1</span>, <span class="va">xlim</span>, <span class="va">main</span><span class="op">)</span> <span class="op">{</span></span>
+<span>  <span class="va">ci</span> <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/cbind.html" class="external-link">rbind</a></span><span class="op">(</span><span class="va">qtost_fit</span><span class="op">$</span><span class="va">ci</span><span class="op">[</span><span class="va">k</span>, <span class="op">]</span>, <span class="va">alpha_qtost_fit</span><span class="op">$</span><span class="va">ci</span><span class="op">[</span><span class="va">k</span>, <span class="op">]</span><span class="op">)</span></span>
+<span>  <span class="va">estimate</span> <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="va">qtost_fit</span><span class="op">$</span><span class="va">pi_y_hat</span><span class="op">[</span><span class="va">k</span><span class="op">]</span>, <span class="va">alpha_qtost_fit</span><span class="op">$</span><span class="va">pi_y_hat</span><span class="op">[</span><span class="va">k</span><span class="op">]</span><span class="op">)</span></span>
+<span>  <span class="va">cols</span> <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"#501d8a"</span>, <span class="st">"#ee8c7d"</span><span class="op">)</span></span>
+<span>  <span class="va">ypos</span> <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">2</span>, <span class="fl">1</span><span class="op">)</span></span>
+<span></span>
+<span>  <span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html" class="external-link">plot</a></span><span class="op">(</span><span class="cn">NA</span>, xlim <span class="op">=</span> <span class="va">xlim</span>, ylim <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">0.4</span>, <span class="fl">2.7</span><span class="op">)</span>, axes <span class="op">=</span> <span class="cn">FALSE</span>,</span>
+<span>       xlab <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/expression.html" class="external-link">expression</a></span><span class="op">(</span><span class="va">pi</span><span class="op">[</span><span class="va">y</span><span class="op">]</span><span class="op">)</span>, ylab <span class="op">=</span> <span class="st">""</span>, main <span class="op">=</span> <span class="va">main</span><span class="op">)</span></span>
+<span>  <span class="fu"><a href="https://rdrr.io/r/graphics/rect.html" class="external-link">rect</a></span><span class="op">(</span><span class="va">pi_x</span> <span class="op">-</span> <span class="va">delta</span>, <span class="fl">0.4</span>, <span class="va">pi_x</span> <span class="op">+</span> <span class="va">delta</span>, <span class="fl">2.7</span>,</span>
+<span>       col <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/grDevices/adjustcolor.html" class="external-link">adjustcolor</a></span><span class="op">(</span><span class="st">"#FF9900"</span>, alpha.f <span class="op">=</span> <span class="fl">0.15</span><span class="op">)</span>, border <span class="op">=</span> <span class="cn">NA</span><span class="op">)</span></span>
+<span>  <span class="fu"><a href="https://rdrr.io/r/graphics/abline.html" class="external-link">abline</a></span><span class="op">(</span>h <span class="op">=</span> <span class="va">ypos</span>, col <span class="op">=</span> <span class="st">"grey85"</span><span class="op">)</span></span>
+<span>  <span class="fu"><a href="https://rdrr.io/r/graphics/abline.html" class="external-link">abline</a></span><span class="op">(</span>v <span class="op">=</span> <span class="va">pi_x</span>, col <span class="op">=</span> <span class="st">"grey65"</span>, lty <span class="op">=</span> <span class="fl">3</span><span class="op">)</span></span>
+<span>  <span class="fu"><a href="https://rdrr.io/r/graphics/abline.html" class="external-link">abline</a></span><span class="op">(</span>v <span class="op">=</span> <span class="va">pi_x</span> <span class="op">+</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="op">-</span><span class="va">delta</span>, <span class="va">delta</span><span class="op">)</span>, lty <span class="op">=</span> <span class="fl">3</span><span class="op">)</span></span>
+<span>  <span class="fu"><a href="https://rdrr.io/r/graphics/arrows.html" class="external-link">arrows</a></span><span class="op">(</span><span class="va">ci</span><span class="op">[</span>, <span class="fl">1</span><span class="op">]</span>, <span class="va">ypos</span>, <span class="va">ci</span><span class="op">[</span>, <span class="fl">2</span><span class="op">]</span>, <span class="va">ypos</span>, angle <span class="op">=</span> <span class="fl">90</span>, code <span class="op">=</span> <span class="fl">3</span>,</span>
+<span>         length <span class="op">=</span> <span class="fl">0.07</span>, col <span class="op">=</span> <span class="va">cols</span>, lwd <span class="op">=</span> <span class="fl">2.5</span><span class="op">)</span></span>
+<span>  <span class="fu"><a href="https://rdrr.io/r/graphics/points.html" class="external-link">points</a></span><span class="op">(</span><span class="va">estimate</span>, <span class="va">ypos</span>, pch <span class="op">=</span> <span class="fl">16</span>, col <span class="op">=</span> <span class="va">cols</span>, cex <span class="op">=</span> <span class="fl">1.5</span><span class="op">)</span></span>
+<span>  <span class="fu"><a href="https://rdrr.io/r/graphics/axis.html" class="external-link">axis</a></span><span class="op">(</span><span class="fl">1</span><span class="op">)</span></span>
+<span>  <span class="fu"><a href="https://rdrr.io/r/graphics/axis.html" class="external-link">axis</a></span><span class="op">(</span><span class="fl">2</span>, at <span class="op">=</span> <span class="va">ypos</span>, labels <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/expression.html" class="external-link">expression</a></span><span class="op">(</span><span class="st">"qTOST"</span>, <span class="va">alpha</span><span class="op">*</span><span class="st">"-qTOST"</span><span class="op">)</span>,</span>
+<span>       las <span class="op">=</span> <span class="fl">1</span>, tick <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span></span>
+<span><span class="op">}</span></span>
+<span></span>
+<span><span class="va">old_par</span> <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/graphics/par.html" class="external-link">par</a></span><span class="op">(</span>mfrow <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">1</span>, <span class="fl">2</span><span class="op">)</span>, mar <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">4</span>, <span class="fl">5.5</span>, <span class="fl">2.5</span>, <span class="fl">1</span><span class="op">)</span>, yaxs <span class="op">=</span> <span class="st">"i"</span><span class="op">)</span></span>
+<span></span>
+<span><span class="kw">for</span> <span class="op">(</span><span class="va">i</span> <span class="kw">in</span> <span class="fu"><a href="https://rdrr.io/r/base/seq.html" class="external-link">seq_along</a></span><span class="op">(</span><span class="va">pi_x</span><span class="op">)</span><span class="op">)</span> <span class="op">{</span></span>
+<span>  <span class="fu">plot_intervals</span><span class="op">(</span><span class="va">hiv_qtost</span><span class="op">[[</span><span class="va">i</span><span class="op">]</span><span class="op">]</span>, <span class="va">hiv_alpha_qtost</span><span class="op">[[</span><span class="va">i</span><span class="op">]</span><span class="op">]</span>,</span>
+<span>                 pi_x <span class="op">=</span> <span class="va">pi_x</span><span class="op">[</span><span class="va">i</span><span class="op">]</span>, delta <span class="op">=</span> <span class="va">delta</span>, xlim <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">0</span>, <span class="fl">0.4</span><span class="op">)</span>,</span>
+<span>                 main <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/bquote.html" class="external-link">bquote</a></span><span class="op">(</span><span class="va">pi</span><span class="op">[</span><span class="va">x</span><span class="op">]</span> <span class="op">==</span> <span class="fu">.</span><span class="op">(</span><span class="va">pi_x</span><span class="op">[</span><span class="va">i</span><span class="op">]</span><span class="op">)</span><span class="op">)</span><span class="op">)</span></span>
+<span><span class="op">}</span></span>
+<span><span class="fu"><a href="https://rdrr.io/r/graphics/par.html" class="external-link">par</a></span><span class="op">(</span><span class="va">old_par</span><span class="op">)</span></span></code></pre></div>
+<p><img src="reproducibility-quantile_files/figure-html/unnamed-chunk-11-1.png" class="r-plt" alt="" width="100%"></p>
+<p>While neither procedure establishes equivalence at the 15th
+percentile, the
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mi>α</mi><annotation encoding="application/x-tex">\alpha</annotation></semantics></math>-qTOST
+interval is entirely inside the equivalence margins and establishes
+equivalence at the 20th percentile when the qTOST fails to do so.</p>
+</div>
+<div class="section level3">
+<h3 id="case-study-2-demonstrating-inter-operator-reproducibility">Case study 2: Demonstrating inter-operator reproducibility<a class="anchor" aria-label="anchor" href="#case-study-2-demonstrating-inter-operator-reproducibility"></a>
+</h3>
+<p>The second case study compares the cutaneous delivery of a compound
+measured by two operators using the same experimental protocol. The
+<code>biodistribution</code> dataset contains six independent
+observations per operator. Its <code>X</code> and <code>Y</code> columns
+are already on the logarithmic scale and represent the reference and
+test operators, respectively.</p>
+<p>The complete analysis is in
+<code>case_study/case_study_lad_mvt.R</code>, which jointly tests the
+20th and 80th reference percentiles over 20 nominal significance levels
+from 0.01 to 0.20, with margin 0.15. This follows the same workflow as
+the one described for the first case study. To reproduce the complete
+analysis, run:</p>
+<div class="sourceCode" id="cb18"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/source.html" class="external-link">source</a></span><span class="op">(</span><span class="st">"case_study/case_study_lad_mvt.R"</span><span class="op">)</span>  <span class="co"># Figures 7 and 8</span></span></code></pre></div>
+<p>The results are stored in <code>sol_qtost</code> and
+<code>sol_alpha_qtost</code>, each a <code>2 x 3 x 20</code> array
+indexed by reference quantile, lower endpoint/estimate/upper endpoint,
+and nominal level. Figure 7 displays the significance levels 0.05 and
+0.10. Figure 8 shows intervals across a larger range.</p>
+<p>As an illustration, Figure 7 can be reproduced as follows.</p>
+<p>First load the data:</p>
+<div class="sourceCode" id="cb19"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://stephaneguerrier.github.io/cTOST/">cTOST</a></span><span class="op">)</span></span>
+<span></span>
+<span><span class="fu"><a href="https://rdrr.io/r/utils/data.html" class="external-link">data</a></span><span class="op">(</span><span class="va">biodistribution</span><span class="op">)</span></span>
+<span><span class="va">x</span> <span class="op">=</span> <span class="va">biodistribution</span><span class="op">$</span><span class="va">X</span></span>
+<span><span class="va">y</span> <span class="op">=</span> <span class="va">biodistribution</span><span class="op">$</span><span class="va">Y</span></span></code></pre></div>
+<p>Then jointly assess the two reference quantiles at nominal
+significance levels 0.05 and 0.10. The designs and the qTOST and the
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mi>α</mi><annotation encoding="application/x-tex">\alpha</annotation></semantics></math>-qTOST
+assessments can be obtained as follows:</p>
+<div class="sourceCode" id="cb20"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="va">pi_x</span> <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">0.2</span>, <span class="fl">0.8</span><span class="op">)</span></span>
+<span><span class="va">delta</span> <span class="op">=</span> <span class="fl">0.15</span></span>
+<span><span class="va">alphas</span> <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">0.05</span>, <span class="fl">0.1</span><span class="op">)</span></span>
+<span></span>
+<span><span class="va">lad_qtost</span> <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/lapply.html" class="external-link">lapply</a></span><span class="op">(</span><span class="va">alphas</span>, <span class="kw">function</span><span class="op">(</span><span class="va">a</span><span class="op">)</span> <span class="op">{</span></span>
+<span>  <span class="fu"><a href="../reference/qtost.html">qtost</a></span><span class="op">(</span><span class="va">x</span>, <span class="va">y</span>, pi_x <span class="op">=</span> <span class="va">pi_x</span>, delta <span class="op">=</span> <span class="va">delta</span>, alpha <span class="op">=</span> <span class="va">a</span>,</span>
+<span>        method <span class="op">=</span> <span class="st">"unadjusted"</span><span class="op">)</span></span>
+<span><span class="op">}</span><span class="op">)</span></span>
+<span></span>
+<span><span class="va">lad_alpha_qtost</span> <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/lapply.html" class="external-link">lapply</a></span><span class="op">(</span><span class="va">alphas</span>, <span class="kw">function</span><span class="op">(</span><span class="va">a</span><span class="op">)</span> <span class="op">{</span></span>
+<span>  <span class="fu"><a href="../reference/qtost.html">qtost</a></span><span class="op">(</span><span class="va">x</span>, <span class="va">y</span>, pi_x <span class="op">=</span> <span class="va">pi_x</span>, delta <span class="op">=</span> <span class="va">delta</span>, alpha <span class="op">=</span> <span class="va">a</span>,</span>
+<span>        method <span class="op">=</span> <span class="st">"alpha"</span>, B <span class="op">=</span> <span class="fl">10000</span>, seed <span class="op">=</span> <span class="fl">12345</span>,</span>
+<span>        tol <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/MathFun.html" class="external-link">sqrt</a></span><span class="op">(</span><span class="va">.Machine</span><span class="op">$</span><span class="va">double.eps</span><span class="op">)</span>, max_iter <span class="op">=</span> <span class="fl">5</span>,</span>
+<span>        tolpower <span class="op">=</span> <span class="fl">1e-3</span>, MC_sup <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span>
+<span><span class="op">}</span><span class="op">)</span></span></code></pre></div>
+<p>Finally, display the confidence intervals and equivalence margins,
+with reference quantiles in columns and nominal levels in rows:</p>
+<div class="sourceCode" id="cb21"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="va">plot_intervals</span> <span class="op">=</span> <span class="kw">function</span><span class="op">(</span><span class="va">qtost_fit</span>, <span class="va">alpha_qtost_fit</span>, <span class="va">pi_x</span>, <span class="va">delta</span>,</span>
+<span>                          <span class="va">k</span> <span class="op">=</span> <span class="fl">1</span>, <span class="va">xlim</span>, <span class="va">main</span><span class="op">)</span> <span class="op">{</span></span>
+<span>  <span class="va">ci</span> <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/cbind.html" class="external-link">rbind</a></span><span class="op">(</span><span class="va">qtost_fit</span><span class="op">$</span><span class="va">ci</span><span class="op">[</span><span class="va">k</span>, <span class="op">]</span>, <span class="va">alpha_qtost_fit</span><span class="op">$</span><span class="va">ci</span><span class="op">[</span><span class="va">k</span>, <span class="op">]</span><span class="op">)</span></span>
+<span>  <span class="va">estimate</span> <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="va">qtost_fit</span><span class="op">$</span><span class="va">pi_y_hat</span><span class="op">[</span><span class="va">k</span><span class="op">]</span>, <span class="va">alpha_qtost_fit</span><span class="op">$</span><span class="va">pi_y_hat</span><span class="op">[</span><span class="va">k</span><span class="op">]</span><span class="op">)</span></span>
+<span>  <span class="va">cols</span> <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"#501d8a"</span>, <span class="st">"#ee8c7d"</span><span class="op">)</span></span>
+<span>  <span class="va">ypos</span> <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">2</span>, <span class="fl">1</span><span class="op">)</span></span>
+<span></span>
+<span>  <span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html" class="external-link">plot</a></span><span class="op">(</span><span class="cn">NA</span>, xlim <span class="op">=</span> <span class="va">xlim</span>, ylim <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">0.4</span>, <span class="fl">2.7</span><span class="op">)</span>, axes <span class="op">=</span> <span class="cn">FALSE</span>,</span>
+<span>       xlab <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/expression.html" class="external-link">expression</a></span><span class="op">(</span><span class="va">pi</span><span class="op">[</span><span class="va">y</span><span class="op">]</span><span class="op">)</span>, ylab <span class="op">=</span> <span class="st">""</span>, main <span class="op">=</span> <span class="va">main</span><span class="op">)</span></span>
+<span>  <span class="fu"><a href="https://rdrr.io/r/graphics/rect.html" class="external-link">rect</a></span><span class="op">(</span><span class="va">pi_x</span> <span class="op">-</span> <span class="va">delta</span>, <span class="fl">0.4</span>, <span class="va">pi_x</span> <span class="op">+</span> <span class="va">delta</span>, <span class="fl">2.7</span>,</span>
+<span>       col <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/grDevices/adjustcolor.html" class="external-link">adjustcolor</a></span><span class="op">(</span><span class="st">"#FF9900"</span>, alpha.f <span class="op">=</span> <span class="fl">0.15</span><span class="op">)</span>, border <span class="op">=</span> <span class="cn">NA</span><span class="op">)</span></span>
+<span>  <span class="fu"><a href="https://rdrr.io/r/graphics/abline.html" class="external-link">abline</a></span><span class="op">(</span>h <span class="op">=</span> <span class="va">ypos</span>, col <span class="op">=</span> <span class="st">"grey85"</span><span class="op">)</span></span>
+<span>  <span class="fu"><a href="https://rdrr.io/r/graphics/abline.html" class="external-link">abline</a></span><span class="op">(</span>v <span class="op">=</span> <span class="va">pi_x</span>, col <span class="op">=</span> <span class="st">"grey65"</span>, lty <span class="op">=</span> <span class="fl">3</span><span class="op">)</span></span>
+<span>  <span class="fu"><a href="https://rdrr.io/r/graphics/abline.html" class="external-link">abline</a></span><span class="op">(</span>v <span class="op">=</span> <span class="va">pi_x</span> <span class="op">+</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="op">-</span><span class="va">delta</span>, <span class="va">delta</span><span class="op">)</span>, lty <span class="op">=</span> <span class="fl">3</span><span class="op">)</span></span>
+<span>  <span class="fu"><a href="https://rdrr.io/r/graphics/arrows.html" class="external-link">arrows</a></span><span class="op">(</span><span class="va">ci</span><span class="op">[</span>, <span class="fl">1</span><span class="op">]</span>, <span class="va">ypos</span>, <span class="va">ci</span><span class="op">[</span>, <span class="fl">2</span><span class="op">]</span>, <span class="va">ypos</span>, angle <span class="op">=</span> <span class="fl">90</span>, code <span class="op">=</span> <span class="fl">3</span>,</span>
+<span>         length <span class="op">=</span> <span class="fl">0.07</span>, col <span class="op">=</span> <span class="va">cols</span>, lwd <span class="op">=</span> <span class="fl">2.5</span><span class="op">)</span></span>
+<span>  <span class="fu"><a href="https://rdrr.io/r/graphics/points.html" class="external-link">points</a></span><span class="op">(</span><span class="va">estimate</span>, <span class="va">ypos</span>, pch <span class="op">=</span> <span class="fl">16</span>, col <span class="op">=</span> <span class="va">cols</span>, cex <span class="op">=</span> <span class="fl">1.5</span><span class="op">)</span></span>
+<span>  <span class="fu"><a href="https://rdrr.io/r/graphics/axis.html" class="external-link">axis</a></span><span class="op">(</span><span class="fl">1</span><span class="op">)</span></span>
+<span>  <span class="fu"><a href="https://rdrr.io/r/graphics/axis.html" class="external-link">axis</a></span><span class="op">(</span><span class="fl">2</span>, at <span class="op">=</span> <span class="va">ypos</span>, labels <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/expression.html" class="external-link">expression</a></span><span class="op">(</span><span class="st">"qTOST"</span>, <span class="va">alpha</span><span class="op">*</span><span class="st">"-qTOST"</span><span class="op">)</span>,</span>
+<span>       las <span class="op">=</span> <span class="fl">1</span>, tick <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span></span>
+<span><span class="op">}</span></span>
+<span></span>
+<span><span class="va">old_par</span> <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/graphics/par.html" class="external-link">par</a></span><span class="op">(</span>mfrow <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">2</span>, <span class="fl">2</span><span class="op">)</span>, mar <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">4</span>, <span class="fl">5.5</span>, <span class="fl">2.5</span>, <span class="fl">1</span><span class="op">)</span>, yaxs <span class="op">=</span> <span class="st">"i"</span><span class="op">)</span></span>
+<span></span>
+<span><span class="kw">for</span> <span class="op">(</span><span class="va">i</span> <span class="kw">in</span> <span class="fu"><a href="https://rdrr.io/r/base/seq.html" class="external-link">seq_along</a></span><span class="op">(</span><span class="va">alphas</span><span class="op">)</span><span class="op">)</span> <span class="op">{</span></span>
+<span>  <span class="kw">for</span> <span class="op">(</span><span class="va">k</span> <span class="kw">in</span> <span class="fu"><a href="https://rdrr.io/r/base/seq.html" class="external-link">seq_along</a></span><span class="op">(</span><span class="va">pi_x</span><span class="op">)</span><span class="op">)</span> <span class="op">{</span></span>
+<span>    <span class="fu">plot_intervals</span><span class="op">(</span><span class="va">lad_qtost</span><span class="op">[[</span><span class="va">i</span><span class="op">]</span><span class="op">]</span>, <span class="va">lad_alpha_qtost</span><span class="op">[[</span><span class="va">i</span><span class="op">]</span><span class="op">]</span>,</span>
+<span>                   pi_x <span class="op">=</span> <span class="va">pi_x</span><span class="op">[</span><span class="va">k</span><span class="op">]</span>, delta <span class="op">=</span> <span class="va">delta</span>, k <span class="op">=</span> <span class="va">k</span>,</span>
+<span>                   xlim <span class="op">=</span> <span class="kw">if</span> <span class="op">(</span><span class="va">k</span> <span class="op">==</span> <span class="fl">1</span><span class="op">)</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">0</span>, <span class="fl">0.6</span><span class="op">)</span> <span class="kw">else</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">0.4</span>, <span class="fl">1</span><span class="op">)</span>,</span>
+<span>                   main <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/bquote.html" class="external-link">bquote</a></span><span class="op">(</span><span class="va">alpha</span> <span class="op">==</span> <span class="fu">.</span><span class="op">(</span><span class="va">alphas</span><span class="op">[</span><span class="va">i</span><span class="op">]</span><span class="op">)</span> <span class="op">~</span> <span class="st">","</span> <span class="op">~</span></span>
+<span>                                 <span class="va">pi</span><span class="op">[</span><span class="va">x</span><span class="op">]</span> <span class="op">==</span> <span class="fu">.</span><span class="op">(</span><span class="va">pi_x</span><span class="op">[</span><span class="va">k</span><span class="op">]</span><span class="op">)</span><span class="op">)</span><span class="op">)</span></span>
+<span>  <span class="op">}</span></span>
+<span><span class="op">}</span></span>
+<span><span class="fu"><a href="https://rdrr.io/r/graphics/par.html" class="external-link">par</a></span><span class="op">(</span><span class="va">old_par</span><span class="op">)</span></span></code></pre></div>
+<p><img src="reproducibility-quantile_files/figure-html/unnamed-chunk-15-1.png" class="r-plt" alt="" width="100%"></p>
+<p>Equivalence is established only when, at a given significance level,
+both intervals lie within their respective equivalence margins. Thus,
+neither procedure establishes joint equivalence at the 5% nominal level.
+At 10%,
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mi>α</mi><annotation encoding="application/x-tex">\alpha</annotation></semantics></math>-qTOST
+establishes joint equivalence, whereas qTOST does not.</p>
+</div>
+</div>
+<div class="section level2">
+<h2 id="references">References<a class="anchor" aria-label="anchor" href="#references"></a>
+</h2>
+<p>Wu, J., Guerrier, S., Gou, S., Kalia, Y. N., and Insolia, L. (2025).
+<em>Bridging the gap between experimental burden and statistical power
+for quantiles equivalence testing</em>. <a href="https://doi.org/10.48550/arXiv.2510.17514" class="external-link">arXiv:2510.17514</a>.</p>
+</div>
+  </main><aside class="col-md-3"><nav id="toc" aria-label="Table of contents"><h2>On this page</h2>
+    </nav></aside>
 </div>
 
 
